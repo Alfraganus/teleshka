@@ -1,9 +1,7 @@
 <template>
   <v-card>
-    <v-app-bar color="deep-purple accent-4" dense dark app>
-      <v-btn icon to="/">
-        <v-icon size="32">mdi-home</v-icon>
-      </v-btn>
+    <v-app-bar color="white" dense app>
+      <v-app-bar-nav-icon @click="mini = !mini"></v-app-bar-nav-icon>
 
       <v-toolbar-title>Page title</v-toolbar-title>
 
@@ -13,7 +11,7 @@
         <v-icon style="margin-right: 10px">mdi-login</v-icon>Login
       </v-btn>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawer" :mini-variant.sync="mini" class="grey darken-4" dark permanent app>
+    <v-navigation-drawer v-model="drawer" :mini-variant.sync="mini" class="blue-grey darken-4" dark permanent app>
       <v-list-item class="px-2">
         <v-list-item-avatar>
           <v-icon size="36">mdi-account-tie</v-icon>
