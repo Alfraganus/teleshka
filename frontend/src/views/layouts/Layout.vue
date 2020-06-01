@@ -41,6 +41,24 @@
     <v-container style="margin: 50px 40px 0 60px" :style="!mini ? 'margin-left: 250px' : 'margin-left: 60px'">
       <router-view></router-view>
     </v-container>
+    <v-footer     
+      color="white" 
+      padless app
+      border="top"
+      colored-border
+      elevation="4"
+      >
+      <v-col
+        class="text-center"
+        cols="12"
+      >
+        {{ new Date().getFullYear() }} — 
+        <a href="https://uzautomotors.com/">
+          <strong>UzAutoMotors </strong>
+        </a>
+        <span> Barcha huquqlar ximoyalangan.</span>
+      </v-col>
+    </v-footer>
   </v-card>
 </template>
 
