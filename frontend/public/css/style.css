@@ -2,5 +2,6 @@
     background-image: url(../img/bg-account.jpg);
     background-position: center bottom;
     background-attachment: fixed;
+    background-size: 100%;
     position: relative;
 }
