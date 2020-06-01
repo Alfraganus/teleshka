@@ -5,7 +5,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    backend_url: 'telejka.uz'
+    backend_url: 'teleshka.uz'
   },
   mutations: {
   },
