@@ -32,6 +32,17 @@ const routes = [
         import('@/views/About.vue')
     },]
   },
+  {
+    path: '/teleshka-list',
+    name: 'Loyaut',
+    component: Layout,
+    hidden: true,
+    children: [{
+      path: '/',
+      component: () =>
+        import('@/views/Teleshka-list.vue')
+    },]
+  },
 ]
 
 const router = new VueRouter({
