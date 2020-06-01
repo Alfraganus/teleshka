@@ -19,6 +19,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::post('create-user', 'UserController@create');
 Route::post('create-telly', 'TellyController@create');
-Route::post('update','TellyController@update');
-Route::get('all','TellyController@get');
-Route::delete('destroy/{id}', 'TellyController@destroy');
+Route::post('telly/update','TellyController@update');
+Route::get('telly/all','TellyController@get');
+Route::delete('delete-telly/{id}', 'TellyController@destroy');
