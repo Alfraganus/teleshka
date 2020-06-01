@@ -20,9 +20,12 @@ Route::post('register', 'UserController@register');
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-
-Route::post('create-user', 'UserController@create');
-Route::post('create-telly', 'TellyController@create');
-Route::post('update','TellyController@update');
-Route::get('all','TellyController@get');
-Route::delete('destroy/{id}', 'TellyController@destroy');
+Route::get('users/', 'UserController@index');
+Route::post('users/create', 'UserController@create');
+Route::post('users/update/id','UserController@update');
+Route::delete('users/delete/id', 'UserController@destroy');
+Route::get('tellies/','TellyController@index');
+Route::post('users/update/id','TellyController@update');
+Route::post('tellies/create', 'TellyController@create');
+Route::post('tellies/update','TellyController@update');
+Route::delete('tellies/delete/{id}', 'TellyController@destroy');
