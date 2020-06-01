@@ -1,0 +1,6 @@
+.logo-back{
+    background-image: url(../img/bg-account.jpg);
+    background-position: center bottom;
+    background-attachment: fixed;
+    position: relative;
+}
