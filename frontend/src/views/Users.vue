@@ -24,13 +24,6 @@
         </thead>
         <tbody>
           <tr v-for="(user, index) in users" :key="index">
-            <td>{{ index +1 }}</td>
-            <td>{{ user.fullname }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.username }}</td>
-            <td>{{ user.role }}</td>
-            <td>
-              <v-btn class="mr-4" color="primary" outlined small dark>
             <td>{{ index + 1 }}</td>
             <td>{{ user.fullname }}</td>
             <td>{{ user.email }}</td>
@@ -77,16 +70,13 @@
       </v-card>
     </v-dialog>
   </div>
-</template> 
+</template>
 
 <script>
 export default {
   data() {
     return {
       users: [],
-      fullName: "wqewq",
-      userName: "sdas",
-      role: "Admin",
       addUserModal: false,
       fullName: "",
       userName: "",
