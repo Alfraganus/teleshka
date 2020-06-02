@@ -50,13 +50,13 @@ class UserController extends Controller
 
     public function register(Request $request)
     {
-
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
-        $success['token'] =  $user->createToken('MyApp')-> accessToken;
+        /*$success['token'] =  $user->createToken('MyApp')-> accessToken;
         $success['name'] =  $user->name;
-        return response()->json(['success'=>$success], $this-> successStatus);
+        return response()->json(['success'=>$success], $this-> successStatus);*/
+        return "Successfully created";
     }
 
     public function destroy($id)
@@ -67,10 +67,11 @@ class UserController extends Controller
     }
 
     public function login(){
-        if(Auth::attempt(['fullname' => request('fullname'), 'password' => request('password')])){
+        if(Auth::attempt(['username' => request('username'), 'password' => request('password')])){
             $user = Auth::user();
-            $success['token'] =  $user->createToken('MyApp')-> accessToken;
-            return response()->json(['success' => $success], $this-> successStatus);
+           /* $success['token'] =  $user->createToken('MyApp')-> accessToken;
+            return response()->json(['success' => $success], $this-> successStatus);*/
+            return "Login granted!";
         }
         else{
             return response()->json(['error'=>'Unauthorised'], 401);
