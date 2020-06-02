@@ -29,9 +29,11 @@ class UserController extends Controller
         $model->username=$username;
         $model->role=$role;
         $model->save();
+
+        return $model;
     }
 
-    public function update(Request $request)
+    public function update(Request $request, $id)
     {
         $updateUser = User::find($request->input('id'));
         $updatedEmail = $request->input('email');
@@ -45,7 +47,7 @@ class UserController extends Controller
         $updateUser->username = $updatedUsername;
         $updateUser->role = $updatedRole;
         $updateUser->save();
-        return 'Updated successfully!';
+        return $updateUser;
     }
 
     public function register(Request $request)
