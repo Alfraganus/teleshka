@@ -92,9 +92,9 @@ export default {
   data() {
     return {
         users: [],
-        fullName: 'wqewq',
-        userName: 'sdas',
-        role: 'Admin',
+        fullName: '',
+        userName: '',
+        role: '',
         addUserModal: false,
     };
   },
@@ -103,9 +103,10 @@ export default {
           this.$axios.post(this.$store.state.backend_url + '/api/users/create', {
             fullName: this.fullName,
             userName: this.userName,
-            Role: this.role
+            role: this.role
         })
-        .then(function (response) {
+        .then((response) => {
+            this.addUserModal = false;
             console.log(response);
         })
         .catch(function (error) {
