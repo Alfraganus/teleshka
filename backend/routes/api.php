@@ -13,19 +13,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::post('users/login', 'UserController@login');
-Route::post('users/register', 'UserController@register');
-
+ 
 
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 Route::get('users/', 'UserController@index');
 Route::post('users/create', 'UserController@create');
-Route::post('users/update/{id}','UserController@update');
+Route::post('users/update/id','UserController@update');
 Route::delete('users/delete/{id}', 'UserController@destroy');
 Route::get('tellies/','TellyController@index');
 Route::post('users/update/id','TellyController@update');
 Route::post('tellies/create', 'TellyController@create');
-Route::post('tellies/update','TellyController@update');
+Route::post('tellies/update/id','TellyController@update');
 Route::delete('tellies/delete/{id}', 'TellyController@destroy');
