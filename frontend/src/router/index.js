@@ -34,13 +34,24 @@ const routes = [
   },
   {
     path: '/teleshka-list',
-    name: 'Loyaut',
+    name: 'Teleshka-list',
     component: Layout,
     hidden: true,
     children: [{
       path: '/',
       component: () =>
         import('@/views/Teleshka-list.vue')
+    },]
+  },
+  {
+    path: '/users',
+    name: 'Users',
+    component: Layout,
+    hidden: true,
+    children: [{
+      path: '/',
+      component: () =>
+        import('@/views/Users.vue')
     },]
   },
 ]
