@@ -19,7 +19,8 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import('../views/layouts/Login.vue')
+    component: () => import('../views/layouts/Login.vue'),
+    hidden: true,
   },
   {
     path: '/about',
@@ -30,6 +31,28 @@ const routes = [
       path: '/',
       component: () =>
         import('@/views/About.vue')
+    },]
+  },
+  {
+    path: '/teleshka-list',
+    name: 'Teleshka-list',
+    component: Layout,
+    hidden: true,
+    children: [{
+      path: '/',
+      component: () =>
+        import('@/views/Teleshka-list.vue')
+    },]
+  },
+  {
+    path: '/users',
+    name: 'Users',
+    component: Layout,
+    hidden: true,
+    children: [{
+      path: '/',
+      component: () =>
+        import('@/views/Users.vue')
     },]
   },
 ]

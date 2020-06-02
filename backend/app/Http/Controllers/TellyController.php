@@ -23,10 +23,10 @@ class TellyController extends Controller
         return 'New Telly successfully created!';
     }
 
-    public function get(Request $request)
+    public function index()
     {
-        $tellyId = $request->input('id');
-        $getTelly = Telly::where('id','=',$tellyId)->get();
+        
+        $getTelly = Telly::get();
         return $getTelly;
     }
 
