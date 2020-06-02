@@ -58,6 +58,7 @@ export default {
         .catch(function(error) {
           // handle error
           console.log(error);
+          alert('Login yoki parol xato!!!');
         });
     }
   }
