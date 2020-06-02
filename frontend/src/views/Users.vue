@@ -107,6 +107,9 @@ export default {
         })
         .then((response) => {
             this.addUserModal = false;
+            this.fullName = '';
+            this.userName = '';
+            this.role = '';
             console.log(response);
         })
         .catch(function (error) {
