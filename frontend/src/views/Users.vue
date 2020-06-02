@@ -6,36 +6,7 @@
     <div>
       <v-subheader class="primary py-8 px-10" dark>
         <v-row justify="center">
-          <v-dialog v-model="addUserModal" persistent max-width="450px">
-            <template v-slot:activator="{ on }">
-              <v-btn color="success" dark v-on="on">Add User</v-btn>
-            </template>
-            <v-card>
-              <v-card-title>
-                <span class="headline">Add user</span>
-              </v-card-title>
-              <v-card-text>
-                <v-container>
-                  <v-row>
-                    <v-col cols="12">
-                      <v-text-field v-model="fullName" label="Fullname*" required></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-text-field v-model="userName" label="User name*" persistent-hint required></v-text-field>
-                    </v-col>
-                    <v-col cols="12">
-                      <v-select :items="['Admin', 'User']" label="Role*"></v-select>
-                    </v-col>
-                  </v-row>
-                </v-container>
-              </v-card-text>
-              <v-card-actions class="text-center">
-                <v-spacer></v-spacer>
-                <v-btn color="green" dark @click="addUser">Add</v-btn>
-                <v-btn color="red darken-1" dark @click="addUserModal = false">Close</v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-dialog>
+          <v-btn color="success" @click="newUser()">New item</v-btn>
         </v-row>
       </v-subheader>
     </div>
@@ -60,6 +31,13 @@
             <td>{{ user.role }}</td>
             <td>
               <v-btn class="mr-4" color="primary" outlined small dark>
+            <td>{{ index + 1 }}</td>
+            <td>{{ user.fullname }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ roles.find( v => v.value == user.role) ? roles.find( v => v.value == user.role).text : '' }}</td>
+            <td>
+              <v-btn class="mr-4" color="primary" @click="editUser(user)" outlined small dark>
                 <v-icon small>mdi-pencil</v-icon>
               </v-btn>
 
@@ -71,6 +49,33 @@
         </tbody>
       </template>
     </v-simple-table>
+    <v-dialog v-model="saveUserModal" persistent max-width="450px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">Add user</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field v-model="form.fullname" label="Fullname*" required></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field v-model="form.username" label="User name*" persistent-hint required></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-select v-model="form.role" label="Role*" :items="roles"></v-select>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions class="text-center">
+          <v-spacer></v-spacer>
+          <v-btn color="green" dark @click="saveUser">Add</v-btn>
+          <v-btn color="red darken-1" dark @click="saveUserModal = false">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template> 
 
@@ -82,8 +87,26 @@ export default {
       fullName: "wqewq",
       userName: "sdas",
       role: "Admin",
-      addUserModal: false
-    };
+      addUserModal: false,
+      fullName: "",
+      userName: "",
+      saveUserModal: false,
+      form: {},
+      roles: [
+        {
+          text: "User",
+          value: "0"
+        },
+        {
+          text: "Admin",
+          value: "1"
+        },
+        {
+          text: "Administrator",
+          value: "2"
+        },
+      ]
+    }
   },
   methods: {
     addUser() {
@@ -100,7 +123,43 @@ export default {
           console.log(error);
         });
     },
-
+    newUser() {
+      this.saveUserModal = true;
+      this.form = {
+        fullname: "",
+        username: "",
+        role: ""
+      };
+    },
+    editUser(item) {
+      this.saveUserModal = true;
+      this.form =  JSON.parse(JSON.stringify(item));
+    },
+    saveUser() {
+      if (!this.form.id)
+        this.$axios
+          .post(this.$store.state.backend_url + "/api/users/create", this.form)
+          .then(response => {
+            this.saveUserModal = false;
+            this.users.push(response.data);
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      else
+        this.$axios
+          .post(this.$store.state.backend_url + "/api/users/update/"+this.form.id, this.form)
+          .then(response => {
+            this.saveUserModal = false;
+            this.users = this.users.map(v => {
+              if (v.id == response.data.id) v = response.data;
+              return v;
+            });
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+    },
     deleteUser(id) {
       this.$axios
         .delete(this.$store.state.backend_url + "/api/users/delete/" + id)
@@ -109,25 +168,22 @@ export default {
           alert(response.data + "User Deleted");
         })
         .catch(function(error) {
-          // handle error
+          console.error(error);
+        });
+    },
+    getList() {
+      this.$axios
+        .get(this.$store.state.backend_url + "/api/users")
+        .then(response => {
+          this.users = response.data;
+        })
+        .catch(function(error) {
           console.log(error);
         });
     }
   },
   mounted() {
-    this.$axios
-      .get(this.$store.state.backend_url + "/api/users")
-      .then(response => {
-        this.users = response.data;
-        // console.log(this.users);
-      })
-      .catch(function(error) {
-        // handle error
-        console.log(error);
-      })
-      .then(function() {
-        // always executed
-      });
+    this.getList();
   }
-};
+}
 </script>

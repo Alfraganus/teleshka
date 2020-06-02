@@ -17,6 +17,7 @@ class CreateTelliesTable extends Migration
             $table->increments('id');
             $table->string('telly_name', 255)->nullable();
             $table->string('telly_type', 100)->nullable();
+            $table->timestamps();
         });
     }
 
