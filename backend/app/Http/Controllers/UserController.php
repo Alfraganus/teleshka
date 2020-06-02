@@ -24,10 +24,12 @@ class UserController extends Controller
         $name = $request->input('fullname');
         $username = $request->input('username');
         $role = $request->input('role');
+        $password = $request->input('password');
         $model = new User();
         $model->fullname=$name;
         $model->username=$username;
         $model->role=$role;
+        $model->password=bcrypt($password);
         $model->save();
 
         return $model;
@@ -43,7 +45,7 @@ class UserController extends Controller
         $updatedRole = $request->input('role');
         $updateUser->email = $updatedEmail;
         $updateUser->fullname = $updatedName;
-        $updateUser->password = $updatedPass;
+        $updateUser->password = bcrypt($updatedPass);
         $updateUser->username = $updatedUsername;
         $updateUser->role = $updatedRole;
         $updateUser->save();
