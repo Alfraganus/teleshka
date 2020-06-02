@@ -24,6 +24,13 @@
         </thead>
         <tbody>
           <tr v-for="(user, index) in users" :key="index">
+            <td>{{ index +1 }}</td>
+            <td>{{ user.fullname }}</td>
+            <td>{{ user.email }}</td>
+            <td>{{ user.username }}</td>
+            <td>{{ user.role }}</td>
+            <td>
+              <v-btn class="mr-4" color="primary" outlined small dark>
             <td>{{ index + 1 }}</td>
             <td>{{ user.fullname }}</td>
             <td>{{ user.email }}</td>
@@ -77,6 +84,10 @@ export default {
   data() {
     return {
       users: [],
+      fullName: "wqewq",
+      userName: "sdas",
+      role: "Admin",
+      addUserModal: false,
       fullName: "",
       userName: "",
       saveUserModal: false,
@@ -93,11 +104,25 @@ export default {
         {
           text: "Administrator",
           value: "2"
-        }
+        },
       ]
-    };
+    }
   },
   methods: {
+    addUser() {
+      this.$axios
+        .post(this.$store.state.backend_url + "/api/users/create", {
+          fullName: this.fullName,
+          userName: this.userName,
+          Role: this.role
+        })
+        .then(function(response) {
+          console.log(response);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
     newUser() {
       this.saveUserModal = true;
       this.form = {
@@ -160,5 +185,5 @@ export default {
   mounted() {
     this.getList();
   }
-};
+}
 </script>

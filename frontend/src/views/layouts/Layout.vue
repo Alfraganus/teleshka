@@ -69,7 +69,8 @@ export default {
       drawer: true,
       items: [
         { title: "My Account", icon: "mdi-account", link: "/"},
-        { title: "Users", icon: "mdi-account-group-outline", link: "about"}
+        { title: "Users", icon: "mdi-account-group-outline", link: "users"},
+        { title: "Teleshkalar", icon: "mdi-account-group-outline", link: "teleshka-list"}
       ],
       mini: true
     };
