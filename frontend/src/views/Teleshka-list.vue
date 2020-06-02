@@ -69,18 +69,6 @@ export default {
     };
   },
   mounted(){
-      this.$axios.get(this.$store.state.backend_url + '/')
-        .then(function (response) {
-            // handle success
-            console.log(response);
-        })
-        .catch(function (error) {
-            // handle error
-            console.log(error);
-        })
-        .then(function () {
-            // always executed
-        });
   }
 };
 </script>
