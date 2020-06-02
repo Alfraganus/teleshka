@@ -8,6 +8,12 @@ import axios from 'axios'
 Vue.prototype.$axios = axios
 
 Vue.config.productionTip = false
+import Cookies from 'vue-cookies';
+Vue.use(Cookies)
+router.beforeEach((to, from, next) => {
+  if (to.name !== 'Login' && !Cookies.get('token')) next({ name: 'Login' })
+  else next()
+})
 
 new Vue({
   router,
