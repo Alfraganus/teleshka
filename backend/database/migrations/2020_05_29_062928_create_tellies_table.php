@@ -15,8 +15,9 @@ class CreateTelliesTable extends Migration
     {
         Schema::create('tellies', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('telly_name', 255)->nullable();
-            $table->string('telly_type', 100)->nullable();
+            $table->string('telly_number', 255)->nullable();
+            $table->integer('telly_type_id', 100)->nullable();
+            $table->string('telly_desc', 255)->nullable();
             $table->timestamps();
         });
     }
