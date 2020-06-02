@@ -59,6 +59,9 @@
               <v-col cols="12">
                 <v-select v-model="form.role" label="Role*" :items="roles"></v-select>
               </v-col>
+              <v-col cols="12">
+                <v-text-field label="Password*" persistent-hint required></v-text-field>
+              </v-col>
             </v-row>
           </v-container>
         </v-card-text>
@@ -118,7 +121,7 @@ export default {
       this.form = {
         fullname: "",
         username: "",
-        role: ""
+        role: "",
       };
     },
     editUser(item) {
