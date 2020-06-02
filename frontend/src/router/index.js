@@ -19,7 +19,8 @@ const routes = [
   {
     path: '/login',
     name: 'Login',
-    component: () => import('../views/layouts/Login.vue')
+    component: () => import('../views/layouts/Login.vue'),
+    hidden: true,
   },
   {
     path: '/about',
