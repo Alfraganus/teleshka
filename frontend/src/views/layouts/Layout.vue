@@ -38,7 +38,7 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <div class="container-fluid" style="margin: 50px 0px 0 60px" :style="!mini ? 'margin-left: 250px' : 'margin-left: 60px'">
+    <div class="container-fluid" style="margin: 50px 0px 0 60px" :style="!mini ? 'margin-left: 260px' : 'margin-left: 60px'">
       <router-view></router-view>
     </div>
     <v-footer     

@@ -6,7 +6,6 @@ import store from './store'
 import vuetify from './plugins/vuetify';
 import axios from 'axios'
 Vue.prototype.$axios = axios
-
 Vue.config.productionTip = false
 import Cookies from 'vue-cookies';
 Vue.use(Cookies)

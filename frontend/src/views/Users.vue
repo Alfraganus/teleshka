@@ -1,47 +1,33 @@
 <template>
   <div class="mx-4">
-    <div class="px-10 py-4">
-      <h1 class="title font-weight-medium">Foydalanuvchilar</h1>
-    </div>
-    <div>
-      <v-subheader class="primary py-8 px-10" dark>
-        <v-row justify="center">
-          <v-btn color="success" @click="newUser()">New item</v-btn>
-        </v-row>
-      </v-subheader>
-    </div>
-    <v-simple-table fixed-header height="auto">
-      <template v-slot:default>
-        <thead>
-          <tr>
-            <th class="text-left font-weight-bold">ID</th>
-            <th class="text-left font-weight-bold">Fullname</th>
-            <th class="text-left font-weight-bold">Email</th>
-            <th class="text-left font-weight-bold">Username</th>
-            <th class="text-left font-weight-bold">Role</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr v-for="(user, index) in users" :key="index">
-            <td>{{ index + 1 }}</td>
-            <td>{{ user.fullname }}</td>
-            <td>{{ user.email }}</td>
-            <td>{{ user.username }}</td>
-            <td>{{ roles.find( v => v.value == user.role) ? roles.find( v => v.value == user.role).text : '' }}</td>
-            <td>
-              <v-btn class="mr-4" color="primary" @click="editUser(user)" outlined small dark>
-                <v-icon small>mdi-pencil</v-icon>
-              </v-btn>
+    <v-card-title>
+      Foydalanuvchilar
+      <v-btn class="ml-8" color="success" @click="newUser()">Add user</v-btn>
+      <v-spacer></v-spacer>
+      <v-text-field
+        v-model="search"
+        append-icon="mdi-magnify"
+        label="Search"
+        single-line
+        hide-details
+      ></v-text-field>
+    </v-card-title>
 
-              <v-btn @click="deleteUser(user.id)" color="primary" outlined small dark>
-                <v-icon color="red" text small>mdi-delete</v-icon>
-              </v-btn>
-            </td>
-          </tr>
-        </tbody>
+    <v-data-table :headers="headers" :items="users" :search="search">
+      <template v-slot:item.id="{ item }">{{ users.map(v => v.id).indexOf(item.id) + 1 }}</template>
+      <template
+        v-slot:item.role="{ item }"
+      >{{ roles.find( v => v.value == item.role) ? roles.find( v => v.value == item.role).text : '' }}</template>
+      <template v-slot:item.icons="{ item }">
+        <v-btn class="mr-4" color="primary" @click="editUser(item)" outlined small dark>
+          <v-icon small>mdi-pencil</v-icon>
+        </v-btn>
+
+        <v-btn @click="deleteUser(item.id)" color="primary" outlined small dark>
+          <v-icon color="red" text small>mdi-delete</v-icon>
+        </v-btn>
       </template>
-    </v-simple-table>
+    </v-data-table>
     <v-dialog v-model="saveUserModal" persistent max-width="450px">
       <v-card>
         <v-card-title>
@@ -65,8 +51,7 @@
             </v-row>
           </v-container>
         </v-card-text>
-        <v-card-actions class="text-center">
-          <v-spacer></v-spacer>
+        <v-card-actions class="justify-center">
           <v-btn color="green" dark @click="saveUser">Add</v-btn>
           <v-btn color="red darken-1" dark @click="saveUserModal = false">Close</v-btn>
         </v-card-actions>
@@ -76,10 +61,24 @@
 </template>
 
 <script>
+import Swal from "sweetalert2";
 export default {
   data() {
     return {
       users: [],
+      headers: [
+        { text: "ID", value: "id" },
+        {
+          text: "Fullname",
+          align: "start",
+          value: "fullname"
+        },
+        { text: "Email", value: "email" },
+        { text: "Username", value: "username" },
+        { text: "Role", value: "role" },
+        { text: "", value: "icons", sortable: false }
+      ],
+      search: "",
       addUserModal: false,
       fullName: "",
       userName: "",
@@ -97,9 +96,9 @@ export default {
         {
           text: "Administrator",
           value: "2"
-        },
+        }
       ]
-    }
+    };
   },
   methods: {
     addUser() {
@@ -126,7 +125,7 @@ export default {
     },
     editUser(item) {
       this.saveUserModal = true;
-      this.form =  JSON.parse(JSON.stringify(item));
+      this.form = JSON.parse(JSON.stringify(item));
     },
     saveUser() {
       if (!this.form.id)
@@ -141,7 +140,10 @@ export default {
           });
       else
         this.$axios
-          .post(this.$store.state.backend_url + "/api/users/update/"+this.form.id, this.form)
+          .post(
+            this.$store.state.backend_url + "/api/users/update/" + this.form.id,
+            this.form
+          )
           .then(response => {
             this.saveUserModal = false;
             this.users = this.users.map(v => {
@@ -154,15 +156,29 @@ export default {
           });
     },
     deleteUser(id) {
-      this.$axios
-        .delete(this.$store.state.backend_url + "/api/users/delete/" + id)
-        .then(response => {
-          this.users = this.users.filter(v => v.id != id);
-          alert(response.data + "User Deleted");
-        })
-        .catch(function(error) {
-          console.error(error);
-        });
+      Swal.fire({
+        title: "O'chirish",
+        text: "Siz ushbu foydalanuvchini o'chirishga aminmisiz!",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#3085d6",
+        cancelButtonColor: "#d33",
+        confirmButtonText: "O'chirish!",
+        cancelButtonText: 'Yopish',
+      }).then(result => {
+        if (result.value) {
+          this.$axios
+            .delete(this.$store.state.backend_url + "/api/users/delete/" + id)
+            .then(res => {
+              this.users = this.users.filter(v => v.id != id);
+              console.log(res.data)
+            })
+            .catch(function(error) {
+              console.error(error);
+            });
+          Swal.fire("O'chirildi!", "Ushbu foydalanuvchi o'chirildi.", "success");
+        }
+      });
     },
     getList() {
       this.$axios
@@ -178,5 +194,5 @@ export default {
   mounted() {
     this.getList();
   }
-}
+};
 </script>
