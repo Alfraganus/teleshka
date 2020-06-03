@@ -65,6 +65,7 @@
     </v-app>
   </div>
 </template>
+
 <script>
 const axios = require("axios").default;
 export default {
