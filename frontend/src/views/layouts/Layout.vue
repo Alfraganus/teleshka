@@ -7,8 +7,8 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn text to="/login">
-        <v-icon style="margin-right: 10px">mdi-login</v-icon>Login
+      <v-btn text @click="Logout" v-if="!$cokies">
+        logout<v-icon class="ml-2">mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
     <v-navigation-drawer v-model="drawer" :mini-variant.sync="mini" class="blue-grey darken-4" dark permanent app>
@@ -74,6 +74,12 @@ export default {
       ],
       mini: true
     };
-  }
+  },
+  methods: {
+    Logout(){
+      this.$cookies.remove('token');
+      this.$router.push("/login")
+    }
+  },
 };
 </script>
