@@ -13,7 +13,13 @@
       ></v-text-field>
     </v-card-title>
 
-    <v-data-table :headers="headers" :items="users" :search="search">
+    <v-data-table
+      :headers="headers"
+      :items="users"
+      :search="search"
+      :loading="Loading"
+      loading-text="Loading... Please wait"
+    >
       <template v-slot:item.id="{ item }">{{ users.map(v => v.id).indexOf(item.id) + 1 }}</template>
       <template
         v-slot:item.role="{ item }"
@@ -37,16 +43,50 @@
           <v-container>
             <v-row>
               <v-col cols="12">
-                <v-text-field v-model="form.fullname" label="Fullname*" required></v-text-field>
+                <v-text-field
+                  v-model="form.fullname"
+                  autofocus
+                  hide-details="auto"
+                  label="Fullname*"
+                  color="#203d5b"
+                  outlined
+                  dense
+                  required
+                ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field v-model="form.username" label="User name*" persistent-hint required></v-text-field>
+                <v-text-field
+                  v-model="form.username"
+                  hide-details="auto"
+                  color="#203d5b"
+                  outlined
+                  dense
+                  label="User name*"
+                  persistent-hint
+                  required
+                ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-select v-model="form.role" label="Role*" :items="roles"></v-select>
+                <v-select
+                  v-model="form.role"
+                  label="Role*"
+                  hide-details="auto"
+                  color="#203d5b"
+                  outlined
+                  dense
+                  :items="roles"
+                ></v-select>
               </v-col>
               <v-col cols="12">
-                <v-text-field label="Password*" persistent-hint required></v-text-field>
+                <v-text-field
+                  label="Password*"
+                  hide-details="auto"
+                  color="#203d5b"
+                  outlined
+                  dense
+                  persistent-hint
+                  required
+                ></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -84,6 +124,7 @@ export default {
       userName: "",
       saveUserModal: false,
       form: {},
+      Loading: true,
       roles: [
         {
           text: "User",
@@ -120,7 +161,7 @@ export default {
       this.form = {
         fullname: "",
         username: "",
-        role: "",
+        role: ""
       };
     },
     editUser(item) {
@@ -164,31 +205,40 @@ export default {
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
         confirmButtonText: "O'chirish!",
-        cancelButtonText: 'Yopish',
+        cancelButtonText: "Yopish"
       }).then(result => {
         if (result.value) {
           this.$axios
             .delete(this.$store.state.backend_url + "/api/users/delete/" + id)
             .then(res => {
               this.users = this.users.filter(v => v.id != id);
-              console.log(res.data)
+              console.log(res.data);
             })
             .catch(function(error) {
               console.error(error);
             });
-          Swal.fire("O'chirildi!", "Ushbu foydalanuvchi o'chirildi.", "success");
+          Swal.fire(
+            "O'chirildi!",
+            "Ushbu foydalanuvchi o'chirildi.",
+            "success"
+          );
         }
       });
     },
     getList() {
-      this.$axios
-        .get(this.$store.state.backend_url + "/api/users")
-        .then(response => {
-          this.users = response.data;
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+      setTimeout(
+        () =>
+          this.$axios
+            .get(this.$store.state.backend_url + "/api/users")
+            .then(response => {
+              this.users = response.data;
+              this.Loading = false;
+            })
+            .catch(function(error) {
+              console.log(error);
+            }),
+        2000
+      );
     }
   },
   mounted() {
