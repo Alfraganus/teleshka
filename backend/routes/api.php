@@ -43,4 +43,9 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('shift/create', 'ShiftController@create');
     Route::post('shift/update/{id}', 'ShiftController@update');
     Route::delete('shift/delete/{id}', 'ShiftController@destroy');
+
+    Route::get('department', 'DepartmentController@index');
+    Route::post('department/create', 'DepartmentController@create');
+    Route::post('department/update/{id}', 'DepartmentController@update');
+    Route::delete('department/delete/{id}', 'DepartmentController@delete');
 });
