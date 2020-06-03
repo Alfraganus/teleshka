@@ -10,7 +10,6 @@
             <v-form @keyup.native.enter="login" style="padding: 15px">
               <v-text-field
                 v-model="username"
-                autofocus
                 color="#203d5b"
                 outlined
                 dense
