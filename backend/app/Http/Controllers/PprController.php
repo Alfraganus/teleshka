@@ -5,7 +5,7 @@ use App\Http\Models\Telly;
 use App\Http\Models\PPrEvent;
 use App\User;
 use App\Http\Models\TellyType;
-
+use App\Http\Models\Shift;
 use Illuminate\Http\Request;
 
 class PprController extends Controller
@@ -13,8 +13,10 @@ class PprController extends Controller
     //
     public function index()
     {
-        $getPpr = PprEvent::get();
-        return $getPpr;
+        $getPpr = PprEvent::with('shift')->with('tellyId')->get();
+        $shifts = Shift::get();
+        $tellyIds = Telly::get();
+        return ['getPpr'=>$getPpr, 'shifts'=>$shifts, 'tellyIds'=>$tellyIds];
     }
 
     public function create(Request $request)
@@ -23,7 +25,7 @@ class PprController extends Controller
         $shift_id = $request->input('shift_id');
         $employeeTabel = $request->input('ppr_responsible_employee_tabel');
         $brigadirTabel =$request->input('brigadir_tabel');
-        $tellyNumber = $request->input('telly_number');
+        $tellyId = $request->input('telly_id');
         $departmentName = $request->input('department_name');
         $technicalReview = $request->input('technical_review_conclusion');
         $addPpr = New PprEvent;
@@ -31,7 +33,7 @@ class PprController extends Controller
         $addPpr->shift_id = $shift_id;
         $addPpr->ppr_responsible_employee_tabel = $employeeTabel;
         $addPpr->brigadir_tabel = $brigadirTabel;
-        $addPpr->telly_number = $tellyNumber;
+        $addPpr->telly_id = $tellyId;
         $addPpr->department_name = $departmentName;
         $addPpr->technical_review_conclusion = $technicalReview;
         $addPpr->save();
@@ -45,14 +47,14 @@ class PprController extends Controller
     $newShiftId = $request->input('shift_id');
     $newEmployeeTabel = $request->input('ppr_responsible_employee_tabel');
     $newBrigadirTabel = $request->input('brigadir_tabel');
-    $newTellyNumber = $request->input('telly_number');
+    $newTellyId = $request->input('telly_id');
     $newDepartmentName = $request->input('department_name');
     $newTechReview = $request->input('technical_review_conclusion');
     $updatePpr->ppr_date = $newDate;
     $updatePpr->shift_id = $newShiftId;
     $updatePpr->ppr_responsible_employee_tabel = $newEmployeeTabel;
     $updatePpr->brigadir_tabel = $newBrigadirTabel;
-    $updatePpr->telly_number =$newTellyNumber;
+    $updatePpr->telly_id =$newTellyId;
     $updatePpr->department_name =$newDepartmentName;
     $updatePpr->technical_review_conclusion = $newTechReview;
     $updatePpr->save();
