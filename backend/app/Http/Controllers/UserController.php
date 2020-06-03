@@ -15,7 +15,7 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        
+        // return Auth::id();
         $getUser = User::get();
         return $getUser;
     }
