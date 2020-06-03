@@ -82,7 +82,8 @@ class UserController extends Controller
             return response()->json(['error'=>'Unauthorised'], 401);
         }
     }
-    public function show(){
+    public function show()
+    {
      return Auth::user();
     }
 }

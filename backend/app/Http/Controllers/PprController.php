@@ -13,10 +13,11 @@ class PprController extends Controller
     //
     public function index()
     {
-        $getPpr = PprEvent::with('shift')->with('tellyId')->get();
+        $getPpr = PprEvent::with('shift')->with('tellyId')->with('departmentId')->get();
         $shifts = Shift::get();
         $tellyIds = Telly::get();
-        return ['getPpr'=>$getPpr, 'shifts'=>$shifts, 'tellyIds'=>$tellyIds];
+        $departments = Deparment::get();
+        return ['getPpr'=>$getPpr, 'shifts'=>$shifts, 'tellyIds'=>$tellyIds, 'departments'=>$departments];
     }
 
     public function create(Request $request)
@@ -26,7 +27,7 @@ class PprController extends Controller
         $employeeTabel = $request->input('ppr_responsible_employee_tabel');
         $brigadirTabel =$request->input('brigadir_tabel');
         $tellyId = $request->input('telly_id');
-        $departmentName = $request->input('department_name');
+        $departmentId = $request->input('department_id');
         $technicalReview = $request->input('technical_review_conclusion');
         $addPpr = New PprEvent;
         $addPpr->ppr_date = $pprDate;
@@ -34,7 +35,7 @@ class PprController extends Controller
         $addPpr->ppr_responsible_employee_tabel = $employeeTabel;
         $addPpr->brigadir_tabel = $brigadirTabel;
         $addPpr->telly_id = $tellyId;
-        $addPpr->department_name = $departmentName;
+        $addPpr->department_id = $departmentId;
         $addPpr->technical_review_conclusion = $technicalReview;
         $addPpr->save();
 
@@ -48,14 +49,14 @@ class PprController extends Controller
     $newEmployeeTabel = $request->input('ppr_responsible_employee_tabel');
     $newBrigadirTabel = $request->input('brigadir_tabel');
     $newTellyId = $request->input('telly_id');
-    $newDepartmentName = $request->input('department_name');
+    $newDepartmentId = $request->input('department_id');
     $newTechReview = $request->input('technical_review_conclusion');
     $updatePpr->ppr_date = $newDate;
     $updatePpr->shift_id = $newShiftId;
     $updatePpr->ppr_responsible_employee_tabel = $newEmployeeTabel;
     $updatePpr->brigadir_tabel = $newBrigadirTabel;
     $updatePpr->telly_id =$newTellyId;
-    $updatePpr->department_name =$newDepartmentName;
+    $updatePpr->department_id =$newDepartmentId;
     $updatePpr->technical_review_conclusion = $newTechReview;
     $updatePpr->save();
     return 'Updated successfully!';
