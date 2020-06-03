@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Http\Models\Telly;
+use App\Http\Models\PPrEvent;
 use App\User;
 use Illuminate\Http\Request;
 
