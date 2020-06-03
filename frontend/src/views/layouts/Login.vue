@@ -71,8 +71,8 @@ const axios = require("axios").default;
 export default {
   data() {
     return {
-      username: "",
-      password: "",
+      username: "test",
+      password: "test",
       darkTheme: true,
       platformName: "UzAutoMotors Workflow",
       loading: false
@@ -83,8 +83,8 @@ export default {
       axios
         .post(this.$store.state.backend_url + "/oauth/token", {
           grant_type: "password",
-          client_id: "5",
-          client_secret: "CZC1cQDoupNtr0J7oX8f4SAuSKZkzCn5BxZZo5aL",
+          client_id: "7",
+          client_secret: "op1mP1RlFCj6PMlgyzar9lvw7Yy1pE3OJbodBSL9",
           username: this.username,
           password: this.password
           // scope:

@@ -18,6 +18,9 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+Route::group(['middleware' => ['auth:api']], function () {
+    
+});
 Route::get('users/', 'UserController@index');
 Route::post('users/create', 'UserController@create');
 Route::post('users/update/{id}','UserController@update');
