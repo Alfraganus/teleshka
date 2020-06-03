@@ -7,7 +7,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn text @click="Logout" v-if="!$cokies">
+      <v-btn text @click="Logout">
         logout<v-icon class="ml-2">mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
@@ -70,7 +70,7 @@ export default {
       items: [
         { title: "My Account", icon: "mdi-account", link: "/"},
         { title: "Users", icon: "mdi-account-group-outline", link: "users"},
-        { title: "Teleshkalar", icon: "mdi-account-group-outline", link: "teleshka-list"}
+        { title: "Teleshkalar", icon: "mdi-truck-trailer", link: "teleshka-list"}
       ],
       mini: true
     };
@@ -78,6 +78,7 @@ export default {
   methods: {
     Logout(){
       this.$cookies.remove('token');
+      this.$cookies.remove('users');
       this.$router.push("/login")
     }
   },
