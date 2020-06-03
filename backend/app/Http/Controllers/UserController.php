@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Http\Models\Telly;
+use App\Http\Models\PPrEvent;
 use App\User;
 use Illuminate\Support\Facades\Auth;
 use Validator;

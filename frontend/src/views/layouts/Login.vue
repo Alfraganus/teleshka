@@ -61,8 +61,8 @@ export default {
     }
   },
   mounted() {
-      this.$cookies.set('token', 'dsffgdsigjhsdkifgsdfg5sd4h6fsg5h4sd6f8hs4fg68hs8fs46dfh4df');
-    console.log(this.$cookies.get('token'));
-  }
+    this.$cookies.set('token', 'dsffgdsigjhsdkifgsdfg5sd4h6fsg5h4sd6f8hs4fg68hs8fs46dfh4df');
+  console.log(this.$cookies.get('token'));
+  },
 };
 </script>
