@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateTelliesTable extends Migration
+class CreateTellyTypesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,9 @@ class CreateTelliesTable extends Migration
      */
     public function up()
     {
-        Schema::create('tellies', function (Blueprint $table) {
+        Schema::create('telly_types', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('telly_number', 255)->nullable();
-            $table->integer('telly_type_id', 100)->nullable();
-            $table->string('telly_desc', 255)->nullable();
-            $table->timestamps();
+            $table->string('name');
         });
     }
 
@@ -29,6 +26,6 @@ class CreateTelliesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('tellies');
+        Schema::dropIfExists('telly_types');
     }
 }

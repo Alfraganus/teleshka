@@ -38,9 +38,9 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <v-container style="margin: 50px 0px 0 60px" :style="!mini ? 'margin-left: 250px' : 'margin-left: 60px'">
+    <div class="container-fluid" style="margin: 50px 0px 0 60px" :style="!mini ? 'margin-left: 260px' : 'margin-left: 60px'">
       <router-view></router-view>
-    </v-container>
+    </div>
     <v-footer     
       color="white" 
       padless app
@@ -69,7 +69,8 @@ export default {
       drawer: true,
       items: [
         { title: "My Account", icon: "mdi-account", link: "/"},
-        { title: "Users", icon: "mdi-account-group-outline", link: "about"}
+        { title: "Users", icon: "mdi-account-group-outline", link: "users"},
+        { title: "Teleshkalar", icon: "mdi-account-group-outline", link: "teleshka-list"}
       ],
       mini: true
     };

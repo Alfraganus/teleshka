@@ -23,7 +23,16 @@ Route::post('users/create', 'UserController@create');
 Route::post('users/update/{id}','UserController@update');
 Route::delete('users/delete/{id}', 'UserController@destroy');
 Route::get('tellies/','TellyController@index');
-Route::post('users/update/id','TellyController@update');
 Route::post('tellies/create', 'TellyController@create');
-Route::post('tellies/update','TellyController@update');
+Route::post('tellies/update/{id}','TellyController@update');
 Route::delete('tellies/delete/{id}', 'TellyController@destroy');
+
+Route::get('ppr/' , 'PprController@index');
+Route::post('ppr/create', 'PprController@create');
+Route::post('ppr/update/{id}','PprController@update');
+Route::delete('ppr/delete/{id}', 'PprController@destroy');
+
+Route::get('telly-type/', 'TellyTypeController@index');
+Route::post('telly-type/create', 'TellyTypeController@create');
+Route::post('telly-type/update/{id}', 'TellyTypeController@update');
+Route::delete('telly-type/delete/{id}', 'TellyTypeController@destroy');

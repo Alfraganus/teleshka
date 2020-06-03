@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Http\Models\Telly;
+use App\Http\Models\PPrEvent;
 use App\User;
 use Illuminate\Http\Request;
 
@@ -14,11 +15,13 @@ class TellyController extends Controller
 
     public function create(Request $request)
     {
-        $tellyName = $request->input('telly_name');
-        $tellyType = $request->input('telly_type');
+        $tellyName = $request->input('telly_number');
+        $tellyType = $request->input('telly_type_id');
+        $tellyDesc = $request->input('telly_desc');
         $addTelly = new Telly;
         $addTelly->telly_name=$tellyName;
-        $addTelly->telly_type=$tellyType;
+        $addTelly->telly_type_id=$tellyType;
+        $addTelly->telly_desc=$tellyDesc;
         $addTelly->save();
         return 'New Telly successfully created!';
     }
@@ -33,10 +36,12 @@ class TellyController extends Controller
     public function update(Request $request)
     {
         $updateTelly = Telly::find($request->input('id'));
-        $updatedName = $request->input('telly_name');
-        $updatedType = $request->input('telly_type');
-        $updateTelly->telly_name = $updatedName;
-        $updateTelly->telly_type = $updatedType;
+        $updatedNumber = $request->input('telly_number');
+        $updatedType = $request->input('telly_type_id');
+        $updatedDesc = $request->input('telly_desc');
+        $updateTelly->telly_number = $updatedNumber;
+        $updateTelly->telly_type_id = $updatedType;
+        $updateTelly->telly_desc = $updatedDesc;
         $updateTelly->save();
         return 'Updated successfully!';
     }
