@@ -24,5 +24,5 @@ Route::post('users/update/{id}','UserController@update');
 Route::delete('users/delete/{id}', 'UserController@destroy');
 Route::get('tellies/','TellyController@index');
 Route::post('tellies/create', 'TellyController@create');
-Route::post('tellies/update/id','TellyController@update');
+Route::post('tellies/update/{id}','TellyController@update');
 Route::delete('tellies/delete/{id}', 'TellyController@destroy');
