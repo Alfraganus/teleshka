@@ -29,8 +29,9 @@ class TellyController extends Controller
     public function index()
     {
         
-        $getTelly = Telly::get();
-        return $getTelly;
+        $getTelly = Telly::with('tellyType')->get();
+        $tellyTypes = TellyType::get();
+        return ['getTelly'=>$getTelly, 'tellyTypes'=>$tellyTypes];
     }
 
     public function update(Request $request)
