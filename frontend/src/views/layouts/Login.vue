@@ -65,7 +65,6 @@
     </v-app>
   </div>
 </template>
-
 <script>
     const axios = require("axios").default;
     export default {
@@ -93,7 +92,7 @@
                         this.$store.dispatch(
                             "setAccessToken",
                             res.data.token_type + " " + res.data.access_token,
-                            this.$router.push("/"),
+                            this.$router.push("/about"),
                             console.log('working')
                         );
                         axios.defaults.headers.common = {

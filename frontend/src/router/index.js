@@ -1,7 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Layout from '@/views/layouts/Layout';
-
+import store from '../store';
 Vue.use(VueRouter)
 
 const routes = [
@@ -58,9 +58,18 @@ const routes = [
 ]
 
 const router = new VueRouter({
-  mode: 'history',
-  base: process.env.BASE_URL,
-  routes
+    mode: 'hash',
+    // mode: 'history',
+    base: process.env.BASE_URL,
+    routes
+})
+
+router.beforeEach((to, from, next) => {
+    var access_token = JSON.parse(store.state.access_token);
+    if (!access_token && to.fullPath != '/login')
+        next('/login')
+    else
+        next()
 })
 
 export default router
