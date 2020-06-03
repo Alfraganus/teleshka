@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+
 import Cookies from 'vue-cookies'
 
 Vue.use(Vuex)

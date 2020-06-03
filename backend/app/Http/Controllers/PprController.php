@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 use App\Http\Models\Telly;
 use App\Http\Models\PPrEvent;
 use App\User;
+use App\Http\Models\TellyType;
 
 use Illuminate\Http\Request;
 
@@ -19,7 +20,7 @@ class PprController extends Controller
     public function create(Request $request)
     {
         $pprDate =  $request->input('ppr_date');
-        $shift = $request->input('shift');
+        $shift_id = $request->input('shift_id');
         $employeeTabel = $request->input('ppr_responsible_employee_tabel');
         $brigadirTabel =$request->input('brigadir_tabel');
         $tellyNumber = $request->input('telly_number');
@@ -27,7 +28,7 @@ class PprController extends Controller
         $technicalReview = $request->input('technical_review_conclusion');
         $addPpr = New PprEvent;
         $addPpr->ppr_date = $pprDate;
-        $addPpr->shift = $shift;
+        $addPpr->shift_id = $shift_id;
         $addPpr->ppr_responsible_employee_tabel = $employeeTabel;
         $addPpr->brigadir_tabel = $brigadirTabel;
         $addPpr->telly_number = $tellyNumber;
@@ -41,14 +42,14 @@ class PprController extends Controller
     {
     $updatePpr = PPrEvent::where(['id'=>$request['id']])->first();
     $newDate =  $request->input('ppr_date');
-    $newShift = $request->input('shift');
+    $newShiftId = $request->input('shift_id');
     $newEmployeeTabel = $request->input('ppr_responsible_employee_tabel');
     $newBrigadirTabel = $request->input('brigadir_tabel');
     $newTellyNumber = $request->input('telly_number');
     $newDepartmentName = $request->input('department_name');
     $newTechReview = $request->input('technical_review_conclusion');
     $updatePpr->ppr_date = $newDate;
-    $updatePpr->shift = $newShift;
+    $updatePpr->shift_id = $newShiftId;
     $updatePpr->ppr_responsible_employee_tabel = $newEmployeeTabel;
     $updatePpr->brigadir_tabel = $newBrigadirTabel;
     $updatePpr->telly_number =$newTellyNumber;
