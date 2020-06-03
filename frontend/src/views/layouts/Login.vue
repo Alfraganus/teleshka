@@ -21,23 +21,23 @@
                     <v-col cols="12">
                       <label for="username">username</label>
                       <v-text-field
-                              outlined
-                              dense
-                              hide-details="auto"
-                              placeholer="username"
-                              type="text"
-                              autocomplete="off"
-                              v-model="username"
+                        outlined
+                        dense
+                        hide-details="auto"
+                        placeholer="username"
+                        type="text"
+                        autocomplete="off"
+                        v-model="username"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="12">
                       <label for="username">password</label>
                       <v-text-field
-                              outlined
-                              dense
-                              hide-details="auto"
-                              type="password"
-                              v-model="password"
+                        outlined
+                        dense
+                        hide-details="auto"
+                        type="password"
+                        v-model="password"
                       ></v-text-field>
                     </v-col>
                   </v-row>
@@ -67,43 +67,43 @@
 </template>
 
 <script>
-    const axios = require("axios").default;
-    export default {
-        data() {
-            return {
-                username: "",
-                password: "",
-                darkTheme: true,
-                platformName: "UzAutoMotors Workflow",
-                loading: false
-            };
-        },
-        methods: {
-            login() {
-                axios
-                    .post(this.$store.state.backend_url + "/oauth/token", {
-                        grant_type: "password",
-                        client_id: "2",
-                        client_secret: "ViT5PIEub3uqvNEMLGkPOEEcM5DZiTjLVGClI0ot",
-                        username: this.username,
-                        password: this.password
-                        // scope:
-                    })
-                    .then(res => {
-                        this.$store.dispatch(
-                            "setAccessToken",
-                            res.data.token_type + " " + res.data.access_token,
-                            this.$router.push("/"),
-                            console.log('working')
-                        );
-                        axios.defaults.headers.common = {
-                            Accept: "application/json",
-                            "Content-Type": "application/json",
-                            Authorization: res.data.token_type + " " + res.data.access_token
-                        };
-                    })
-
-            }
-        }
+const axios = require("axios").default;
+export default {
+  data() {
+    return {
+      username: "test",
+      password: "test",
+      darkTheme: true,
+      platformName: "UzAutoMotors Workflow",
+      loading: false
     };
+  },
+  methods: {
+    login() {
+      axios
+        .post(this.$store.state.backend_url + "/oauth/token", {
+          grant_type: "password",
+          client_id: "5",
+          client_secret: "CZC1cQDoupNtr0J7oX8f4SAuSKZkzCn5BxZZo5aL",
+          username: this.username,
+          password: this.password
+          // scope:
+        })
+        .then(res => {
+          this.$cookies.set('token', res.data.token_type + " " + res.data.access_token);
+            this.$router.push("/"),
+          // this.$store.dispatch(
+          //   "setAccessToken",
+          //   res.data.token_type + " " + res.data.access_token,
+          //   console.log(res)
+          // );
+          axios.defaults.headers.common = {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: res.data.token_type + " " + res.data.access_token
+          };
+        });
+    }
+  }
+};
 </script>
