@@ -22,6 +22,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('users/create', 'UserController@create');
     Route::post('users/update/{id}','UserController@update');
     Route::delete('users/delete/{id}', 'UserController@destroy');
+    Route::get('users/show', 'UserController@show');
     
     Route::get('tellies','TellyController@index');
     Route::post('tellies/create', 'TellyController@create');

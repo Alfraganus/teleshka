@@ -15,7 +15,7 @@ class UserController extends Controller
 
     public function index(Request $request)
     {
-        // return Auth::id();
+        
         $getUser = User::get();
         return $getUser;
     }
@@ -82,5 +82,7 @@ class UserController extends Controller
             return response()->json(['error'=>'Unauthorised'], 401);
         }
     }
-
+    public function show(){
+     return Auth::user();
+    }
 }
