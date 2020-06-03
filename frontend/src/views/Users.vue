@@ -113,10 +113,10 @@ export default {
           align: "start",
           value: "fullname"
         },
-        { text: "Email", value: "email" },
-        { text: "Username", value: "username" },
-        { text: "Role", value: "role" },
-        { text: "", value: "icons", sortable: false }
+        { text: "Email", value: "email"},
+        { text: "Username", value: "username"},
+        { text: "Role", value: "role"},
+        { text: "", value: "icons", sortable: false}
       ],
       search: "",
       addUserModal: false,

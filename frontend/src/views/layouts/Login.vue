@@ -39,8 +39,8 @@ const axios = require("axios").default;
 export default {
   data() {
     return {
-      username: "test",
-      password: "test",
+      username: "",
+      password: "",
       darkTheme: true,
       platformName: "UzAutoMotors Workflow",
       loading: false
