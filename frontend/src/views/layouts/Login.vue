@@ -59,12 +59,7 @@ export default {
         })
         .then(res => {
           this.$cookies.set('token', res.data.token_type + " " + res.data.access_token);
-          axios.get(this.$store.state.backend_url + "/users/show")
-          .then(ress => {
-            this.$cookies.set('user', ress.data);
-            console.log(ress.data)
-          })
-            this.$router.push("/"),
+          this.$router.push("/"),
           // this.$store.dispatch(
           //   "setAccessToken",
           //   res.data.token_type + " " + res.data.access_token,
@@ -75,6 +70,11 @@ export default {
             "Content-Type": "application/json",
             Authorization: res.data.token_type + " " + res.data.access_token
           };
+          axios.get(this.$store.state.backend_url + "/api/users/show")
+          .then(ress => {
+            this.$cookies.set('users', ress.data);
+            console.log(ress.data)
+          })
         });
     }
   }

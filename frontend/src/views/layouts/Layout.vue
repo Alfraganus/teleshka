@@ -7,7 +7,7 @@
 
       <v-spacer></v-spacer>
 
-      <v-btn text @click="Logout" v-if="!$cokies">
+      <v-btn text @click="Logout">
         logout<v-icon class="ml-2">mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
@@ -78,6 +78,7 @@ export default {
   methods: {
     Logout(){
       this.$cookies.remove('token');
+      this.$cookies.remove('users');
       this.$router.push("/login")
     }
   },
