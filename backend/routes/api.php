@@ -31,3 +31,8 @@ Route::get('ppr/' , 'PprController@index');
 Route::post('ppr/create', 'PprController@create');
 Route::post('ppr/update/{id}','PprController@update');
 Route::delete('ppr/delete/{id}', 'PprController@destroy');
+
+Route::get('telly-type/', 'TellyTypeController@index');
+Route::post('telly-type/create', 'TellyTypeController@create');
+Route::post('telly-type/update/{id}', 'TellyTypeController@update');
+Route::delete('telly-type/delete/{id}', 'TellyTypeController@destroy');
