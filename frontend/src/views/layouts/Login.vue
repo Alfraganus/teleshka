@@ -58,7 +58,7 @@ export default {
           // scope:
         })
         .then(res => {
-          this.$cookies.set('token', res.data.token_type + " " + res.data.access_token);
+          this.$cookies.set('token', res.data.token_type + " " + res.data.access_token, '20s');
           this.$router.push("/"),
           // this.$store.dispatch(
           //   "setAccessToken",
@@ -72,7 +72,7 @@ export default {
           };
           axios.get(this.$store.state.backend_url + "/api/users/show")
           .then(ress => {
-            this.$cookies.set('users', ress.data);
+            this.$cookies.set('users', ress.data, '20s');
             console.log(ress.data)
           })
         });
