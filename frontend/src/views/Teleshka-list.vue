@@ -208,7 +208,7 @@ export default {
           this.$axios
             .get(this.$store.state.backend_url + "/api/tellies")
             .then(response => {
-              this.tellies = response.data.getTelly;
+              this.tellies = response.data;
               this.Loading = false;
             })
             .catch(function(error) {
