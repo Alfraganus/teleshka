@@ -55,6 +55,39 @@ const routes = [
         import('@/views/Users.vue')
     },]
   },
+  {
+    path: '/shift',
+    name: 'Shift',
+    component: Layout,
+    hidden: true,
+    children: [{
+      path: '/',
+      component: () =>
+        import('@/views/Shift.vue')
+    },]
+  },
+  {
+    path: '/telly-type',
+    name: 'Telly-type',
+    component: Layout,
+    hidden: true,
+    children: [{
+      path: '/',
+      component: () =>
+        import('@/views/Telly-type.vue')
+    },]
+  },
+  {
+    path: '/department',
+    name: 'Department',
+    component: Layout,
+    hidden: true,
+    children: [{
+      path: '/',
+      component: () =>
+        import('@/views/Department.vue')
+    },]
+  },
 ]
 
 const router = new VueRouter({

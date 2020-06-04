@@ -70,7 +70,10 @@ export default {
       items: [
         { title: "My Account", icon: "mdi-account", link: "/"},
         { title: "Users", icon: "mdi-account-group-outline", link: "users"},
-        { title: "Teleshkalar", icon: "mdi-truck-trailer", link: "teleshka-list"}
+        { title: "Teleshkalar", icon: "mdi-truck-trailer", link: "teleshka-list"},
+        { title: "Teleshka turlari", icon: "mdi-truck-trailer", link: "telly-type"},
+        { title: "Department", icon: "mdi-truck-trailer", link: "department"},
+        { title: "Shift", icon: "mdi-truck-trailer", link: "shift"},
       ],
       mini: true
     };
