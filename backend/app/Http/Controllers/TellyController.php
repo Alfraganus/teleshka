@@ -15,11 +15,11 @@ class TellyController extends Controller
 
     public function create(Request $request)
     {
-        $tellyName = $request->input('telly_number');
+        $tellyNumber = $request->input('telly_number');
         $tellyType = $request->input('telly_type_id');
         $tellyDesc = $request->input('telly_desc');
         $addTelly = new Telly;
-        $addTelly->telly_name=$tellyName;
+        $addTelly->telly_number=$tellyNumber;
         $addTelly->telly_type_id=$tellyType;
         $addTelly->telly_desc=$tellyDesc;
         $addTelly->save();
