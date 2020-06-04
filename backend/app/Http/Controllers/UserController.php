@@ -30,6 +30,7 @@ class UserController extends Controller
         $model = new User();
         $model->fullname=$name;
         $model->username=$username;
+        $model->email=$email;
         $model->role=$role;
         $model->password=bcrypt($password);
         $model->save();
