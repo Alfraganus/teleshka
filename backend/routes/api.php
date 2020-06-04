@@ -17,7 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::group(['middleware' => ['auth:api']], function () {
+Route::group(['middleware' => ['auth:api']], function () {});
     Route::get('users', 'UserController@index');
     Route::post('users/create', 'UserController@create');
     Route::post('users/update/{id}','UserController@update');
@@ -43,4 +43,8 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('shift/create', 'ShiftController@create');
     Route::post('shift/update/{id}', 'ShiftController@update');
     Route::delete('shift/delete/{id}', 'ShiftController@destroy');
-});
+
+    Route::get('department', 'DepartmentController@index');
+    Route::post('department/create', 'DepartmentController@create');
+    Route::post('department/update/{id}', 'DepartmentController@update');
+    Route::delete('department/delete/{id}', 'DepartmentController@delete');

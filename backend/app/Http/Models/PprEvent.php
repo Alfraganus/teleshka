@@ -16,5 +16,11 @@ class PprEvent extends Model
         {
             return $this->hasOne('App\Http\Models\Telly', 'id', 'telly_id');
         }
+        
+            public function departmentId()
+            {
+                return $this->hasOne('App\Http\Models\Department', 'id', 'department_id');
+            }
+    
     }
 
