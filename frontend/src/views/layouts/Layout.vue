@@ -17,7 +17,7 @@
           <v-icon size="36">mdi-account-tie</v-icon>
         </v-list-item-avatar>
 
-        <v-list-item-title>User Name</v-list-item-title>
+        <v-list-item-title>{{ $cookies.get('user').fullname }}</v-list-item-title>
 
         <v-btn icon @click.stop="mini = !mini">
           <v-icon>mdi-chevron-left</v-icon>
@@ -82,7 +82,7 @@ export default {
     Logout(){
       this.$cookies.remove('token');
       this.$cookies.remove('users');
-      this.$router.push("/login")
+      this.$router.push('/login')
     }
   },
 };

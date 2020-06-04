@@ -2,7 +2,7 @@
   <div class="mx-4">
     <v-card-title>
       Foydalanuvchilar
-      <v-btn class="ml-8" color="success" @click="newUser()">Add user</v-btn>
+      <v-btn class="ml-8" color="success" v-if="$user.role >= 2" @click="newUser()">Add user</v-btn>
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
@@ -25,11 +25,11 @@
         v-slot:item.role="{ item }"
       >{{ roles.find( v => v.value == item.role) ? roles.find( v => v.value == item.role).text : '' }}</template>
       <template v-slot:item.icons="{ item }">
-        <v-btn class="mr-4" color="primary" @click="editUser(item)" outlined small dark>
+        <v-btn class="mr-4" color="primary" v-if="item.id != 1 && $user.role >= 1" @click="editUser(item)" outlined small dark>
           <v-icon small>mdi-pencil</v-icon>
         </v-btn>
 
-        <v-btn @click="deleteUser(item.id)" color="primary" outlined small dark>
+        <v-btn @click="deleteUser(item.id)" v-if="item.id != 1 && $user.role >= 2" color="primary" outlined small dark>
           <v-icon color="red" text small>mdi-delete</v-icon>
         </v-btn>
       </template>

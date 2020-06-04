@@ -76,7 +76,7 @@ export default {
             res.data.token_type + " " + res.data.access_token,
             "1h"
           );
-          this.$router.push("/"),
+          //this.$router.push("/"),
             (axios.defaults.headers.common = {
               Accept: "application/json",
               "Content-Type": "application/json",
@@ -85,10 +85,13 @@ export default {
           axios
             .get(this.$store.state.backend_url + "/api/users/show")
             .then(ress => {
-              this.$cookies.set("users", ress.data, "1h");
+              this.$cookies.set("user", ress.data, "1h");
               //console.log(ress.data);
+              location.replace('/');
             });
-          Swal.close()
+          Swal.close();
+          
+          
         })
         .catch(function(error) {
           Swal.fire({

@@ -2,7 +2,7 @@
   <div class="mx-4">
     <v-card-title>
       Shiftlar
-      <v-btn class="ml-8" color="success" @click="newShift()">Shift yaratish</v-btn>
+      <v-btn class="ml-8" color="success" @click="newShift()" v-if="$user.role >= 1">Shift yaratish</v-btn>
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
@@ -21,11 +21,11 @@
     >
       <template v-slot:item.id="{ item }">{{ shift.map(v => v.id).indexOf(item.id) + 1 }}</template>
       <template v-slot:item.icons="{ item }">
-        <v-btn class="mr-4" color="primary" @click="editShift(item)" outlined small dark>
+        <v-btn class="mr-4" color="primary" v-if="$user.role >= 1" @click="editShift(item)" outlined small dark>
           <v-icon small>mdi-pencil</v-icon>
         </v-btn>
 
-        <v-btn @click="deleteShift(item.id)" color="primary" outlined small dark>
+        <v-btn @click="deleteShift(item.id)" v-if="$user.role >= 2" color="primary" outlined small dark>
           <v-icon color="red" text small>mdi-delete</v-icon>
         </v-btn>
       </template>

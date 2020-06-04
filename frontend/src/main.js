@@ -12,6 +12,8 @@ Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 Vue.use(Cookies)
 
+Vue.prototype.$user = Cookies.get('user')
+
 router.beforeEach((to, from, next) => {
   if (to.name !== 'Login' && !Cookies.get('token')) next({ name: 'Login' })
   else next()

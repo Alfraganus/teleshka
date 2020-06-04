@@ -2,7 +2,7 @@
   <div class="mx-4">
     <v-card-title>
       Teleshkalar
-      <v-btn class="ml-8" color="success" @click="newTelly()">Yangi teleshka qo'shish</v-btn>
+      <v-btn class="ml-8" color="success" @click="newTelly()" v-if="$user.role >= 1">Yangi teleshka qo'shish</v-btn>
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
@@ -22,11 +22,11 @@
       <template v-slot:item.id="{ item }">{{ tellies.map(v => v.id).indexOf(item.id) + 1 }}</template>
       <template v-slot:item.telly_type_id="{ item }">{{ item.telly_type.name}}</template>
       <template v-slot:item.icons="{ item }">
-        <v-btn class="mr-4" color="primary" @click="editTelly(item)" outlined small dark>
+        <v-btn class="mr-4" color="primary" v-if="$user.role >= 1" @click="editTelly(item)" outlined small dark>
           <v-icon small>mdi-pencil</v-icon>
         </v-btn>
 
-        <v-btn @click="deleteTelly(item.id)" color="primary" outlined small dark>
+        <v-btn @click="deleteTelly(item.id)" color="primary" v-if="$user.role >= 2" outlined small dark>
           <v-icon color="red" text small>mdi-delete</v-icon>
         </v-btn>
       </template>
