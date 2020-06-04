@@ -35,7 +35,7 @@
     <v-dialog v-model="saveTellyModal" persistent max-width="450px">
       <v-card>
         <v-card-title>
-          <span class="headline">Yangi teleshka qo'shish</span>
+          <span class="headline">{{ tellyTitle }}</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -81,7 +81,7 @@
           </v-container>
         </v-card-text>
         <v-card-actions class="justify-center">
-          <v-btn color="green" dark @click="saveTelly">Add</v-btn>
+          <v-btn color="green" dark @click="saveTelly">Save</v-btn>
           <v-btn color="red darken-1" dark @click="saveTellyModal = false">Close</v-btn>
         </v-card-actions>
       </v-card>
@@ -115,7 +115,8 @@ export default {
       telly_desc: "",
       addTellyModal: false,
       saveTellyModal: false,
-      form: {}
+      form: {},
+      tellyTitle: ""
     };
   },
   methods: {
@@ -134,6 +135,7 @@ export default {
     },
     newTelly() {
       this.saveTellyModal = true;
+      this.tellyTitle = "Yangi teleshka qo'shish";
       this.form = {
         telly_number: "",
         telly_type_id: "",
@@ -142,6 +144,7 @@ export default {
     },
     editTelly(item) {
       this.saveTellyModal = true;
+      this.tellyTitle = "O'zgartirish";
       this.form = JSON.parse(JSON.stringify(item));
     },
     saveTelly() {
@@ -153,7 +156,14 @@ export default {
           )
           .then(response => {
             this.saveTellyModal = false;
-            this.tellies.push(response.data);
+            Swal.fire({
+              position: "top-end",
+              icon: "success",
+              title: response.data,
+              showConfirmButton: false,
+              timer: 1500
+            });
+            this.getList();
           })
           .catch(function(error) {
             console.log(error);
@@ -168,10 +178,16 @@ export default {
           )
           .then(response => {
             this.saveTellyModal = false;
-            this.tellies = this.tellies.map(v => {
-              if (v.id == response.data.id) v = response.data;
-              return v;
+            Swal.fire({
+              position: "top-end",
+              toast: true,
+              icon: "success",
+              title: response.data,
+              showConfirmButton: false,
+              timer: 1500,
+              timerProgressBar: true
             });
+            this.getList();
           })
           .catch(function(error) {
             console.log(error);
@@ -198,7 +214,16 @@ export default {
             .catch(function(error) {
               console.error(error);
             });
-          Swal.fire("O'chirildi!", "Ushbu teleshka o'chirildi.", "success");
+          Swal.fire({
+            position: "top-end",
+            toast: true,
+            icon: "success",
+            title: "O'chirildi",
+            showConfirmButton: false,
+            width: '250px',
+            timer: 2000,
+            timerProgressBar: true
+          });
         }
       });
     },
@@ -208,7 +233,7 @@ export default {
           this.$axios
             .get(this.$store.state.backend_url + "/api/tellies")
             .then(response => {
-              this.tellies = response.data.getTelly;
+              this.tellies = response.data;
               this.Loading = false;
             })
             .catch(function(error) {

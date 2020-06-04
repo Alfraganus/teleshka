@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 
 use App\Http\Models\Telly;
+use App\Http\Models\TellyType;
 use App\Http\Models\PPrEvent;
 use App\User;
 use Illuminate\Http\Request;
@@ -28,10 +29,8 @@ class TellyController extends Controller
 
     public function index()
     {
-        
         $getTelly = Telly::with('tellyType')->get();
-        $tellyTypes = Telly::get();
-        return ['getTelly'=>$getTelly, 'tellyTypes'=>$tellyTypes];
+        return $getTelly;
     }
 
     public function update(Request $request)
