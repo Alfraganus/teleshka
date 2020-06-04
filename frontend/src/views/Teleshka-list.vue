@@ -20,9 +20,7 @@
       loading-text="Loading... Please wait"
     >
       <template v-slot:item.id="{ item }">{{ tellies.map(v => v.id).indexOf(item.id) + 1 }}</template>
-      <template v-slot:item.telly_type_id="{ item }">
-        {{ telly_type.find(v => v.id == item.telly_type_id) ? telly_type.find(v => v.id == item.telly_type_id).name : ''}}
-        </template>
+      <template v-slot:item.telly_type_id="{ item }">{{ item.telly_type.name}}</template>
       <template v-slot:item.icons="{ item }">
         <v-btn class="mr-4" color="primary" @click="editTelly(item)" outlined small dark>
           <v-icon small>mdi-pencil</v-icon>
@@ -55,17 +53,20 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-select 
-                label="Telle type*" 
-                hide-details="auto" 
-                color="#203d5b" 
-                outlined 
-                :items="telly_type"
-                item-text="name"
-                dense></v-select>
+                <v-select
+                  v-model="form.telly_type_id"
+                  label="Telle type*"
+                  hide-details="auto"
+                  color="#203d5b"
+                  outlined
+                  :items="telly_type"
+                  item-text="name"
+                  item-value="id"
+                  dense
+                ></v-select>
               </v-col>
               <v-col cols="12">
-                <v-text-field
+                <v-textarea
                   v-model="form.telly_desc"
                   hide-details="auto"
                   color="#203d5b"
@@ -74,18 +75,7 @@
                   label="Description*"
                   persistent-hint
                   required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  label="Password*"
-                  hide-details="auto"
-                  color="#203d5b"
-                  outlined
-                  dense
-                  persistent-hint
-                  required
-                ></v-text-field>
+                ></v-textarea>
               </v-col>
             </v-row>
           </v-container>
@@ -121,6 +111,7 @@ export default {
       search: "",
       Loading: true,
       telly_number: "",
+      telly_type_id: "",
       telly_desc: "",
       addTellyModal: false,
       saveTellyModal: false,
@@ -145,6 +136,7 @@ export default {
       this.saveTellyModal = true;
       this.form = {
         telly_number: "",
+        telly_type_id: "",
         telly_desc: ""
       };
     },
@@ -216,21 +208,12 @@ export default {
           this.$axios
             .get(this.$store.state.backend_url + "/api/tellies")
             .then(response => {
-              this.tellies = response.data;
+              this.tellies = response.data.getTelly;
               this.Loading = false;
             })
             .catch(function(error) {
               console.log(error);
             }),
-        (this.tellies = [
-          {
-            id: 1,
-            telly_number: 1345,
-            telly_type_id: 2,
-            telly_desc: "Katrej yuklash uchun"
-          }
-        ]),
-        (this.Loading = false),
         2000
       );
     },
