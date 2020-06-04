@@ -30,7 +30,7 @@ class TellyController extends Controller
     {
         
         $getTelly = Telly::with('tellyType')->get();
-        $tellyTypes = TellyType::get();
+        $tellyTypes = Telly::get();
         return ['getTelly'=>$getTelly, 'tellyTypes'=>$tellyTypes];
     }
 
