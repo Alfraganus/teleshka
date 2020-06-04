@@ -67,6 +67,19 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
+                <v-text-field
+                  v-model="form.email"
+                  hide-details="auto"
+                  color="#203d5b"
+                  outlined
+                  dense
+                  label="Email*"
+                  :rules="[rules.required, rules.email]"
+                  persistent-hint
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
                 <v-select
                   v-model="form.role"
                   label="Role*"
@@ -79,11 +92,13 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field
+                  v-model="form.password"
                   label="Password*"
                   hide-details="auto"
                   color="#203d5b"
                   outlined
                   dense
+                  type="password"
                   persistent-hint
                   required
                 ></v-text-field>
@@ -106,18 +121,6 @@ export default {
   data() {
     return {
       users: [],
-      headers: [
-        { text: "ID", value: "id" },
-        {
-          text: "Fullname",
-          align: "start",
-          value: "fullname"
-        },
-        { text: "Email", value: "email"},
-        { text: "Username", value: "username"},
-        { text: "Role", value: "role"},
-        { text: "", value: "icons", sortable: false}
-      ],
       search: "",
       addUserModal: false,
       fullName: "",
@@ -125,6 +128,27 @@ export default {
       saveUserModal: false,
       form: {},
       Loading: true,
+      email: "",
+      headers: [
+        { text: "ID", value: "id" },
+        {
+          text: "Fullname",
+          align: "start",
+          value: "fullname"
+        },
+        { text: "Email", value: "email" },
+        { text: "Username", value: "username" },
+        { text: "Role", value: "role" },
+        { text: "", value: "icons", sortable: false }
+      ],      
+      rules: {
+        required: value => !!value || "Required.",
+        counter: value => value.length <= 40 || "Max 40 characters",
+        email: value => {
+          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+          return pattern.test(value) || "Invalid e-mail.";
+        }
+      },      
       roles: [
         {
           text: "User",
@@ -147,7 +171,8 @@ export default {
         .post(this.$store.state.backend_url + "/api/users/create", {
           fullName: this.fullName,
           userName: this.userName,
-          Role: this.role
+          role: this.role,
+          email: this.email
         })
         .then(function(response) {
           console.log(response);
@@ -161,7 +186,9 @@ export default {
       this.form = {
         fullname: "",
         username: "",
-        role: ""
+        role: "",
+        password: "",
+        email: ""
       };
     },
     editUser(item) {

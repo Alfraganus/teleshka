@@ -65,6 +65,7 @@ export default {
           grant_type: "password",
           client_id: "5",
           client_secret: "CZC1cQDoupNtr0J7oX8f4SAuSKZkzCn5BxZZo5aL",
+
           username: this.username,
           password: this.password
           // scope:

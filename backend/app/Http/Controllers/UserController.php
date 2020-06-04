@@ -24,6 +24,7 @@ class UserController extends Controller
     {
         $name = $request->input('fullname');
         $username = $request->input('username');
+        $email = $request->input('email');
         $role = $request->input('role');
         $password = $request->input('password');
         $model = new User();
