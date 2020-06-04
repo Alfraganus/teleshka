@@ -204,7 +204,7 @@ export default {
             this.users.push(response.data);
           })
           .catch(function(error) {
-            console.log(error);
+            console.error(error);
           });
       else
         this.$axios
@@ -220,7 +220,7 @@ export default {
             });
           })
           .catch(function(error) {
-            console.log(error);
+            console.error(error);
           });
     },
     deleteUser(id) {
@@ -239,7 +239,7 @@ export default {
             .delete(this.$store.state.backend_url + "/api/users/delete/" + id)
             .then(res => {
               this.users = this.users.filter(v => v.id != id);
-              console.log(res.data);
+              console.error(res.data);
             })
             .catch(function(error) {
               console.error(error);
