@@ -6,6 +6,7 @@ use App\Http\Models\PPrEvent;
 use App\User;
 use App\Http\Models\TellyType;
 use App\Http\Models\Shift;
+use App\Http\Models\Department;
 use Illuminate\Http\Request;
 
 class PprController extends Controller

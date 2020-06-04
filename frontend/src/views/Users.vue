@@ -188,7 +188,7 @@ export default {
         username: "",
         role: "",
         password: "",
-        email: ""
+        email: '',
       };
     },
     editUser(item) {
