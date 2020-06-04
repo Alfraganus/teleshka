@@ -55,7 +55,7 @@
               <v-col cols="12">
                 <v-select
                   v-model="form.telly_type_id"
-                  label="Telle type*"
+                  label="Telly type*"
                   hide-details="auto"
                   color="#203d5b"
                   outlined
