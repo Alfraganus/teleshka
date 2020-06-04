@@ -55,7 +55,7 @@ export default {
   methods: {
     login() {
       Swal.fire({
-        title: "Wait ...",
+        title: "Loading ...",
         onBeforeOpen: () => {
           Swal.showLoading();
         }

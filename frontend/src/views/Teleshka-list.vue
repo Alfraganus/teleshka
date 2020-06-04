@@ -81,7 +81,7 @@
           </v-container>
         </v-card-text>
         <v-card-actions class="justify-center">
-          <v-btn color="green" dark @click="saveTelly">Add</v-btn>
+          <v-btn color="green" dark @click="saveTelly">Save</v-btn>
           <v-btn color="red darken-1" dark @click="saveTellyModal = false">Close</v-btn>
         </v-card-actions>
       </v-card>
