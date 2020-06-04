@@ -51,8 +51,8 @@ export default {
       axios
         .post(this.$store.state.backend_url + "/oauth/token", {
           grant_type: "password",
-          client_id: "7",
-          client_secret: "op1mP1RlFCj6PMlgyzar9lvw7Yy1pE3OJbodBSL9",
+          client_id: "2",
+          client_secret: "TpzobYd18FYVkeLYofUmWuEshknxPDykzmrVuXNy",
           username: this.username,
           password: this.password
           // scope:
