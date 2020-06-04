@@ -1,7 +1,7 @@
 <template>
   <div class="mx-4">
     <v-card-title>
-      Teleshkalar
+      Shiftlar
       <v-btn class="ml-8" color="success" @click="newShift()">Shift yaratish</v-btn>
       <v-spacer></v-spacer>
       <v-text-field

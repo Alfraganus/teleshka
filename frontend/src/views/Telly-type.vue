@@ -1,7 +1,7 @@
 <template>
   <div class="mx-4">
     <v-card-title>
-      Teleshkalar
+      Teleshka turlari
       <v-btn class="ml-8" color="success" @click="newTelly()">Teleshka turini yaratish</v-btn>
       <v-spacer></v-spacer>
       <v-text-field
