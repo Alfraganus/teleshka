@@ -3,7 +3,7 @@
     <v-app-bar color="white" dense app>
       <v-app-bar-nav-icon @click="mini = !mini"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>Page title</v-toolbar-title>
+      <v-toolbar-title> page </v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -17,7 +17,7 @@
           <v-icon size="36">mdi-account-tie</v-icon>
         </v-list-item-avatar>
 
-        <v-list-item-title>{{ $cookies.get('user').fullname }}</v-list-item-title>
+        <v-list-item-title>{{ $user.fullname }}</v-list-item-title>
 
         <v-btn icon @click.stop="mini = !mini">
           <v-icon>mdi-chevron-left</v-icon>

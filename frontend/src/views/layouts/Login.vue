@@ -90,8 +90,6 @@ export default {
               location.replace('/');
             });
           Swal.close();
-          
-          
         })
         .catch(function(error) {
           Swal.fire({

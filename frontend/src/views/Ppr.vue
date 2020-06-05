@@ -2,6 +2,18 @@
   <div class="mx-4">
     <v-card-title>
       Teleshkalarni joriy tamirlash
+      <v-btn
+        @click="addPpr()"
+        v-if="$user.role >= 2"
+        color="success"
+        class="ml-4"
+        dark
+        outlined
+        small
+        icon
+      >
+        <v-icon text>mdi-plus-thick</v-icon>
+      </v-btn>
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
@@ -21,13 +33,13 @@
       <template v-slot:item.id="{ item }">{{ ppr.map(v => v.id).indexOf(item.id) + 1 }}</template>
       <template v-slot:item.icons="{ item }">
         <v-btn
-          class="mr-4"
           color="primary"
           v-if="$user.role >= 1"
           @click="editPpr(item)"
           outlined
           small
           dark
+          icon
         >
           <v-icon small>mdi-pencil</v-icon>
         </v-btn>
@@ -39,6 +51,7 @@
           outlined
           small
           dark
+          icon
         >
           <v-icon color="red" text small>mdi-delete</v-icon>
         </v-btn>
@@ -55,15 +68,88 @@
             <v-row>
               <v-col cols="12">
                 <v-text-field
-                  v-model="form.name"
+                  v-model="form.ppr_date"
                   autofocus
                   hide-details="auto"
-                  label="Shift name*"
+                  label="Tamirlash vaqti"
                   color="#203d5b"
                   outlined
+                  type="date"
                   dense
                   required
                 ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-select
+                  v-model="form.shift_id"
+                  label="Shifts*"
+                  hide-details="auto"
+                  color="#203d5b"
+                  outlined
+                  :items="shift"
+                  item-text="name"
+                  item-value="id"
+                  dense
+                ></v-select>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="form.ppr_responsible_employee_tabel"
+                  hide-details="auto"
+                  label="Tamirlovchi tabel raqami"
+                  color="#203d5b"
+                  outlined
+                  type="number"
+                  dense
+                  readonly
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="form.brigadir_tabel"
+                  hide-details="auto"
+                  label="Brigadel tabel raqami"
+                  color="#203d5b"
+                  outlined
+                  type="number"
+                  dense
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="form.telly_id"
+                  hide-details="auto"
+                  label="Teleshka"
+                  color="#203d5b"
+                  outlined
+                  type="number"
+                  dense
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-select
+                  v-model="form.department_id"
+                  label="Department*"
+                  hide-details="auto"
+                  color="#203d5b"
+                  outlined
+                  :items="department"
+                  item-text="name"
+                  item-value="id"
+                  dense
+                ></v-select>
+              </v-col>
+              <v-col cols="12">
+                <v-textarea
+                  v-model="form.technical_review_conclusion"
+                  hide-details="auto"
+                  color="#203d5b"
+                  outlined
+                  dense
+                  label="Description*"
+                  persistent-hint
+                  required
+                ></v-textarea>
               </v-col>
             </v-row>
           </v-container>
@@ -106,39 +192,106 @@ export default {
       addPprModal: false,
       savePprModal: false,
       form: {},
-      pprTitle: ""
+      pprTitle: "",
+      shift: [],
+      department: [],
+      newPprInfo: ""
     };
   },
   methods: {
+    addPpr(id) {
+      this.savePprModal = true;
+      this.pprTitle = "Teleshka tamirlashni hisobga olish";
+      this.form = {
+        ppr_date: "",
+        shift_id: "",
+        ppr_responsible_employee_tabel: this.$user.tabel_number,
+        brigadir_tabel: "",
+        telly_id: id,
+        department_id: "",
+        technical_review_conclusion: ""
+      };
+      this.getShiftList();
+      this.getDepartmentList();
+    },
     editPpr(item) {
       this.savePprModal = true;
       this.pprTitle = "O'zgartirish";
       this.form = JSON.parse(JSON.stringify(item));
     },
     savePpr() {
-      this.$axios
-        .post(
-          this.$store.state.backend_url + "/api/ppr/update/" + this.form.id,
-          this.form
-        )
-        .then(response => {
-          this.savePprModal = false;
-          Swal.fire({
-            position: "top-end",
-            toast: true,
-            icon: "success",
-            title: "Tamirlash o'zgardi!!!",
-            showConfirmButton: false,
-            timer: 1500,
-            timerProgressBar: true
+      if (!this.form.id)
+        this.$axios
+          .get(
+            "http://wb.uzautomotors.com/api/get-all-employees/" +
+              this.form.brigadir_tabel
+          )
+          .then(res => {
+            this.newPprInfo = res.data[0];
+            console.log(this.form.technical_review_conclusion);
+            this.$axios
+              .post(this.$store.state.backend_url + "/api/ppr/create", {
+                ppr_date: this.form.ppr_date,
+                shift_id: this.form.shift_id,
+                ppr_responsible_employee_tabel: this.form
+                  .ppr_responsible_employee_tabel,
+                ppr_responsible_employee_fullname: this.$user.fullname,
+                brigadir_tabel: this.form.brigadir_tabel,
+                brigadir_fullname:
+                  this.newPprInfo.firstname_uz_latin +
+                  " " +
+                  this.newPprInfo.lastname_uz_latin +
+                  " " +
+                  this.newPprInfo.middlename_uz_latin,
+                telly_id: this.form.telly_id,
+                department_id: this.form.department_id,
+                technical_review_conclusion: this.form
+                  .technical_review_conclusion,
+                created_at: new Date(),
+                updated_at: new Date()
+              })
+              .then(response => {
+                this.savePprModal = false;
+                Swal.fire({
+                  position: "top-end",
+                  icon: "success",
+                  title: response.data,
+                  showConfirmButton: false,
+                  timer: 1500
+                });
+                this.getList();
+              })
+              .catch(function(error) {
+                console.log(error);
+              });
+          })
+          .catch(function(error) {
+            console.error(error);
           });
-          this.Loading = true;
-          this.getList();
-          console.log(response.date);
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+      else
+        this.$axios
+          .post(
+            this.$store.state.backend_url +
+              "/api/tellies/update/" +
+              this.form.id,
+            this.form
+          )
+          .then(response => {
+            this.saveTellyModal = false;
+            Swal.fire({
+              position: "top-end",
+              toast: true,
+              icon: "success",
+              title: response.data,
+              showConfirmButton: false,
+              timer: 1500,
+              timerProgressBar: true
+            });
+            this.router.push("/ppr");
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
     },
     deletePpr(id) {
       Swal.fire({
@@ -190,6 +343,28 @@ export default {
             }),
         2000
       );
+    },
+    getDepartmentList() {
+      this.$axios
+        .get(this.$store.state.backend_url + "/api/department")
+        .then(response => {
+          this.department = response.data;
+          this.Loading = false;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    getShiftList() {
+      this.$axios
+        .get(this.$store.state.backend_url + "/api/shift")
+        .then(response => {
+          this.shift = response.data;
+          this.Loading = false;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     }
   },
   mounted() {

@@ -59,7 +59,7 @@
             <v-row>
               <v-col cols="12">
                 <v-text-field
-                  v-model="form.tabel_num"
+                  v-model="form.tabel_number"
                   autofocus
                   hide-details="auto"
                   label="Tabel №*"
@@ -69,19 +69,6 @@
                   dense
                   required
                   :readonly="readonly"
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="form.email"
-                  hide-details="auto"
-                  color="#203d5b"
-                  outlined
-                  dense
-                  label="Email*"
-                  :rules="[rules.required, rules.email]"
-                  persistent-hint
-                  required
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
@@ -115,16 +102,12 @@ export default {
       users: [],
       search: "",
       addUserModal: false,
-      fullName: "",
-      userName: "",
-      tabel_num: "",
+      tabel_number: "",
       saveUserModal: false,
       form: {},
       Loading: true,
-      email: "",
       readonly: false,
       newUserInfo: {},
-      creatUser: {},
       headers: [
         { text: "ID", value: "id" },
         {
@@ -138,37 +121,20 @@ export default {
         { text: "Role", value: "role" },
         { text: "", value: "icons", sortable: false }
       ],
-      rules: {
-        required: value => !!value || "Required.",
-        counter: value => value.length <= 40 || "Max 40 characters",
-        email: value => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-          return pattern.test(value) || "Invalid e-mail.";
-        }
-      },
       userRoles: [
-        {
-          text: "User",
-          value: "0"
-        },
-        {
-          text: "Admin",
-          value: "1"
-        },
-        {
-          text: "Administrator",
-          value: "2"
-        }
+        { text: "User", value: "0" },
+        { text: "Admin", value: "1" },
+        { text: "Administrator", value: "2" }
       ]
     };
   },
   methods: {
     newUser() {
       this.saveUserModal = true;
+      this.readonly = false;
       this.form = {
-        tabel_num: "",
-        role: "",
-        email: ""
+        tabel_number: "",
+        role: ""
       };
     },
     editUser(item) {
@@ -181,71 +147,71 @@ export default {
         this.$axios
           .get(
             "http://wb.uzautomotors.com/api/get-all-employees/" +
-              this.form.tabel_num
+              this.form.tabel_number
           )
           .then(res => {
-            this.newUserInfo = res.data;
-            this.creatUser = {
-              email: this.form.email,
-              fullname:
-                this.newUserInfo.firstname_uz_latin +
-                " " +
-                this.newUserInfo.lastname_uz_latin +
-                " " +
-                this.newUserInfo.middlename_uz_latin,
-              tabel_number: this.form.tabel_num.substr(0,1),
-              username: this.form.tabel_num,
-              role: this.form.role
-            };
-            // this.$axios
-            //   .post(
-            //     this.$store.state.backend_url + "/api/users/create",
-            //     (email = this.form.email),
-            //     (fullname =
-            //       this.newUserInfo.firstname_uz_latin +
-            //       " " +
-            //       this.newUserInfo.lastname_uz_latin +
-            //       " " +
-            //       this.newUserInfo.middlename_uz_latin),
-            //     (tabel_number = this.form.tabel_num),
-            //     (username = this.form.tabel_num),
-            //     (role = this.form.role)
-            //   )
-            //   .then(response => {
-            //     this.saveUserModal = false;
-            //     this.users.push(response.data);
-            //   })
-            //   .catch(function(error) {
-            //     console.error(error);
-            //   });
-            console.log(this.creatUser);
+            this.newUserInfo = res.data[0];
+            this.$axios
+              .post(this.$store.state.backend_url + "/api/users/create", {
+                fullname:
+                  this.newUserInfo.firstname_uz_latin +
+                  " " +
+                  this.newUserInfo.lastname_uz_latin +
+                  " " +
+                  this.newUserInfo.middlename_uz_latin,
+                tabel_number: this.form.tabel_number,
+                username:
+                  this.newUserInfo.firstname_uz_latin
+                    .substr(0, 1)
+                    .toLowerCase() +
+                  this.newUserInfo.lastname_uz_latin
+                    .substr(0, 1)
+                    .toLowerCase() +
+                  this.form.tabel_number,
+                role: this.form.role,
+                email:
+                  this.newUserInfo.firstname_uz_latin
+                    .substr(0, 1)
+                    .toLowerCase() +
+                  this.newUserInfo.lastname_uz_latin
+                    .substr(0, 1)
+                    .toLowerCase() +
+                  this.form.tabel_number +
+                  "@uzautomotors.com"
+              })
+              .then(response => {
+                this.saveUserModal = false;
+                this.users.push(response.data);
+              })
+              .catch(function(error) {
+                console.error(error);
+              });
           })
           .catch(function(error) {
             console.error(error);
+            //this.saveUserModal = false;
+            Swal.fire({
+              title: "Bunday tabel mavjud emas..!",
+              icon: "error",
+              confirmButtonColor: "#d33"
+            });
           });
-      } else console.log(this.tabel_num);
-      // this.$axios.get("http://wb.uzautomotors.com/api/get-all-employees/" + this.tabel_num)
-      //   .then(newUser => {
-      //     console.error(newUser.data);
-      //   })
-      //   .catch(function(error) {
-      //     console.error(error)
-      //   })
-      // this.$axios
-      //   .post(
-      //     this.$store.state.backend_url + "/api/users/update/" + this.form.id,
-      //     this.form
-      //   )
-      //   .then(response => {
-      //     this.saveUserModal = false;
-      //     this.users = this.users.map(v => {
-      //       if (v.id == response.data.id) v = response.data;
-      //       return v;
-      //     });
-      //   })
-      //   .catch(function(error) {
-      //     console.error(error);
-      //   });
+      } else 
+      this.$axios
+        .post(
+          this.$store.state.backend_url + "/api/users/update/" + this.form.id,
+          this.form
+        )
+        .then(response => {
+          this.saveUserModal = false;
+          this.users = this.users.map(v => {
+            if (v.id == response.data.id) v = response.data;
+            return v;
+          });
+        })
+        .catch(function(error) {
+          console.error(error);
+        });
     },
     deleteUser(id) {
       Swal.fire({
@@ -294,14 +260,6 @@ export default {
   },
   mounted() {
     this.getList();
-    this.$axios
-      .get("http://wb.uzautomotors.com/api/get-all-employees/8110")
-      .then(response => {
-        console.log(response);
-      })
-      .catch(function(error) {
-        console.log(error);
-      });
   }
 };
 

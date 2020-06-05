@@ -26,7 +26,9 @@ class PprController extends Controller
         $pprDate =  $request->input('ppr_date');
         $shift_id = $request->input('shift_id');
         $employeeTabel = $request->input('ppr_responsible_employee_tabel');
-        $brigadirTabel =$request->input('brigadir_tabel');
+        $employeeFullname = $request->input('ppr_responsible_employee_fullname');
+        $brigadirTabel = $request->input('brigadir_tabel');
+        $brigadirFullname =$request->input('brigadir_fullname');
         $tellyId = $request->input('telly_id');
         $departmentId = $request->input('department_id');
         $technicalReview = $request->input('technical_review_conclusion');
@@ -34,7 +36,9 @@ class PprController extends Controller
         $addPpr->ppr_date = $pprDate;
         $addPpr->shift_id = $shift_id;
         $addPpr->ppr_responsible_employee_tabel = $employeeTabel;
+        $addPpr->ppr_responsible_employee_fullname = $employeeFullname;
         $addPpr->brigadir_tabel = $brigadirTabel;
+        $addPpr->brigadir_fullname = $brigadirFullname;
         $addPpr->telly_id = $tellyId;
         $addPpr->department_id = $departmentId;
         $addPpr->technical_review_conclusion = $technicalReview;
