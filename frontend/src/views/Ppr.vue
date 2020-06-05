@@ -181,7 +181,7 @@ export default {
           this.$axios
             .get(this.$store.state.backend_url + "/api/ppr")
             .then(response => {
-              this.ppr = response.data;
+              this.ppr = response.getPpr;
               this.Loading = false;
             })
             .catch(function(error) {
