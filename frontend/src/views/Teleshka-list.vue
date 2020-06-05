@@ -40,18 +40,6 @@
         </v-btn>
 
         <v-btn
-          @click="addPpr(item.id)"
-          class="mr-4"
-          color="primary"
-          v-if="$user.role >= 1"
-          outlined
-          small
-          dark
-        >
-          <v-icon color="success" text small>mdi-cog</v-icon>
-        </v-btn>
-
-        <v-btn
           @click="deleteTelly(item.id)"
           color="primary"
           v-if="$user.role >= 2"
@@ -81,6 +69,7 @@
                   color="#203d5b"
                   outlined
                   dense
+                  type="number"
                   required
                 ></v-text-field>
               </v-col>
@@ -92,62 +81,6 @@
                   color="#203d5b"
                   outlined
                   :items="telly_type"
-                  item-text="name"
-                  item-value="id"
-                  dense
-                ></v-select>
-              </v-col>
-              <v-col cols="12">
-                <v-textarea
-                  v-model="form.telly_desc"
-                  hide-details="auto"
-                  color="#203d5b"
-                  outlined
-                  dense
-                  label="Description*"
-                  persistent-hint
-                  required
-                ></v-textarea>
-              </v-col>
-            </v-row>
-          </v-container>
-        </v-card-text>
-        <v-card-actions class="justify-center">
-          <v-btn color="green" dark @click="saveTelly">Save</v-btn>
-          <v-btn color="red darken-1" dark @click="saveTellyModal = false">Close</v-btn>
-        </v-card-actions>
-      </v-card>
-    </v-dialog>
-
-    <v-dialog v-model="savePprModal" persistent max-width="450px">
-      <v-card>
-        <v-card-title>
-          <span class="headline">{{ pprTitle }}</span>
-        </v-card-title>
-        <v-card-text>
-          <v-container>
-            <v-row>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="formppr.ppr_date"
-                  autofocus
-                  hide-details="auto"
-                  label="Tamirlash vaqti"
-                  color="#203d5b"
-                  outlined
-                  type="date"
-                  dense
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-select
-                  v-model="formppr.shift_id"
-                  label="Shifts*"
-                  hide-details="auto"
-                  color="#203d5b"
-                  outlined
-                  :items="shift"
                   item-text="name"
                   item-value="id"
                   dense
@@ -196,26 +129,17 @@ export default {
         { text: "", align: "right", value: "icons", sortable: false }
       ],
       telly_type: [],
-      shift: [],
       search: "",
       Loading: true,
       telly_number: "",
       telly_type_id: "",
       telly_desc: "",
       saveTellyModal: false,
-      savePprModal: false,
       form: {},
-      formppr: {},
       tellyTitle: "",
-      pprTitle: ""
     };
   },
   methods: {
-    addPpr(id) {
-      this.savePprModal = true;
-      this.pprTitle = "Teleshka tamirlashni hisobga olish " + id;
-      this.getShiftList();
-    },
     newTelly() {
       this.saveTellyModal = true;
       this.tellyTitle = "Yangi teleshka qo'shish";
@@ -324,17 +248,6 @@ export default {
             }),
         2000
       );
-    },
-    getShiftList() {
-      this.$axios
-        .get(this.$store.state.backend_url + "/api/shift")
-        .then(response => {
-          this.shift = response.data;
-          this.Loading = false;
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
     },
     getTypeList() {
       this.$axios
