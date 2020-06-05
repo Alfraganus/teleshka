@@ -74,6 +74,7 @@ export default {
         { title: "Teleshka turlari", icon: "mdi-truck-trailer", link: "telly-type"},
         { title: "Department", icon: "mdi-truck-trailer", link: "department"},
         { title: "Shift", icon: "mdi-truck-trailer", link: "shift"},
+        { title: "Joriy tamirlash", icon: "mdi-cog", link: "ppr"},
       ],
       mini: true
     };
