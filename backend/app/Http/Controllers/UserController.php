@@ -24,12 +24,14 @@ class UserController extends Controller
     {
         $name = $request->input('fullname');
         $username = $request->input('username');
+        $tabelnumber = $request->input('tabel_number');
         $email = $request->input('email');
         $role = $request->input('role');
         $password = $request->input('password');
         $model = new User();
         $model->fullname=$name;
         $model->username=$username;
+        $model->tabel_number =$tabelnumber;
         $model->email=$email;
         $model->role=$role;
         $model->password=bcrypt($password);
@@ -43,11 +45,13 @@ class UserController extends Controller
         $updateUser = User::find($request->input('id'));
         $updatedEmail = $request->input('email');
         $updatedName = $request->input('fullname');
+        $updatedTabel = $request->input('tabel_number');
         $updatedPass = $request->input('password');
         $updatedUsername = $request->input('username');
         $updatedRole = $request->input('role');
         $updateUser->email = $updatedEmail;
         $updateUser->fullname = $updatedName;
+        $updateUser->tabel_number = $updatedTabel;
         $updateUser->password = bcrypt($updatedPass);
         $updateUser->username = $updatedUsername;
         $updateUser->role = $updatedRole;
