@@ -14,7 +14,7 @@ class PprController extends Controller
     //
     public function index()
     {
-        $getPpr = PprEvent::with('shift')->with('tellyId')->with('departmentId')->orderBy('updated_at')->get();
+        $getPpr = PprEvent::with('shift')->with('tellyId')->with('departmentId')->orderBy('updated_at', 'asc')->get();
         //$shifts = Shift::get();
         //$tellyIds = Telly::get();
         //$departments = Department::get();
