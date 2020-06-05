@@ -89,7 +89,7 @@ export default {
         {
           text: "Tamirlash sanasi",
           align: "start",
-          value: "ppr_date "
+          value: "ppr_date"
         },
         { text: "Shift", value: "shift" },
         { text: "Tamirlovchi", value: "ppr_responsible_employee_fullname" },
@@ -181,7 +181,8 @@ export default {
           this.$axios
             .get(this.$store.state.backend_url + "/api/ppr")
             .then(response => {
-              this.ppr = response.getPpr;
+              this.ppr = response.data.getPpr;
+              console.log(response);
               this.Loading = false;
             })
             .catch(function(error) {
