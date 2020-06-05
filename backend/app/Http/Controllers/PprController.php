@@ -17,7 +17,7 @@ class PprController extends Controller
         $getPpr = PprEvent::with('shift')->with('tellyId')->with('departmentId')->get();
         $shifts = Shift::get();
         $tellyIds = Telly::get();
-        $departments = Deparment::get();
+        $departments = Department::get();
         return ['getPpr'=>$getPpr, 'shifts'=>$shifts, 'tellyIds'=>$tellyIds, 'departments'=>$departments];
     }
 
