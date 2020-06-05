@@ -2,7 +2,12 @@
   <div class="mx-4">
     <v-card-title>
       Teleshkalar
-      <v-btn class="ml-8" color="success" @click="newTelly()" v-if="$user.role >= 1">Yangi teleshka qo'shish</v-btn>
+      <v-btn
+        class="ml-8"
+        color="success"
+        @click="newTelly()"
+        v-if="$user.role >= 1"
+      >Yangi teleshka qo'shish</v-btn>
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
@@ -22,11 +27,38 @@
       <template v-slot:item.id="{ item }">{{ tellies.map(v => v.id).indexOf(item.id) + 1 }}</template>
       <template v-slot:item.telly_type_id="{ item }">{{ item.telly_type.name}}</template>
       <template v-slot:item.icons="{ item }">
-        <v-btn class="mr-4" color="primary" v-if="$user.role >= 1" @click="editTelly(item)" outlined small dark>
+        <v-btn
+          class="mr-4"
+          color="primary"
+          v-if="$user.role >= 1"
+          @click="editTelly(item)"
+          outlined
+          small
+          dark
+        >
           <v-icon small>mdi-pencil</v-icon>
         </v-btn>
 
-        <v-btn @click="deleteTelly(item.id)" color="primary" v-if="$user.role >= 2" outlined small dark>
+        <v-btn
+          @click="addPpr(item.id)"
+          class="mr-4"
+          color="primary"
+          v-if="$user.role >= 1"
+          outlined
+          small
+          dark
+        >
+          <v-icon color="success" text small>mdi-cog</v-icon>
+        </v-btn>
+
+        <v-btn
+          @click="deleteTelly(item.id)"
+          color="primary"
+          v-if="$user.role >= 2"
+          outlined
+          small
+          dark
+        >
           <v-icon color="red" text small>mdi-delete</v-icon>
         </v-btn>
       </template>
@@ -86,6 +118,62 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-dialog v-model="savePprModal" persistent max-width="450px">
+      <v-card>
+        <v-card-title>
+          <span class="headline">{{ pprTitle }}</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-text-field
+                  v-model="formppr.ppr_date"
+                  autofocus
+                  hide-details="auto"
+                  label="Tamirlash vaqti"
+                  color="#203d5b"
+                  outlined
+                  type="date"
+                  dense
+                  required
+                ></v-text-field>
+              </v-col>
+              <v-col cols="12">
+                <v-select
+                  v-model="formppr.shift_id"
+                  label="Shifts*"
+                  hide-details="auto"
+                  color="#203d5b"
+                  outlined
+                  :items="shift"
+                  item-text="name"
+                  item-value="id"
+                  dense
+                ></v-select>
+              </v-col>
+              <v-col cols="12">
+                <v-textarea
+                  v-model="form.telly_desc"
+                  hide-details="auto"
+                  color="#203d5b"
+                  outlined
+                  dense
+                  label="Description*"
+                  persistent-hint
+                  required
+                ></v-textarea>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions class="justify-center">
+          <v-btn color="green" dark @click="saveTelly">Save</v-btn>
+          <v-btn color="red darken-1" dark @click="saveTellyModal = false">Close</v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </div>
 </template>
 
@@ -108,30 +196,25 @@ export default {
         { text: "", align: "right", value: "icons", sortable: false }
       ],
       telly_type: [],
+      shift: [],
       search: "",
       Loading: true,
       telly_number: "",
       telly_type_id: "",
       telly_desc: "",
-      addTellyModal: false,
       saveTellyModal: false,
+      savePprModal: false,
       form: {},
-      tellyTitle: ""
+      formppr: {},
+      tellyTitle: "",
+      pprTitle: ""
     };
   },
   methods: {
-    addTelly() {
-      this.$axios
-        .post(this.$store.state.backend_url + "/api/tellies/create", {
-          telly_number: this.telly_number,
-          telly_desc: this.telly_desc
-        })
-        .then(function(response) {
-          console.log(response);
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+    addPpr(id) {
+      this.savePprModal = true;
+      this.pprTitle = "Teleshka tamirlashni hisobga olish " + id;
+      this.getShiftList();
     },
     newTelly() {
       this.saveTellyModal = true;
@@ -220,7 +303,7 @@ export default {
             icon: "success",
             title: "O'chirildi",
             showConfirmButton: false,
-            width: '250px',
+            width: "250px",
             timer: 2000,
             timerProgressBar: true
           });
@@ -241,6 +324,17 @@ export default {
             }),
         2000
       );
+    },
+    getShiftList() {
+      this.$axios
+        .get(this.$store.state.backend_url + "/api/shift")
+        .then(response => {
+          this.shift = response.data;
+          this.Loading = false;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     },
     getTypeList() {
       this.$axios

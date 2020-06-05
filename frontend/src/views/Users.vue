@@ -23,13 +23,28 @@
       <template v-slot:item.id="{ item }">{{ users.map(v => v.id).indexOf(item.id) + 1 }}</template>
       <template
         v-slot:item.role="{ item }"
-      >{{ roles.find( v => v.value == item.role) ? roles.find( v => v.value == item.role).text : '' }}</template>
+      >{{ userRoles.find( v => v.value == item.role) ? userRoles.find( v => v.value == item.role).text : '' }}</template>
       <template v-slot:item.icons="{ item }">
-        <v-btn class="mr-4" color="primary" v-if="item.id != 1 && $user.role >= 1" @click="editUser(item)" outlined small dark>
+        <v-btn
+          class="mr-4"
+          color="primary"
+          v-if="item.id != 1 && $user.role >= 1"
+          @click="editUser(item)"
+          outlined
+          small
+          dark
+        >
           <v-icon small>mdi-pencil</v-icon>
         </v-btn>
 
-        <v-btn @click="deleteUser(item.id)" v-if="item.id != 1 && $user.role >= 2" color="primary" outlined small dark>
+        <v-btn
+          @click="deleteUser(item.id)"
+          v-if="item.id != 1 && $user.role >= 2"
+          color="primary"
+          outlined
+          small
+          dark
+        >
           <v-icon color="red" text small>mdi-delete</v-icon>
         </v-btn>
       </template>
@@ -44,26 +59,16 @@
             <v-row>
               <v-col cols="12">
                 <v-text-field
-                  v-model="form.fullname"
+                  v-model="form.tabel_num"
                   autofocus
                   hide-details="auto"
-                  label="Fullname*"
+                  label="Tabel №*"
                   color="#203d5b"
                   outlined
+                  type="number"
                   dense
                   required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="form.username"
-                  hide-details="auto"
-                  color="#203d5b"
-                  outlined
-                  dense
-                  label="User name*"
-                  persistent-hint
-                  required
+                  :readonly="readonly"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
@@ -87,21 +92,8 @@
                   color="#203d5b"
                   outlined
                   dense
-                  :items="roles"
+                  :items="userRoles"
                 ></v-select>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="form.password"
-                  label="Password*"
-                  hide-details="auto"
-                  color="#203d5b"
-                  outlined
-                  dense
-                  type="password"
-                  persistent-hint
-                  required
-                ></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -125,10 +117,14 @@ export default {
       addUserModal: false,
       fullName: "",
       userName: "",
+      tabel_num: "",
       saveUserModal: false,
       form: {},
       Loading: true,
       email: "",
+      readonly: false,
+      newUserInfo: {},
+      creatUser: {},
       headers: [
         { text: "ID", value: "id" },
         {
@@ -138,9 +134,10 @@ export default {
         },
         { text: "Email", value: "email" },
         { text: "Username", value: "username" },
+        { text: "Tabel #", value: "tabel_number" },
         { text: "Role", value: "role" },
         { text: "", value: "icons", sortable: false }
-      ],      
+      ],
       rules: {
         required: value => !!value || "Required.",
         counter: value => value.length <= 40 || "Max 40 characters",
@@ -148,8 +145,8 @@ export default {
           const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
           return pattern.test(value) || "Invalid e-mail.";
         }
-      },      
-      roles: [
+      },
+      userRoles: [
         {
           text: "User",
           value: "0"
@@ -166,62 +163,89 @@ export default {
     };
   },
   methods: {
-    addUser() {
-      this.$axios
-        .post(this.$store.state.backend_url + "/api/users/create", {
-          fullName: this.fullName,
-          userName: this.userName,
-          role: this.role,
-          email: this.email
-        })
-        .then(function(response) {
-          console.log(response);
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-    },
     newUser() {
       this.saveUserModal = true;
       this.form = {
-        fullname: "",
-        username: "",
+        tabel_num: "",
         role: "",
-        password: "",
-        email: '',
+        email: ""
       };
     },
     editUser(item) {
       this.saveUserModal = true;
+      this.readonly = true;
       this.form = JSON.parse(JSON.stringify(item));
     },
     saveUser() {
-      if (!this.form.id)
+      if (!this.form.id) {
         this.$axios
-          .post(this.$store.state.backend_url + "/api/users/create", this.form)
-          .then(response => {
-            this.saveUserModal = false;
-            this.users.push(response.data);
-          })
-          .catch(function(error) {
-            console.error(error);
-          });
-      else
-        this.$axios
-          .post(
-            this.$store.state.backend_url + "/api/users/update/" + this.form.id,
-            this.form
+          .get(
+            "http://wb.uzautomotors.com/api/get-all-employees/" +
+              this.form.tabel_num
           )
-          .then(response => {
-            this.saveUserModal = false;
-            this.users = this.users.map(v => {
-              if (v.id == response.data.id) v = response.data;
-              return v;
-            });
+          .then(res => {
+            this.newUserInfo = res.data;
+            this.creatUser = {
+              email: this.form.email,
+              fullname:
+                this.newUserInfo.firstname_uz_latin +
+                " " +
+                this.newUserInfo.lastname_uz_latin +
+                " " +
+                this.newUserInfo.middlename_uz_latin,
+              tabel_number: this.form.tabel_num.substr(0,1),
+              username: this.form.tabel_num,
+              role: this.form.role
+            };
+            // this.$axios
+            //   .post(
+            //     this.$store.state.backend_url + "/api/users/create",
+            //     (email = this.form.email),
+            //     (fullname =
+            //       this.newUserInfo.firstname_uz_latin +
+            //       " " +
+            //       this.newUserInfo.lastname_uz_latin +
+            //       " " +
+            //       this.newUserInfo.middlename_uz_latin),
+            //     (tabel_number = this.form.tabel_num),
+            //     (username = this.form.tabel_num),
+            //     (role = this.form.role)
+            //   )
+            //   .then(response => {
+            //     this.saveUserModal = false;
+            //     this.users.push(response.data);
+            //   })
+            //   .catch(function(error) {
+            //     console.error(error);
+            //   });
+            console.log(this.creatUser);
           })
           .catch(function(error) {
             console.error(error);
           });
+      } else console.log(this.tabel_num);
+      // this.$axios.get("http://wb.uzautomotors.com/api/get-all-employees/" + this.tabel_num)
+      //   .then(newUser => {
+      //     console.error(newUser.data);
+      //   })
+      //   .catch(function(error) {
+      //     console.error(error)
+      //   })
+      // this.$axios
+      //   .post(
+      //     this.$store.state.backend_url + "/api/users/update/" + this.form.id,
+      //     this.form
+      //   )
+      //   .then(response => {
+      //     this.saveUserModal = false;
+      //     this.users = this.users.map(v => {
+      //       if (v.id == response.data.id) v = response.data;
+      //       return v;
+      //     });
+      //   })
+      //   .catch(function(error) {
+      //     console.error(error);
+      //   });
     },
     deleteUser(id) {
       Swal.fire({
@@ -270,6 +294,16 @@ export default {
   },
   mounted() {
     this.getList();
+    this.$axios
+      .get("http://wb.uzautomotors.com/api/get-all-employees/8110")
+      .then(response => {
+        console.log(response);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
   }
 };
+
+// Toxir aka: 8110, Qodir aka: 9592
 </script>
