@@ -18,7 +18,7 @@ class PprController extends Controller
         $shifts = Shift::get();
         $tellyIds = Telly::get();
         $departments = Department::get();
-        return ['getPpr'=>$getPpr, 'shifts'=>$shifts, 'tellyIds'=>$tellyIds, 'departments'=>$departments];
+        return ['getPpr'=>$getPpr];
     }
 
     public function create(Request $request)
