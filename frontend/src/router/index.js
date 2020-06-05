@@ -88,6 +88,17 @@ const routes = [
         import('@/views/Department.vue')
     },]
   },
+  {
+    path: '/ppr',
+    name: 'Ppr',
+    component: Layout,
+    hidden: true,
+    children: [{
+      path: '/',
+      component: () =>
+        import('@/views/Ppr.vue')
+    },]
+  },
 ]
 
 const router = new VueRouter({

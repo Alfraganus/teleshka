@@ -1,8 +1,7 @@
 <template>
   <div class="mx-4">
     <v-card-title>
-      Shiftlar
-      <v-btn class="ml-8" color="success" @click="newShift()" v-if="$user.role >= 1">Shift yaratish</v-btn>
+      Teleshkalarni joriy tamirlash
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
@@ -14,27 +13,42 @@
     </v-card-title>
     <v-data-table
       :headers="headers"
-      :items="shift"
+      :items="ppr"
       :search="search"
       :loading="Loading"
       loading-text="Loading... Please wait"
     >
-      <template v-slot:item.id="{ item }">{{ shift.map(v => v.id).indexOf(item.id) + 1 }}</template>
+      <template v-slot:item.id="{ item }">{{ ppr.map(v => v.id).indexOf(item.id) + 1 }}</template>
       <template v-slot:item.icons="{ item }">
-        <v-btn class="mr-4" color="primary" v-if="$user.role >= 1" @click="editShift(item)" outlined small dark>
+        <v-btn
+          class="mr-4"
+          color="primary"
+          v-if="$user.role >= 1"
+          @click="editPpr(item)"
+          outlined
+          small
+          dark
+        >
           <v-icon small>mdi-pencil</v-icon>
         </v-btn>
 
-        <v-btn @click="deleteShift(item.id)" v-if="$user.role >= 2" color="primary" outlined small dark>
+        <v-btn
+          @click="deletePpr(item.id)"
+          v-if="$user.role >= 2"
+          color="primary"
+          outlined
+          small
+          dark
+        >
           <v-icon color="red" text small>mdi-delete</v-icon>
         </v-btn>
       </template>
     </v-data-table>
 
-    <v-dialog v-model="saveShiftModal" persistent max-width="450px">
+    <v-dialog v-model="savePprModal" persistent max-width="450px">
       <v-card>
         <v-card-title>
-          <span class="headline">{{ ShiftTitle }}</span>
+          <span class="headline">{{ pprTitle }}</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -55,8 +69,8 @@
           </v-container>
         </v-card-text>
         <v-card-actions class="justify-center">
-          <v-btn color="green" dark @click="saveShift">Save</v-btn>
-          <v-btn color="red darken-1" dark @click="saveShiftModal = false">Close</v-btn>
+          <v-btn color="green" dark @click="savePpr">Save</v-btn>
+          <v-btn color="red darken-1" dark @click="savePprModal = false">Close</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -69,92 +83,67 @@ import Swal from "sweetalert2";
 export default {
   data() {
     return {
-      shift: [],
+      ppr: [],
       headers: [
         { text: "ID", value: "id" },
         {
-          text: "Shift name",
+          text: "Tamirlash sanasi",
           align: "start",
-          value: "name"
+          value: "ppr_date "
         },
+        { text: "Shift", value: "shift" },
+        { text: "Tamirlovchi", value: "ppr_responsible_employee_fullname" },
+        { text: "Brigadir", value: "brigadir_fullname" },
+        { text: "Telly №", value: "telly_id" },
+        { text: "Department", value: "department_id" },
+        { text: "Tamirlangan vaqt", value: "updated_at" },
+        { text: "Izox", value: "technical_review_conclusion" },
         { text: "", align: "right", value: "icons", sortable: false }
       ],
       search: "",
       Loading: true,
       name: "",
-      addShiftModal: false,
-      saveShiftModal: false,
+      addPprModal: false,
+      savePprModal: false,
       form: {},
-      ShiftTitle: ""
+      pprTitle: ""
     };
   },
   methods: {
-    newShift() {
-      this.saveShiftModal = true;
-      this.ShiftTitle = "Shift qo'shish";
-      this.form = {
-          name: ""
-      };
-    },
-    editShift(item) {
-      this.saveShiftModal = true;
-      this.ShiftTitle = "O'zgartirish";
+    editPpr(item) {
+      this.savePprModal = true;
+      this.pprTitle = "O'zgartirish";
       this.form = JSON.parse(JSON.stringify(item));
     },
-    saveShift() {
-      if (!this.form.id)
-        this.$axios
-          .post(
-            this.$store.state.backend_url + "/api/shift/create",
-            this.form
-          )
-          .then(response => {
-            this.saveShiftModal = false;
-            Swal.fire({
-              position: "top-end",
-              icon: "success",
-              title: "Shift type qo'shildi!!!",
-              showConfirmButton: false,
-              timer: 1500
-            });
-            this.Loading = true;
-            this.getList();
-            console.log(response.date)
-          })
-          .catch(function(error) {
-            console.log(error);
+    savePpr() {
+      this.$axios
+        .post(
+          this.$store.state.backend_url + "/api/ppr/update/" + this.form.id,
+          this.form
+        )
+        .then(response => {
+          this.savePprModal = false;
+          Swal.fire({
+            position: "top-end",
+            toast: true,
+            icon: "success",
+            title: "Tamirlash o'zgardi!!!",
+            showConfirmButton: false,
+            timer: 1500,
+            timerProgressBar: true
           });
-      else
-        this.$axios
-          .post(
-            this.$store.state.backend_url +
-              "/api/shift/update/" +
-              this.form.id,
-            this.form
-          )
-          .then(response => {
-            this.saveShiftModal = false;
-            Swal.fire({
-              position: "top-end",
-              toast: true,
-              icon: "success",
-              title: "Shift o'zgardi!!!",
-              showConfirmButton: false,
-              timer: 1500,
-              timerProgressBar: true
-            });
-            this.Loading = true;
-            this.getList();
-            console.log(response.date)
-          })
-          .catch(function(error) {
-            console.log(error);
-          });
+          this.Loading = true;
+          this.getList();
+          console.log(response.date);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     },
-    deleteShift(id) {
+    deletePpr(id) {
       Swal.fire({
         title: "O'chirish",
-        text: "Siz ushbu Shiftni o'chirishga aminmisiz!",
+        text: "Siz ushbu tamirlashni o'chirishga aminmisiz!",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",
@@ -164,10 +153,10 @@ export default {
       }).then(result => {
         if (result.value) {
           this.$axios
-            .delete(this.$store.state.backend_url + "/api/shift/delete/" + id)
+            .delete(this.$store.state.backend_url + "/api/ppr/delete/" + id)
             .then(res => {
               this.Loading = true;
-               this.getList();
+              this.getList();
               console.log(res.data);
             })
             .catch(function(error) {
@@ -179,7 +168,7 @@ export default {
             icon: "success",
             title: "O'chirildi",
             showConfirmButton: false,
-            width: '250px',
+            width: "250px",
             timer: 2000,
             timerProgressBar: true
           });
@@ -190,9 +179,9 @@ export default {
       setTimeout(
         () =>
           this.$axios
-            .get(this.$store.state.backend_url + "/api/shift")
+            .get(this.$store.state.backend_url + "/api/ppr")
             .then(response => {
-              this.shift = response.data;
+              this.ppr = response.data;
               this.Loading = false;
             })
             .catch(function(error) {
@@ -200,7 +189,7 @@ export default {
             }),
         2000
       );
-    },
+    }
   },
   mounted() {
     this.getList();
