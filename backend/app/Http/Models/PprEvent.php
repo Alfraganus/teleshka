@@ -21,8 +21,6 @@ class PprEvent extends Model
             {
                 return $this->hasOne('App\Http\Models\Department', 'id', 'department_id');
             }
-            protected $allowedSortParameters = [
-                'created-at',
-            ];
+            
     }
 
