@@ -2,7 +2,6 @@
   <div class="mx-4">
     <v-card-title>
       Shiftlar
-      <v-btn class="ml-8" color="success" @click="newShift()" v-if="$user.role >= 1">Shift yaratish</v-btn>
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
@@ -11,6 +10,18 @@
         single-line
         hide-details
       ></v-text-field>
+      <v-btn
+        @click="newShift()"
+        v-if="$user.role >= 1"
+        color="success"
+        class="ml-8"
+        dark
+        outlined
+        small
+        icon
+      >
+        <v-icon text>mdi-plus-thick</v-icon>
+      </v-btn>
     </v-card-title>
     <v-data-table
       :headers="headers"
@@ -18,16 +29,13 @@
       :search="search"
       :loading="Loading"
       loading-text="Loading... Please wait"
+      class="elevation-3"
+      :height="height - 200"
     >
       <template v-slot:item.id="{ item }">{{ shift.map(v => v.id).indexOf(item.id) + 1 }}</template>
       <template v-slot:item.icons="{ item }">
-        <v-btn class="mr-4" color="primary" v-if="$user.role >= 1" @click="editShift(item)" outlined small dark>
-          <v-icon small>mdi-pencil</v-icon>
-        </v-btn>
-
-        <v-btn @click="deleteShift(item.id)" v-if="$user.role >= 2" color="primary" outlined small dark>
-          <v-icon color="red" text small>mdi-delete</v-icon>
-        </v-btn>
+        <v-icon v-if="$user.role >= 1" @click="editShift(item)">mdi-pencil</v-icon>
+        <v-icon @click="deleteShift(item.id)" v-if="$user.role >= 2">mdi-delete</v-icon>
       </template>
     </v-data-table>
 
@@ -71,13 +79,13 @@ export default {
     return {
       shift: [],
       headers: [
-        { text: "ID", value: "id" },
+        { text: "ID", value: "id", width: 65 },
         {
           text: "Shift name",
           align: "start",
           value: "name"
         },
-        { text: "", align: "right", value: "icons", sortable: false }
+        { text: "", align: "right", value: "icons", sortable: false, width: 80 }
       ],
       search: "",
       Loading: true,
@@ -85,7 +93,8 @@ export default {
       addShiftModal: false,
       saveShiftModal: false,
       form: {},
-      ShiftTitle: ""
+      ShiftTitle: "",
+      height: 600
     };
   },
   methods: {
@@ -93,7 +102,7 @@ export default {
       this.saveShiftModal = true;
       this.ShiftTitle = "Shift qo'shish";
       this.form = {
-          name: ""
+        name: ""
       };
     },
     editShift(item) {
@@ -104,22 +113,21 @@ export default {
     saveShift() {
       if (!this.form.id)
         this.$axios
-          .post(
-            this.$store.state.backend_url + "/api/shift/create",
-            this.form
-          )
+          .post(this.$store.state.backend_url + "/api/shift/create", this.form)
           .then(response => {
             this.saveShiftModal = false;
             Swal.fire({
               position: "top-end",
+              toast: true,
               icon: "success",
-              title: "Shift type qo'shildi!!!",
+              title: "Saqlandi!!!",
               showConfirmButton: false,
-              timer: 1500
+              timer: 1500,
+              timerProgressBar: true
             });
             this.Loading = true;
             this.getList();
-            console.log(response.date)
+            console.log(response.date);
           })
           .catch(function(error) {
             console.log(error);
@@ -127,9 +135,7 @@ export default {
       else
         this.$axios
           .post(
-            this.$store.state.backend_url +
-              "/api/shift/update/" +
-              this.form.id,
+            this.$store.state.backend_url + "/api/shift/update/" + this.form.id,
             this.form
           )
           .then(response => {
@@ -145,7 +151,7 @@ export default {
             });
             this.Loading = true;
             this.getList();
-            console.log(response.date)
+            console.log(response.date);
           })
           .catch(function(error) {
             console.log(error);
@@ -167,7 +173,7 @@ export default {
             .delete(this.$store.state.backend_url + "/api/shift/delete/" + id)
             .then(res => {
               this.Loading = true;
-               this.getList();
+              this.getList();
               console.log(res.data);
             })
             .catch(function(error) {
@@ -179,7 +185,6 @@ export default {
             icon: "success",
             title: "O'chirildi",
             showConfirmButton: false,
-            width: '250px',
             timer: 2000,
             timerProgressBar: true
           });
@@ -200,10 +205,11 @@ export default {
             }),
         2000
       );
-    },
+    }
   },
   mounted() {
     this.getList();
+    this.height = document.getElementById("navbar").clientHeight;
   }
 };
 </script>

@@ -2,7 +2,6 @@
   <div class="mx-4">
     <v-card-title>
       Teleshka turlari
-      <v-btn class="ml-8" color="success" @click="newTelly()" v-if="$user.role >= 2">Teleshka turini yaratish</v-btn>
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
@@ -11,6 +10,18 @@
         single-line
         hide-details
       ></v-text-field>
+      <v-btn
+        @click="newTelly()"
+        v-if="$user.role >= 2"
+        color="success"
+        class="ml-8"
+        dark
+        outlined
+        small
+        icon
+      >
+        <v-icon text>mdi-plus-thick</v-icon>
+      </v-btn>
     </v-card-title>
     <v-data-table
       :headers="headers"
@@ -18,16 +29,13 @@
       :search="search"
       :loading="Loading"
       loading-text="Loading... Please wait"
+      class="elevation-3"
+      :height="height - 200"
     >
       <template v-slot:item.id="{ item }">{{ telly_types.map(v => v.id).indexOf(item.id) + 1 }}</template>
       <template v-slot:item.icons="{ item }">
-        <v-btn class="mr-4" color="primary" v-if="$user.role >= 2" @click="editTelly(item)" outlined small dark>
-          <v-icon small>mdi-pencil</v-icon>
-        </v-btn>
-
-        <v-btn @click="deleteTelly(item.id)" v-if="$user.role >= 2" color="primary" outlined small dark>
-          <v-icon color="red" text small>mdi-delete</v-icon>
-        </v-btn>
+        <v-icon v-if="$user.role >= 2" @click="editTelly(item)">mdi-pencil</v-icon>
+        <v-icon @click="deleteTelly(item.id)" v-if="$user.role >= 2">mdi-delete</v-icon>
       </template>
     </v-data-table>
 
@@ -71,13 +79,19 @@ export default {
     return {
       telly_types: [],
       headers: [
-        { text: "ID", value: "id" },
+        { text: "ID", value: "id", width: 65 },
         {
           text: "Telly type",
           align: "start",
           value: "name"
         },
-        { text: "", align: "right", value: "icons", sortable: false }
+        {
+          text: "",
+          align: "right",
+          value: "icons",
+          sortable: false,
+          width: 80
+        }
       ],
       search: "",
       Loading: true,
@@ -85,7 +99,8 @@ export default {
       addTellyModal: false,
       saveTellyModal: false,
       form: {},
-      tellyTitle: ""
+      tellyTitle: "",
+      height: 600
     };
   },
   methods: {
@@ -93,7 +108,7 @@ export default {
       this.saveTellyModal = true;
       this.tellyTitle = "Teleshka turini qo'shish";
       this.form = {
-          name: ""
+        name: ""
       };
     },
     editTelly(item) {
@@ -112,13 +127,15 @@ export default {
             this.saveTellyModal = false;
             Swal.fire({
               position: "top-end",
+              toast: true,
               icon: "success",
               title: "Telly type qo'shildi!!!",
               showConfirmButton: false,
-              timer: 1500
+              timer: 1500,
+              timerProgressBar: true
             });
             this.getList();
-            console.log(response.date)
+            console.log(response.date);
           })
           .catch(function(error) {
             console.log(error);
@@ -143,7 +160,7 @@ export default {
               timerProgressBar: true
             });
             this.getList();
-            console.log(response.date)
+            console.log(response.date);
           })
           .catch(function(error) {
             console.log(error);
@@ -162,7 +179,9 @@ export default {
       }).then(result => {
         if (result.value) {
           this.$axios
-            .delete(this.$store.state.backend_url + "/api/telly-type/delete/" + id)
+            .delete(
+              this.$store.state.backend_url + "/api/telly-type/delete/" + id
+            )
             .then(res => {
               this.telly_types = this.telly_types.filter(v => v.id != id);
               console.log(res.data);
@@ -176,7 +195,7 @@ export default {
             icon: "success",
             title: "O'chirildi",
             showConfirmButton: false,
-            width: '250px',
+            width: "250px",
             timer: 2000,
             timerProgressBar: true
           });
@@ -197,10 +216,11 @@ export default {
             }),
         2000
       );
-    },
+    }
   },
   mounted() {
     this.getList();
+    this.height = document.getElementById("navbar").clientHeight;
   }
 };
 </script>

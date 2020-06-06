@@ -2,7 +2,6 @@
   <div class="mx-4">
     <v-card-title>
       Foydalanuvchilar
-      <v-btn class="ml-8" color="success" v-if="$user.role >= 2" @click="newUser()">Add user</v-btn>
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
@@ -11,42 +10,35 @@
         single-line
         hide-details
       ></v-text-field>
+      <v-btn
+        @click="newUser()"
+        v-if="$user.role >= 2"
+        color="success"
+        class="ml-8"
+        dark
+        outlined
+        small
+        icon
+      >
+        <v-icon text>mdi-plus-thick</v-icon>
+      </v-btn>
     </v-card-title>
-
     <v-data-table
       :headers="headers"
       :items="users"
       :search="search"
       :loading="Loading"
       loading-text="Loading... Please wait"
+      class="elevation-3"
+      :height="height - 200"
     >
       <template v-slot:item.id="{ item }">{{ users.map(v => v.id).indexOf(item.id) + 1 }}</template>
       <template
         v-slot:item.role="{ item }"
       >{{ userRoles.find( v => v.value == item.role) ? userRoles.find( v => v.value == item.role).text : '' }}</template>
       <template v-slot:item.icons="{ item }">
-        <v-btn
-          class="mr-4"
-          color="primary"
-          v-if="item.id != 1 && $user.role >= 1"
-          @click="editUser(item)"
-          outlined
-          small
-          dark
-        >
-          <v-icon small>mdi-pencil</v-icon>
-        </v-btn>
-
-        <v-btn
-          @click="deleteUser(item.id)"
-          v-if="item.id != 1 && $user.role >= 2"
-          color="primary"
-          outlined
-          small
-          dark
-        >
-          <v-icon color="red" text small>mdi-delete</v-icon>
-        </v-btn>
+        <v-icon v-if="item.id != 1 && $user.role >= 1" @click="editUser(item)">mdi-pencil</v-icon>
+        <v-icon @click="deleteUser(item.id)" v-if="item.id != 1 && $user.role >= 2">mdi-delete</v-icon>
       </template>
     </v-data-table>
     <v-dialog v-model="saveUserModal" persistent max-width="450px">
@@ -109,7 +101,7 @@ export default {
       readonly: false,
       newUserInfo: {},
       headers: [
-        { text: "ID", value: "id" },
+        { text: "ID", value: "id", width: 65 },
         {
           text: "Fullname",
           align: "start",
@@ -119,13 +111,20 @@ export default {
         { text: "Username", value: "username" },
         { text: "Tabel #", value: "tabel_number" },
         { text: "Role", value: "role" },
-        { text: "", value: "icons", sortable: false }
+        {
+          text: "",
+          align: "right",
+          value: "icons",
+          sortable: false,
+          width: 80
+        }
       ],
       userRoles: [
         { text: "User", value: "0" },
         { text: "Admin", value: "1" },
         { text: "Administrator", value: "2" }
-      ]
+      ],
+      height: 600
     };
   },
   methods: {
@@ -181,6 +180,15 @@ export default {
               })
               .then(response => {
                 this.saveUserModal = false;
+                Swal.fire({
+                  position: "top-end",
+                  toast: true,
+                  icon: "success",
+                  title: "Saqlandi!!!",
+                  showConfirmButton: false,
+                  timer: 1500,
+                  timerProgressBar: true
+                });
                 this.users.push(response.data);
               })
               .catch(function(error) {
@@ -196,22 +204,31 @@ export default {
               confirmButtonColor: "#d33"
             });
           });
-      } else 
-      this.$axios
-        .post(
-          this.$store.state.backend_url + "/api/users/update/" + this.form.id,
-          this.form
-        )
-        .then(response => {
-          this.saveUserModal = false;
-          this.users = this.users.map(v => {
-            if (v.id == response.data.id) v = response.data;
-            return v;
+      } else
+        this.$axios
+          .post(
+            this.$store.state.backend_url + "/api/users/update/" + this.form.id,
+            this.form
+          )
+          .then(response => {
+            this.saveUserModal = false;
+            this.users = this.users.map(v => {
+              if (v.id == response.data.id) v = response.data;
+              return v;
+            });
+            Swal.fire({
+              position: "top-end",
+              toast: true,
+              icon: "success",
+              title: "O'zgartirildi!!!",
+              showConfirmButton: false,
+              timer: 1500,
+              timerProgressBar: true
+            });
+          })
+          .catch(function(error) {
+            console.error(error);
           });
-        })
-        .catch(function(error) {
-          console.error(error);
-        });
     },
     deleteUser(id) {
       Swal.fire({
@@ -234,11 +251,15 @@ export default {
             .catch(function(error) {
               console.error(error);
             });
-          Swal.fire(
-            "O'chirildi!",
-            "Ushbu foydalanuvchi o'chirildi.",
-            "success"
-          );
+          Swal.fire({
+            position: "top-end",
+            toast: true,
+            icon: "success",
+            title: "O'chirildi",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true
+          });
         }
       });
     },
@@ -260,6 +281,7 @@ export default {
   },
   mounted() {
     this.getList();
+    this.height = document.getElementById("navbar").clientHeight;
   }
 };
 

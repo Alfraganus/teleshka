@@ -2,12 +2,6 @@
   <div class="mx-4">
     <v-card-title>
       Teleshkalar
-      <v-btn
-        class="ml-8"
-        color="success"
-        @click="newTelly()"
-        v-if="$user.role >= 1"
-      >Yangi teleshka qo'shish</v-btn>
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
@@ -16,6 +10,18 @@
         single-line
         hide-details
       ></v-text-field>
+      <v-btn
+        @click="newTelly()"
+        v-if="$user.role >= 2"
+        color="success"
+        class="ml-8"
+        dark
+        outlined
+        small
+        icon
+      >
+        <v-icon text>mdi-plus-thick</v-icon>
+      </v-btn>
     </v-card-title>
     <v-data-table
       :headers="headers"
@@ -23,32 +29,14 @@
       :search="search"
       :loading="Loading"
       loading-text="Loading... Please wait"
+      class="elevation-3"
+      :height="height - 200"
     >
       <template v-slot:item.id="{ item }">{{ tellies.map(v => v.id).indexOf(item.id) + 1 }}</template>
       <template v-slot:item.telly_type_id="{ item }">{{ item.telly_type.name}}</template>
       <template v-slot:item.icons="{ item }">
-        <v-btn
-          class="mr-4"
-          color="primary"
-          v-if="$user.role >= 1"
-          @click="editTelly(item)"
-          outlined
-          small
-          dark
-        >
-          <v-icon small>mdi-pencil</v-icon>
-        </v-btn>
-
-        <v-btn
-          @click="deleteTelly(item.id)"
-          color="primary"
-          v-if="$user.role >= 2"
-          outlined
-          small
-          dark
-        >
-          <v-icon color="red" text small>mdi-delete</v-icon>
-        </v-btn>
+        <v-icon v-if="$user.role >= 1" @click="editTelly(item)">mdi-pencil</v-icon>
+        <v-icon v-if="$user.role >= 2" @click="deleteTelly(item.id)">mdi-delete</v-icon>
       </template>
     </v-data-table>
 
@@ -118,7 +106,7 @@ export default {
     return {
       tellies: [],
       headers: [
-        { text: "ID", value: "id" },
+        { text: "ID", value: "id", width: 65 },
         {
           text: "Telly №",
           align: "start",
@@ -126,7 +114,13 @@ export default {
         },
         { text: "Telly type", value: "telly_type_id" },
         { text: "Description", value: "telly_desc" },
-        { text: "", align: "right", value: "icons", sortable: false }
+        {
+          text: "",
+          align: "right",
+          value: "icons",
+          sortable: false,
+          width: 80
+        }
       ],
       telly_type: [],
       search: "",
@@ -137,6 +131,7 @@ export default {
       saveTellyModal: false,
       form: {},
       tellyTitle: "",
+      height: ""
     };
   },
   methods: {
@@ -168,7 +163,8 @@ export default {
               icon: "success",
               title: response.data,
               showConfirmButton: false,
-              timer: 1500
+              timer: 1500,
+              timerProgressBar: true
             });
             this.getList();
           })
@@ -227,7 +223,6 @@ export default {
             icon: "success",
             title: "O'chirildi",
             showConfirmButton: false,
-            width: "250px",
             timer: 2000,
             timerProgressBar: true
           });
@@ -263,6 +258,7 @@ export default {
   mounted() {
     this.getTypeList();
     this.getList();
+    this.height = document.getElementById("navbar").clientHeight;
   }
 };
 </script>

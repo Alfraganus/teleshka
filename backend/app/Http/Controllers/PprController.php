@@ -51,15 +51,15 @@ class PprController extends Controller
     $updatePpr = PPrEvent::where(['id'=>$request['id']])->first();
     $newDate =  $request->input('ppr_date');
     $newShiftId = $request->input('shift_id');
-    $newEmployeeTabel = $request->input('ppr_responsible_employee_tabel');
     $newBrigadirTabel = $request->input('brigadir_tabel');
+    $newBrigadirFullname = $request->input('brigadir_fullname');
     $newTellyId = $request->input('telly_id');
     $newDepartmentId = $request->input('department_id');
     $newTechReview = $request->input('technical_review_conclusion');
     $updatePpr->ppr_date = $newDate;
     $updatePpr->shift_id = $newShiftId;
-    $updatePpr->ppr_responsible_employee_tabel = $newEmployeeTabel;
     $updatePpr->brigadir_tabel = $newBrigadirTabel;
+    $updatePpr->brigadir_fullname = $newBrigadirFullname;
     $updatePpr->telly_id =$newTellyId;
     $updatePpr->department_id =$newDepartmentId;
     $updatePpr->technical_review_conclusion = $newTechReview;
