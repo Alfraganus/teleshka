@@ -1,5 +1,5 @@
 <template>
-  <v-card>
+  <v-card elevation="0">
     <v-app-bar color="white" dense app>
       <v-app-bar-nav-icon @click="mini = !mini"></v-app-bar-nav-icon>
 
