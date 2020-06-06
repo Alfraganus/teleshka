@@ -94,18 +94,6 @@
               </v-col>
               <v-col cols="12">
                 <v-text-field
-                  v-model="form.ppr_responsible_employee_tabel"
-                  hide-details="auto"
-                  label="Tamirlovchi tabel raqami"
-                  color="#203d5b"
-                  outlined
-                  type="number"
-                  dense
-                  readonly
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
                   v-model="form.brigadir_tabel"
                   hide-details="auto"
                   label="Brigadel tabel raqami"
@@ -116,15 +104,31 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-text-field
-                  v-model="form.telly_id"
+                <v-autocomplete
+                  v-model="friends"
+                  :items="tellies"
                   hide-details="auto"
-                  label="Teleshka"
                   color="#203d5b"
+                  label="Teleshka"
                   outlined
-                  type="number"
-                  dense
-                ></v-text-field>
+                  item-text="tellyInfo"
+                  item-value="id"
+                >
+                  <template v-slot:selection="data">
+                    <v-list-item-content>
+                      <v-list-item-title v-html="data.item.telly_number"></v-list-item-title>
+                      <v-list-item-subtitle v-html="data.item.telly_desc"></v-list-item-subtitle>
+                    </v-list-item-content>
+                  </template>
+                  <template v-slot:item="data">
+                    <template>
+                      <v-list-item-content>
+                        <v-list-item-title v-html="data.item.telly_number"></v-list-item-title>
+                        <v-list-item-subtitle v-html="data.item.telly_desc"></v-list-item-subtitle>
+                      </v-list-item-content>
+                    </template>
+                  </template>
+                </v-autocomplete>
               </v-col>
               <v-col cols="12">
                 <v-select
@@ -171,7 +175,7 @@ export default {
     return {
       ppr: [],
       headers: [
-        { text: "ID", value: "id" },
+        { text: "ID", value: "id", width: 50 },
         {
           text: "Tamirlash sanasi",
           align: "start",
@@ -184,7 +188,7 @@ export default {
         { text: "Department", value: "department_id" },
         { text: "Tamirlangan vaqt", value: "updated_at" },
         { text: "Izox", value: "technical_review_conclusion" },
-        { text: "", align: "right", value: "icons", sortable: false }
+        { text: "", align: "right", value: "icons", sortable: false, width: 100 }
       ],
       search: "",
       Loading: true,
@@ -195,7 +199,9 @@ export default {
       pprTitle: "",
       shift: [],
       department: [],
-      newPprInfo: ""
+      newPprInfo: "",
+      tellies: "",
+      friends: []
     };
   },
   methods: {
@@ -213,6 +219,7 @@ export default {
       };
       this.getShiftList();
       this.getDepartmentList();
+      this.getTellyList();
     },
     editPpr(item) {
       this.savePprModal = true;
@@ -228,13 +235,11 @@ export default {
           )
           .then(res => {
             this.newPprInfo = res.data[0];
-            console.log(this.form.technical_review_conclusion);
             this.$axios
               .post(this.$store.state.backend_url + "/api/ppr/create", {
                 ppr_date: this.form.ppr_date,
                 shift_id: this.form.shift_id,
-                ppr_responsible_employee_tabel: this.form
-                  .ppr_responsible_employee_tabel,
+                ppr_responsible_employee_tabel: this.$user.tabel_number,
                 ppr_responsible_employee_fullname: this.$user.fullname,
                 brigadir_tabel: this.form.brigadir_tabel,
                 brigadir_fullname:
@@ -243,7 +248,7 @@ export default {
                   this.newPprInfo.lastname_uz_latin +
                   " " +
                   this.newPprInfo.middlename_uz_latin,
-                telly_id: this.form.telly_id,
+                telly_id: this.friends,
                 department_id: this.form.department_id,
                 technical_review_conclusion: this.form
                   .technical_review_conclusion,
@@ -335,7 +340,6 @@ export default {
             .get(this.$store.state.backend_url + "/api/ppr")
             .then(response => {
               this.ppr = response.data;
-              console.log(response);
               this.Loading = false;
             })
             .catch(function(error) {
@@ -349,7 +353,6 @@ export default {
         .get(this.$store.state.backend_url + "/api/department")
         .then(response => {
           this.department = response.data;
-          this.Loading = false;
         })
         .catch(function(error) {
           console.log(error);
@@ -360,7 +363,20 @@ export default {
         .get(this.$store.state.backend_url + "/api/shift")
         .then(response => {
           this.shift = response.data;
-          this.Loading = false;
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    getTellyList() {
+      this.$axios
+        .get(this.$store.state.backend_url + "/api/tellies")
+        .then(response => {
+          this.tellies = response.data.map(v => {
+            v.tellyInfo = v.telly_number + ' ' + v.telly_desc;
+            return v;
+          });
+          //console.log(response.data);
         })
         .catch(function(error) {
           console.log(error);
@@ -369,6 +385,7 @@ export default {
   },
   mounted() {
     this.getList();
+    this.getTellyList();
   }
 };
 </script>
