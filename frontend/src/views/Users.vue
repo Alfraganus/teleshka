@@ -1,6 +1,6 @@
 <template>
   <div class="mx-4">
-    <v-card-title>
+    <v-card-title class="elevation-1">
       Foydalanuvchilar
       <v-spacer></v-spacer>
       <v-text-field
@@ -8,7 +8,10 @@
         append-icon="mdi-magnify"
         label="Search"
         single-line
-        hide-details
+        hide-details="auto"
+        outlined
+        color="#203d5b"
+        dense
       ></v-text-field>
       <v-btn
         @click="newUser()"
@@ -23,6 +26,7 @@
         <v-icon text>mdi-plus-thick</v-icon>
       </v-btn>
     </v-card-title>
+    <v-divider :inset="inset"></v-divider>
     <v-data-table
       :headers="headers"
       :items="users"
@@ -37,8 +41,8 @@
         v-slot:item.role="{ item }"
       >{{ userRoles.find( v => v.value == item.role) ? userRoles.find( v => v.value == item.role).text : '' }}</template>
       <template v-slot:item.icons="{ item }">
-        <v-icon v-if="item.id != 1 && $user.role >= 1" @click="editUser(item)">mdi-pencil</v-icon>
-        <v-icon @click="deleteUser(item.id)" v-if="item.id != 1 && $user.role >= 2">mdi-delete</v-icon>
+        <v-icon v-if="item.id != 1 && $user.role >= 1" @click="editUser(item)" color="primary">mdi-pencil</v-icon>
+        <v-icon @click="deleteUser(item.id)" v-if="item.id != 1 && $user.role >= 2" color="red">mdi-delete</v-icon>
       </template>
     </v-data-table>
     <v-dialog v-model="saveUserModal" persistent max-width="450px">
@@ -101,15 +105,15 @@ export default {
       readonly: false,
       newUserInfo: {},
       headers: [
-        { text: "ID", value: "id", width: 65 },
+        { text: "#", value: "id", width: 65 },
         {
-          text: "Fullname",
+          text: "F.I.O.",
           align: "start",
           value: "fullname"
         },
         { text: "Email", value: "email" },
-        { text: "Username", value: "username" },
-        { text: "Tabel #", value: "tabel_number" },
+        { text: "Login", value: "username" },
+        { text: "Tabel nomeri", value: "tabel_number" },
         { text: "Role", value: "role" },
         {
           text: "",

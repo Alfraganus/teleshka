@@ -1,6 +1,6 @@
 <template>
   <div class="mx-4">
-    <v-card-title>
+    <v-card-title class="elevation-1">
       Teleshka turlari
       <v-spacer></v-spacer>
       <v-text-field
@@ -9,6 +9,9 @@
         label="Search"
         single-line
         hide-details
+        outlined
+        color="#203d5b"
+        dense
       ></v-text-field>
       <v-btn
         @click="newTelly()"
@@ -23,6 +26,7 @@
         <v-icon text>mdi-plus-thick</v-icon>
       </v-btn>
     </v-card-title>
+    <v-divider :inset="inset"></v-divider>
     <v-data-table
       :headers="headers"
       :items="telly_types"
@@ -34,8 +38,8 @@
     >
       <template v-slot:item.id="{ item }">{{ telly_types.map(v => v.id).indexOf(item.id) + 1 }}</template>
       <template v-slot:item.icons="{ item }">
-        <v-icon v-if="$user.role >= 2" @click="editTelly(item)">mdi-pencil</v-icon>
-        <v-icon @click="deleteTelly(item.id)" v-if="$user.role >= 2">mdi-delete</v-icon>
+        <v-icon v-if="$user.role >= 2" @click="editTelly(item)" color="primary">mdi-pencil</v-icon>
+        <v-icon @click="deleteTelly(item.id)" v-if="$user.role >= 2" color="red">mdi-delete</v-icon>
       </template>
     </v-data-table>
 
@@ -79,9 +83,9 @@ export default {
     return {
       telly_types: [],
       headers: [
-        { text: "ID", value: "id", width: 65 },
+        { text: "#", value: "id", width: 65 },
         {
-          text: "Telly type",
+          text: "Teleshka turi",
           align: "start",
           value: "name"
         },

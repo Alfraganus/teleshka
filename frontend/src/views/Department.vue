@@ -1,6 +1,6 @@
 <template>
   <div class="mx-4">
-    <v-card-title>
+    <v-card-title class="elevation-1">
       Departmentlar
       <v-spacer></v-spacer>
       <v-text-field
@@ -9,6 +9,9 @@
         label="Search"
         single-line
         hide-details
+        outlined
+        color="#203d5b"
+        dense
       ></v-text-field>
       <v-btn
         @click="newDepartment()"
@@ -23,6 +26,7 @@
         <v-icon text>mdi-plus-thick</v-icon>
       </v-btn>
     </v-card-title>
+    <v-divider :inset="inset"></v-divider>
     <v-data-table
       :headers="headers"
       :items="department"
@@ -34,8 +38,8 @@
     >
       <template v-slot:item.id="{ item }">{{ department.map(v => v.id).indexOf(item.id) + 1 }}</template>
       <template v-slot:item.icons="{ item }">
-        <v-icon v-if="$user.role >= 1" @click="editDepartment(item)">mdi-pencil</v-icon>
-        <v-icon @click="deleteDepartment(item.id)" v-if="$user.role >= 2">mdi-delete</v-icon>
+        <v-icon v-if="$user.role >= 1" @click="editDepartment(item)" color="primary">mdi-pencil</v-icon>
+        <v-icon @click="deleteDepartment(item.id)" v-if="$user.role >= 2" color="red">mdi-delete</v-icon>
       </template>
     </v-data-table>
 
@@ -79,7 +83,7 @@ export default {
     return {
       department: [],
       headers: [
-        { text: "ID", value: "id", width: 65 },
+        { text: "#", value: "id", width: 65 },
         {
           text: "Department name",
           align: "start",

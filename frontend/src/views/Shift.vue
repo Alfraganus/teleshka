@@ -1,7 +1,7 @@
 <template>
   <div class="mx-4">
-    <v-card-title>
-      Shiftlar
+    <v-card-title class="elevation-1">
+      Smenalar
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
@@ -9,6 +9,9 @@
         label="Search"
         single-line
         hide-details
+        outlined
+        color="#203d5b"
+        dense
       ></v-text-field>
       <v-btn
         @click="newShift()"
@@ -23,6 +26,7 @@
         <v-icon text>mdi-plus-thick</v-icon>
       </v-btn>
     </v-card-title>
+    <v-divider :inset="inset"></v-divider>
     <v-data-table
       :headers="headers"
       :items="shift"
@@ -34,8 +38,8 @@
     >
       <template v-slot:item.id="{ item }">{{ shift.map(v => v.id).indexOf(item.id) + 1 }}</template>
       <template v-slot:item.icons="{ item }">
-        <v-icon v-if="$user.role >= 1" @click="editShift(item)">mdi-pencil</v-icon>
-        <v-icon @click="deleteShift(item.id)" v-if="$user.role >= 2">mdi-delete</v-icon>
+        <v-icon v-if="$user.role >= 1" @click="editShift(item)" color="primary">mdi-pencil</v-icon>
+        <v-icon @click="deleteShift(item.id)" v-if="$user.role >= 2" color="red">mdi-delete</v-icon>
       </template>
     </v-data-table>
 
@@ -79,9 +83,9 @@ export default {
     return {
       shift: [],
       headers: [
-        { text: "ID", value: "id", width: 65 },
+        { text: "#", value: "id", width: 65 },
         {
-          text: "Shift name",
+          text: "Smena nomi",
           align: "start",
           value: "name"
         },

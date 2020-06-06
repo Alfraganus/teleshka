@@ -1,6 +1,5 @@
 <template>
-  <div class>
-    <h1>Hello World!! {{ $user.fullname }}</h1>
+  <div>
     <v-card class="mx-4">
       <v-card-title class="py-3 px-5">Bosh sahifa</v-card-title>
       <v-divider :inset="inset"></v-divider>

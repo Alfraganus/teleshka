@@ -1,6 +1,6 @@
 <template>
   <div class="mx-4">
-    <v-card-title>
+    <v-card-title class="elevation-1">
       Teleshkalar
       <v-spacer></v-spacer>
       <v-text-field
@@ -9,6 +9,9 @@
         label="Search"
         single-line
         hide-details
+        outlined
+        color="#203d5b"
+        dense
       ></v-text-field>
       <v-btn
         @click="newTelly()"
@@ -23,20 +26,21 @@
         <v-icon text>mdi-plus-thick</v-icon>
       </v-btn>
     </v-card-title>
+    <v-divider :inset="inset"></v-divider>
     <v-data-table
       :headers="headers"
       :items="tellies"
       :search="search"
       :loading="Loading"
       loading-text="Loading... Please wait"
-      class="elevation-3"
+      class="elevation-2"
       :height="height - 200"
     >
       <template v-slot:item.id="{ item }">{{ tellies.map(v => v.id).indexOf(item.id) + 1 }}</template>
       <template v-slot:item.telly_type_id="{ item }">{{ item.telly_type.name}}</template>
       <template v-slot:item.icons="{ item }">
-        <v-icon v-if="$user.role >= 1" @click="editTelly(item)">mdi-pencil</v-icon>
-        <v-icon v-if="$user.role >= 2" @click="deleteTelly(item.id)">mdi-delete</v-icon>
+        <v-icon v-if="$user.role >= 1" @click="editTelly(item)" color="primary">mdi-pencil</v-icon>
+        <v-icon v-if="$user.role >= 2" @click="deleteTelly(item.id)" color="red">mdi-delete</v-icon>
       </template>
     </v-data-table>
 
@@ -106,14 +110,14 @@ export default {
     return {
       tellies: [],
       headers: [
-        { text: "ID", value: "id", width: 65 },
+        { text: "#", value: "id", width: 65 },
         {
-          text: "Telly №",
+          text: "Teleshka nomeri",
           align: "start",
           value: "telly_number"
         },
-        { text: "Telly type", value: "telly_type_id" },
-        { text: "Description", value: "telly_desc" },
+        { text: "Teleshka turi", value: "telly_type_id" },
+        { text: "Tavsifnoma", value: "telly_desc" },
         {
           text: "",
           align: "right",

@@ -1,6 +1,6 @@
 <template>
   <div class="mx-4">
-    <v-card-title>
+    <v-card-title class="elevation-1">
       Teleshkalarni joriy tamirlash
       <v-spacer></v-spacer>
       <v-text-field
@@ -9,6 +9,9 @@
         label="Search"
         single-line
         hide-details
+        outlined
+        color="#203d5b"
+        dense
       ></v-text-field>
       <v-btn
         @click="addPpr()"
@@ -23,6 +26,7 @@
         <v-icon text>mdi-plus-thick</v-icon>
       </v-btn>
     </v-card-title>
+    <v-divider :inset="inset"></v-divider>
     <v-data-table
       :headers="headers"
       :items="ppr"
@@ -42,8 +46,8 @@
       </template>
       <template v-slot:item.department_id="{ item }">{{ item.department_id.name }}</template>
       <template v-slot:item.icons="{ item }">
-        <v-icon v-if="$user.role >= 1" @click="editPpr(item)">mdi-pencil</v-icon>
-        <v-icon @click="deletePpr(item.id)" v-if="$user.role >= 2">mdi-delete</v-icon>
+        <v-icon v-if="$user.role >= 1" @click="editPpr(item)" color="primary">mdi-pencil</v-icon>
+        <v-icon @click="deletePpr(item.id)" v-if="$user.role >= 2" color="red">mdi-delete</v-icon>
       </template>
     </v-data-table>
 
@@ -164,16 +168,16 @@ export default {
     return {
       ppr: [],
       headers: [
-        { text: "ID", value: "id", width: 65 },
+        { text: "#", value: "id", width: 65 },
         {
           text: "Tamirlash sanasi",
           align: "start",
           value: "ppr_date"
         },
-        { text: "Shift", value: "shift" },
+        { text: "Smena", value: "shift" },
         { text: "Tamirlovchi", value: "ppr_responsible_employee_fullname" },
         { text: "Brigadir", value: "brigadir_fullname" },
-        { text: "Telly №", value: "telly_id" },
+        { text: "Teleshka nomeri", value: "telly_id" },
         { text: "Department", value: "department_id" },
         { text: "Tamirlangan vaqt", value: "updated_at" },
         { text: "Izox", value: "technical_review_conclusion" },
