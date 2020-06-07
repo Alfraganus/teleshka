@@ -83,6 +83,7 @@ export default {
       tellysLength: "",
       pprsLength: "",
       pprLists: "",
+      pprTypeLists: "",
       data: {
         labels: [],
         datasets: [
@@ -158,9 +159,24 @@ export default {
         .get(this.$store.state.backend_url + "/api/ppr/list")
         .then(response => {
           this.pprLists = response.data;
-          console.log(this.pprLists);
-          // this.pprLists.forEach(element => {
-          //   this.data.labels.push(element.month);
+          this.pprLists.forEach(element => {
+            this.data.labels.push(this.month.find(v => v.n == element.month).name);
+            this.data.datasets[0].data.push(element.count);
+          });
+          this.renderChart(this.data, this.options);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
+    pprTypeList(){
+      this.$axios
+        .get(this.$store.state.backend_url + "/api/ppr/typelist")
+        .then(response => {
+          // this.pprTypeLists = response.data;
+          console.log(response);
+          // this.pprTypeLists.forEach(element => {
+          //   this.data.labels.push(this.month.find(v => v.n == element.month).name);
           //   this.data.datasets[0].data.push(element.count);
           // });
           // this.renderChart(this.data, this.options);
@@ -176,6 +192,7 @@ export default {
     this.getPprCount();
     // this.renderChart(this.data, this.options);
     this.pprList();
+    this.pprTypeList();
   }
 };
 </script>
