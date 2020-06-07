@@ -8,6 +8,7 @@ use App\Http\Models\TellyType;
 use App\Http\Models\Shift;
 use App\Http\Models\Department;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 
 class PprController extends Controller
 {
@@ -69,5 +70,13 @@ class PprController extends Controller
         $Ppr = PprEvent::FindOrFail($id);
         $Ppr->delete();
         return 'Deleted successfully';
+    }
+
+    public function list()
+    {
+        $getPpr = PprEvent::select(DB::raw('substring(ppr_date, 1,7) as month'), DB::raw('count(id) as count'))
+                ->groupBy('month')
+                ->get();
+        return $getPpr;
     }
 }
