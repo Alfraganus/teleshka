@@ -73,7 +73,8 @@ class PprController extends Controller
 
     public function list()
     {
-        $getPpr = PprEvent::select(DB::raw('DATE_FORMAT(`ppr_date`, "%c") as month'), DB::raw('count(id) as count'))
+        $getPpr = PprEvent::select(DB::raw('substring(`ppr_date`, 6,2) as month'), DB::raw('count(id) as count'))
+                ->where(DB::raw('substring(`ppr_date`, 1,4) = date("Y")'))
                 ->groupBy('month')
                 ->get();
                 
