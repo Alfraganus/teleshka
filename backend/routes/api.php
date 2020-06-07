@@ -18,7 +18,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 });
 
 
-Route::get('ppr/list', 'PprController@list');
+
 Route::group(['middleware' => ['auth:api']], function () {
     Route::get('users', 'UserController@index');
     Route::post('users/create', 'UserController@create');
@@ -35,7 +35,8 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('ppr/create', 'PprController@create');
     Route::post('ppr/update/{id}','PprController@update');
     Route::delete('ppr/delete/{id}', 'PprController@destroy');
-    
+    Route::get('ppr/typelist', 'PprController@typelist');
+    Route::get('ppr/list', 'PprController@list');
     
     
     
