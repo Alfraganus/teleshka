@@ -52,7 +52,9 @@
           </v-card>
         </v-col>
       </v-row>
-      <canvas ref="canvas"></canvas>
+      <div style="max-width:700px; margin:0 auto;">
+        <canvas ref="canvas"></canvas>
+      </div>      
     </v-card>
   </div>
 </template>
@@ -66,12 +68,13 @@ export default {
       usersLength: "",
       tellysLength: "",
       pprsLength: "",
+      pprLists: "",
       data: {
-        labels: ["Red", "Blue", "Yellow"],
+        labels: [],
         datasets: [
           {
-            label: "# of Votes",
-            data: [12, 19, 3],
+            label: "Tamirlangan teleshkalar",
+            data: [],
             backgroundColor: [
               "rgba(255, 99, 132, 0.2)",
               "rgba(54, 162, 235, 0.2)",
@@ -135,13 +138,29 @@ export default {
         .catch(function(error) {
           console.log(error);
         });
+    },
+    pprList() {
+      this.$axios
+        .get(this.$store.state.backend_url + "/api/ppr/list")
+        .then(response => {
+          this.pprLists = response.data;
+          this.pprLists.forEach(element => {
+            this.data.labels.push(element.month);
+            this.data.datasets[0].data.push(element.count);
+          });
+          this.renderChart(this.data, this.options);
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
     }
   },
   mounted() {
     this.getUsersCount();
     this.getTellysCount();
     this.getPprCount();
-    this.renderChart(this.data, this.options);
+    // this.renderChart(this.data, this.options);
+    this.pprList();
   }
 };
 </script>
