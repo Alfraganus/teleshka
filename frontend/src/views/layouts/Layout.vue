@@ -1,23 +1,32 @@
 <template>
-  <v-card>
+  <v-card elevation="0">
     <v-app-bar color="white" dense app>
       <v-app-bar-nav-icon @click="mini = !mini"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>Page title</v-toolbar-title>
+      <v-toolbar-title>page</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
       <v-btn text @click="Logout">
-        logout<v-icon class="ml-2">mdi-logout</v-icon>
+        <v-icon class="ml-2">mdi-logout</v-icon>
       </v-btn>
     </v-app-bar>
-    <v-navigation-drawer v-model="drawer" :mini-variant.sync="mini" class="blue-grey darken-4" dark permanent app>
+    <v-navigation-drawer
+      v-model="drawer"
+      :mini-variant.sync="mini"
+      class="blue-grey darken-4"
+      expand-on-hover
+      dark
+      permanent
+      app
+      id="navbar"
+    >
       <v-list-item class="px-2">
         <v-list-item-avatar>
           <v-icon size="36">mdi-account-tie</v-icon>
         </v-list-item-avatar>
 
-        <v-list-item-title>{{ $cookies.get('user').fullname }}</v-list-item-title>
+        <v-list-item-title>{{ $user.fullname }}</v-list-item-title>
 
         <v-btn icon @click.stop="mini = !mini">
           <v-icon>mdi-chevron-left</v-icon>
@@ -38,25 +47,20 @@
         </v-list-item>
       </v-list>
     </v-navigation-drawer>
-    <div class="container-fluid" style="margin: 50px 0px 0 60px" :style="!mini ? 'margin-left: 260px' : 'margin-left: 60px'">
+    <div
+      class="container-fluid"
+      style="margin: 50px 0px 55px 60px;"
+      :style="!mini ? 'margin-left: 260px' : 'margin-left: 60px'"
+    >
       <router-view></router-view>
     </div>
-    <v-footer     
-      color="white" 
-      padless app
-      border="top"
-      colored-border
-      elevation="4"
-      >
-      <v-col
-        class="text-center"
-        cols="12"
-      >
-        {{ new Date().getFullYear() }} — 
+    <v-footer color="white" padless app border="top" colored-border elevation="4">
+      <v-col class="text-center" cols="12">
+        {{ new Date().getFullYear() }} —
         <a href="https://uzautomotors.com/">
-          <strong>UzAutoMotors </strong>
+          <strong>UzAutoMotors</strong>
         </a>
-        <span> Barcha huquqlar ximoyalangan.</span>
+        <span>Barcha huquqlar ximoyalangan.</span>
       </v-col>
     </v-footer>
   </v-card>
@@ -68,23 +72,31 @@ export default {
     return {
       drawer: true,
       items: [
-        { title: "My Account", icon: "mdi-account", link: "/"},
-        { title: "Users", icon: "mdi-account-group-outline", link: "users"},
-        { title: "Teleshkalar", icon: "mdi-truck-trailer", link: "teleshka-list"},
-        { title: "Teleshka turlari", icon: "mdi-truck-trailer", link: "telly-type"},
-        { title: "Department", icon: "mdi-truck-trailer", link: "department"},
-        { title: "Shift", icon: "mdi-truck-trailer", link: "shift"},
-        { title: "Joriy tamirlash", icon: "mdi-cog", link: "ppr"},
+        { title: "My Account", icon: "mdi-account", link: "/" },
+        { title: "Users", icon: "mdi-account-group-outline", link: "users" },
+        { title: "Joriy tamirlash", icon: "mdi-cog", link: "ppr" },
+        {
+          title: "Teleshkalar",
+          icon: "mdi-truck-trailer",
+          link: "teleshka-list"
+        },
+        {
+          title: "Teleshka turlari",
+          icon: "mdi-truck-trailer",
+          link: "telly-type"
+        },
+        { title: "Department", icon: "mdi-truck-trailer", link: "department" },
+        { title: "Shift", icon: "mdi-truck-trailer", link: "shift" },
       ],
       mini: true
     };
   },
   methods: {
-    Logout(){
-      this.$cookies.remove('token');
-      this.$cookies.remove('users');
-      this.$router.push('/login')
+    Logout() {
+      this.$cookies.remove("token");
+      this.$cookies.remove("users");
+      this.$router.push("/login");
     }
-  },
+  }
 };
 </script>

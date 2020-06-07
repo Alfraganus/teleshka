@@ -11,18 +11,20 @@
               <v-text-field
                 v-model="username"
                 color="#203d5b"
+                placeholder="username"
+                type="text"
                 outlined
                 dense
-                label="Username"
                 autocomplete="off"
               ></v-text-field>
               <v-text-field
                 v-model="password"
                 color="#203d5b"
-                label="Enter your password"
+                placeholder="Enter your password"
                 type="password"
                 outlined
                 dense
+                autocomplete="off"
               ></v-text-field>
               <v-checkbox class="mx-2" label="Remember me" style="margin: 0"></v-checkbox>
               <v-btn color="rgb(32, 61, 91)" @click="login" class="col-12" dark>
@@ -49,17 +51,13 @@ export default {
   data() {
     return {
       username: "",
-      password: ""
+      password: "",
+      loader: null,
     };
   },
   methods: {
     login() {
-      Swal.fire({
-        title: "Loading ...",
-        onBeforeOpen: () => {
-          Swal.showLoading();
-        }
-      });
+      this.loader = !this.loader;
       axios
         .post(this.$store.state.backend_url + "/oauth/token", {
           grant_type: "password",
@@ -89,9 +87,6 @@ export default {
               //console.log(ress.data);
               location.replace('/');
             });
-          Swal.close();
-          
-          
         })
         .catch(function(error) {
           Swal.fire({

@@ -1,37 +1,48 @@
 <template>
   <div class="mx-4">
-    <v-card-title>
+    <v-card-title class="elevation-1">
       Foydalanuvchilar
-      <v-btn class="ml-8" color="success" v-if="$user.role >= 2" @click="newUser()">Add user</v-btn>
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
         append-icon="mdi-magnify"
         label="Search"
         single-line
-        hide-details
+        hide-details="auto"
+        outlined
+        color="#203d5b"
+        dense
       ></v-text-field>
+      <v-btn
+        @click="newUser()"
+        v-if="$user.role >= 2"
+        color="success"
+        class="ml-8"
+        dark
+        outlined
+        small
+        icon
+      >
+        <v-icon text>mdi-plus-thick</v-icon>
+      </v-btn>
     </v-card-title>
-
+    <v-divider :inset="inset"></v-divider>
     <v-data-table
       :headers="headers"
       :items="users"
       :search="search"
       :loading="Loading"
       loading-text="Loading... Please wait"
+      class="elevation-3"
+      :height="height - 200"
     >
       <template v-slot:item.id="{ item }">{{ users.map(v => v.id).indexOf(item.id) + 1 }}</template>
       <template
         v-slot:item.role="{ item }"
-      >{{ roles.find( v => v.value == item.role) ? roles.find( v => v.value == item.role).text : '' }}</template>
+      >{{ userRoles.find( v => v.value == item.role) ? userRoles.find( v => v.value == item.role).text : '' }}</template>
       <template v-slot:item.icons="{ item }">
-        <v-btn class="mr-4" color="primary" v-if="item.id != 1 && $user.role >= 1" @click="editUser(item)" outlined small dark>
-          <v-icon small>mdi-pencil</v-icon>
-        </v-btn>
-
-        <v-btn @click="deleteUser(item.id)" v-if="item.id != 1 && $user.role >= 2" color="primary" outlined small dark>
-          <v-icon color="red" text small>mdi-delete</v-icon>
-        </v-btn>
+        <v-icon v-if="item.id != 1 && $user.role >= 1" @click="editUser(item)" color="primary">mdi-pencil</v-icon>
+        <v-icon @click="deleteUser(item.id)" v-if="item.id != 1 && $user.role >= 2" color="red">mdi-delete</v-icon>
       </template>
     </v-data-table>
     <v-dialog v-model="saveUserModal" persistent max-width="450px">
@@ -44,39 +55,16 @@
             <v-row>
               <v-col cols="12">
                 <v-text-field
-                  v-model="form.fullname"
+                  v-model="form.tabel_number"
                   autofocus
                   hide-details="auto"
-                  label="Fullname*"
+                  label="Tabel №*"
                   color="#203d5b"
                   outlined
+                  type="number"
                   dense
                   required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="form.username"
-                  hide-details="auto"
-                  color="#203d5b"
-                  outlined
-                  dense
-                  label="User name*"
-                  persistent-hint
-                  required
-                ></v-text-field>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="form.email"
-                  hide-details="auto"
-                  color="#203d5b"
-                  outlined
-                  dense
-                  label="Email*"
-                  :rules="[rules.required, rules.email]"
-                  persistent-hint
-                  required
+                  :readonly="readonly"
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
@@ -87,21 +75,8 @@
                   color="#203d5b"
                   outlined
                   dense
-                  :items="roles"
+                  :items="userRoles"
                 ></v-select>
-              </v-col>
-              <v-col cols="12">
-                <v-text-field
-                  v-model="form.password"
-                  label="Password*"
-                  hide-details="auto"
-                  color="#203d5b"
-                  outlined
-                  dense
-                  type="password"
-                  persistent-hint
-                  required
-                ></v-text-field>
               </v-col>
             </v-row>
           </v-container>
@@ -123,90 +98,117 @@ export default {
       users: [],
       search: "",
       addUserModal: false,
-      fullName: "",
-      userName: "",
+      tabel_number: "",
       saveUserModal: false,
       form: {},
       Loading: true,
-      email: "",
+      readonly: false,
+      newUserInfo: {},
       headers: [
-        { text: "ID", value: "id" },
+        { text: "#", value: "id", width: 65 },
         {
-          text: "Fullname",
+          text: "F.I.O.",
           align: "start",
           value: "fullname"
         },
         { text: "Email", value: "email" },
-        { text: "Username", value: "username" },
+        { text: "Login", value: "username" },
+        { text: "Tabel nomeri", value: "tabel_number" },
         { text: "Role", value: "role" },
-        { text: "", value: "icons", sortable: false }
-      ],      
-      rules: {
-        required: value => !!value || "Required.",
-        counter: value => value.length <= 40 || "Max 40 characters",
-        email: value => {
-          const pattern = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-          return pattern.test(value) || "Invalid e-mail.";
+        {
+          text: "",
+          align: "right",
+          value: "icons",
+          sortable: false,
+          width: 80
         }
-      },      
-      roles: [
-        {
-          text: "User",
-          value: "0"
-        },
-        {
-          text: "Admin",
-          value: "1"
-        },
-        {
-          text: "Administrator",
-          value: "2"
-        }
-      ]
+      ],
+      userRoles: [
+        { text: "User", value: "0" },
+        { text: "Admin", value: "1" },
+        { text: "Administrator", value: "2" }
+      ],
+      height: 600
     };
   },
   methods: {
-    addUser() {
-      this.$axios
-        .post(this.$store.state.backend_url + "/api/users/create", {
-          fullName: this.fullName,
-          userName: this.userName,
-          role: this.role,
-          email: this.email
-        })
-        .then(function(response) {
-          console.log(response);
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
-    },
     newUser() {
       this.saveUserModal = true;
+      this.readonly = false;
       this.form = {
-        fullname: "",
-        username: "",
-        role: "",
-        password: "",
-        email: '',
+        tabel_number: "",
+        role: ""
       };
     },
     editUser(item) {
       this.saveUserModal = true;
+      this.readonly = true;
       this.form = JSON.parse(JSON.stringify(item));
     },
     saveUser() {
-      if (!this.form.id)
+      if (!this.form.id) {
         this.$axios
-          .post(this.$store.state.backend_url + "/api/users/create", this.form)
-          .then(response => {
-            this.saveUserModal = false;
-            this.users.push(response.data);
+          .get(
+            "http://wb.uzautomotors.com/api/get-all-employees/" +
+              this.form.tabel_number
+          )
+          .then(res => {
+            this.newUserInfo = res.data[0];
+            this.$axios
+              .post(this.$store.state.backend_url + "/api/users/create", {
+                fullname:
+                  this.newUserInfo.firstname_uz_latin +
+                  " " +
+                  this.newUserInfo.lastname_uz_latin +
+                  " " +
+                  this.newUserInfo.middlename_uz_latin,
+                tabel_number: this.form.tabel_number,
+                username:
+                  this.newUserInfo.firstname_uz_latin
+                    .substr(0, 1)
+                    .toLowerCase() +
+                  this.newUserInfo.lastname_uz_latin
+                    .substr(0, 1)
+                    .toLowerCase() +
+                  this.form.tabel_number,
+                role: this.form.role,
+                email:
+                  this.newUserInfo.firstname_uz_latin
+                    .substr(0, 1)
+                    .toLowerCase() +
+                  this.newUserInfo.lastname_uz_latin
+                    .substr(0, 1)
+                    .toLowerCase() +
+                  this.form.tabel_number +
+                  "@uzautomotors.com"
+              })
+              .then(response => {
+                this.saveUserModal = false;
+                Swal.fire({
+                  position: "top-end",
+                  toast: true,
+                  icon: "success",
+                  title: "Saqlandi!!!",
+                  showConfirmButton: false,
+                  timer: 1500,
+                  timerProgressBar: true
+                });
+                this.users.push(response.data);
+              })
+              .catch(function(error) {
+                console.error(error);
+              });
           })
           .catch(function(error) {
             console.error(error);
+            //this.saveUserModal = false;
+            Swal.fire({
+              title: "Bunday tabel mavjud emas..!",
+              icon: "error",
+              confirmButtonColor: "#d33"
+            });
           });
-      else
+      } else
         this.$axios
           .post(
             this.$store.state.backend_url + "/api/users/update/" + this.form.id,
@@ -217,6 +219,15 @@ export default {
             this.users = this.users.map(v => {
               if (v.id == response.data.id) v = response.data;
               return v;
+            });
+            Swal.fire({
+              position: "top-end",
+              toast: true,
+              icon: "success",
+              title: "O'zgartirildi!!!",
+              showConfirmButton: false,
+              timer: 1500,
+              timerProgressBar: true
             });
           })
           .catch(function(error) {
@@ -244,11 +255,15 @@ export default {
             .catch(function(error) {
               console.error(error);
             });
-          Swal.fire(
-            "O'chirildi!",
-            "Ushbu foydalanuvchi o'chirildi.",
-            "success"
-          );
+          Swal.fire({
+            position: "top-end",
+            toast: true,
+            icon: "success",
+            title: "O'chirildi",
+            showConfirmButton: false,
+            timer: 2000,
+            timerProgressBar: true
+          });
         }
       });
     },
@@ -270,6 +285,9 @@ export default {
   },
   mounted() {
     this.getList();
+    this.height = document.getElementById("navbar").clientHeight;
   }
 };
+
+// Toxir aka: 8110, Qodir aka: 9592
 </script>
