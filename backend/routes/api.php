@@ -38,6 +38,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::get('ppr/list', 'PprController@list');
     
     
+    
     Route::get('telly-type', 'TellyTypeController@index');
     Route::post('telly-type/create', 'TellyTypeController@create');
     Route::post('telly-type/update/{id}', 'TellyTypeController@update');
