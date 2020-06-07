@@ -65,6 +65,20 @@ export default {
   extends: Bar,
   data() {
     return {
+      month: [
+        {n: 1, name: "Yanvar"},
+        {n: 2, name: "Fevral"},
+        {n: 3, name: "Mart"},
+        {n: 4, name: "Aprel"},
+        {n: 5, name: "May"},
+        {n: 6, name: "Iyun"},
+        {n: 7, name: "Iyul"},
+        {n: 8, name: "Avgust"},
+        {n: 9, name: "Sentabr"},
+        {n: 10, name: "Oktabr"},
+        {n: 11, name: "Noyabr"},
+        {n: 12, name: "Dekabr"},
+      ],
       usersLength: "",
       tellysLength: "",
       pprsLength: "",
@@ -76,12 +90,12 @@ export default {
             label: "Tamirlangan teleshkalar",
             data: [],
             backgroundColor: [
-              "rgba(255, 99, 132, 0.2)",
-              "rgba(54, 162, 235, 0.2)",
-              "rgba(255, 206, 86, 0.2)",
-              "rgba(75, 192, 192, 0.2)",
-              "rgba(153, 102, 255, 0.2)",
-              "rgba(255, 159, 64, 0.2)"
+              "rgba(255, 99, 132, 0.5)",
+              "rgba(54, 162, 235, 0.5)",
+              "rgba(255, 206, 86, 0.5)",
+              "rgba(75, 192, 192, 0.5)",
+              "rgba(153, 102, 255, 0.5)",
+              "rgba(255, 159, 64, 0.5)"
             ],
             borderColor: [
               "rgba(255, 99, 132, 1)",
@@ -144,11 +158,12 @@ export default {
         .get(this.$store.state.backend_url + "/api/ppr/list")
         .then(response => {
           this.pprLists = response.data;
-          this.pprLists.forEach(element => {
-            this.data.labels.push(element.month);
-            this.data.datasets[0].data.push(element.count);
-          });
-          this.renderChart(this.data, this.options);
+          console.log(this.pprLists);
+          // this.pprLists.forEach(element => {
+          //   this.data.labels.push(element.month);
+          //   this.data.datasets[0].data.push(element.count);
+          // });
+          // this.renderChart(this.data, this.options);
         })
         .catch(function(error) {
           console.log(error);
