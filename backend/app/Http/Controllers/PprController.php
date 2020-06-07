@@ -73,10 +73,24 @@ class PprController extends Controller
 
     public function list()
     {
-        $getPpr = PprEvent::select(DB::raw('substring(ppr_date,6,2) as month'), DB::raw('count(id) as count'))
+        $year=date("Y");
+        $getPprs = PprEvent::select(DB::raw('month(ppr_date) as month'),DB::raw('count(id) as ppr_count'))
+                ->whereBetween('ppr_date',[$year.'-01-01',($year+1).'-01-01'])
                 ->groupBy('month')
-                ->get()
-                ->sortBy('');
-        return $getPpr;
+                ->get();
+                
+        return $getPprs;
+    }
+
+    public function typelist()
+    {
+
+        $getTypes= DB::select("select tt.name, count(p.id) ppr_count from ppr_events p 
+                        inner join tellies t on t.id=p.telly_id 
+                        inner join telly_types tt on tt.id=t.telly_type_id
+                        where p.ppr_date BETWEEN '".date("Y")."-01-01' and '".(date("Y")+1)."-01-01'
+                        group by tt.name");
+                return ['res'=>$getTypes, 'year'=>date("Y")];
+
     }
 }

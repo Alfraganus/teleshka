@@ -35,6 +35,7 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('ppr/create', 'PprController@create');
     Route::post('ppr/update/{id}','PprController@update');
     Route::delete('ppr/delete/{id}', 'PprController@destroy');
+    Route::get('ppr/typelist', 'PprController@typelist');
     Route::get('ppr/list', 'PprController@list');
     
     
