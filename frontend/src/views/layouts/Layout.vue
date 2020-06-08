@@ -3,7 +3,7 @@
     <v-app-bar color="white" dense app>
       <v-app-bar-nav-icon @click="mini = !mini"></v-app-bar-nav-icon>
 
-      <v-toolbar-title>page</v-toolbar-title>
+      <v-toolbar-title>Bosh sahifa</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
