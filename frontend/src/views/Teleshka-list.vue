@@ -26,7 +26,7 @@
         <v-icon text>mdi-plus-thick</v-icon>
       </v-btn>
     </v-card-title>
-    <v-divider :inset="inset"></v-divider>
+    <v-divider></v-divider>
     <v-data-table
       :headers="headers"
       :items="tellies"
@@ -66,17 +66,30 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-select
+                <v-autocomplete
                   v-model="form.telly_type_id"
-                  label="Telly type*"
+                  :items="telly_type"
                   hide-details="auto"
                   color="#203d5b"
+                  label="Teleshka turi"
                   outlined
-                  :items="telly_type"
+                  dense
                   item-text="name"
                   item-value="id"
-                  dense
-                ></v-select>
+                >
+                  <template v-slot:selection="data">
+                    <v-list-item-content>
+                      <v-list-item-title v-html="data.item.name"></v-list-item-title>
+                    </v-list-item-content>
+                  </template>
+                  <template v-slot:item="data">
+                    <template>
+                      <v-list-item-content>
+                        <v-list-item-title v-html="data.item.name"></v-list-item-title>
+                      </v-list-item-content>
+                    </template>
+                  </template>
+                </v-autocomplete>
               </v-col>
               <v-col cols="12">
                 <v-textarea
@@ -164,6 +177,7 @@ export default {
             this.saveTellyModal = false;
             Swal.fire({
               position: "top-end",
+              toast: true,
               icon: "success",
               title: response.data,
               showConfirmButton: false,
