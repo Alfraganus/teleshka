@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card class="mx-4">
-      <div style="max-width:700px; margin:0 auto;">
+      <div>
         <canvas ref="canvas"></canvas>
       </div>      
     </v-card>
@@ -15,21 +15,21 @@ export default {
   data() {
     return {
       month: [
-        {n: 1, name: "Yanvar"},
-        {n: 2, name: "Fevral"},
-        {n: 3, name: "Mart"},
-        {n: 4, name: "Aprel"},
-        {n: 5, name: "May"},
-        {n: 6, name: "Iyun"},
-        {n: 7, name: "Iyul"},
-        {n: 8, name: "Avgust"},
-        {n: 9, name: "Sentabr"},
-        {n: 10, name: "Oktabr"},
-        {n: 11, name: "Noyabr"},
-        {n: 12, name: "Dekabr"},
+        { n: 1, name: "Yanvar" },
+        { n: 2, name: "Fevral" },
+        { n: 3, name: "Mart" },
+        { n: 4, name: "Aprel" },
+        { n: 5, name: "May" },
+        { n: 6, name: "Iyun" },
+        { n: 7, name: "Iyul" },
+        { n: 8, name: "Avgust" },
+        { n: 9, name: "Sentabr" },
+        { n: 10, name: "Oktabr" },
+        { n: 11, name: "Noyabr" },
+        { n: 12, name: "Dekabr" }
       ],
       pprTypeLists: "",
-      type: 'pie',
+      type: "pie",
       data: {
         labels: [],
         datasets: [
@@ -73,7 +73,7 @@ export default {
     pprTypeList() {
       this.$axios
         .get(this.$store.state.backend_url + "/api/ppr/typelist")
-        .then(response => {            
+        .then(response => {
           this.pprTypeLists = response.data.res;
           this.pprTypeLists.forEach(element => {
             this.data.labels.push(element.name);
@@ -84,7 +84,7 @@ export default {
         .catch(function(error) {
           console.log(error);
         });
-    },
+    }
   },
   mounted() {
     this.pprTypeList();

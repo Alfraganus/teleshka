@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-card class="mx-4">
-      <div style="max-width:700px; margin:0 auto;">
+      <div>
         <canvas ref="canvas"></canvas>
       </div>      
     </v-card>
