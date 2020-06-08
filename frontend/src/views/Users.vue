@@ -68,15 +68,30 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
-                <v-select
+                <v-autocomplete
                   v-model="form.role"
-                  label="Role*"
+                  :items="userRoles"
                   hide-details="auto"
                   color="#203d5b"
+                  label="Role"
                   outlined
                   dense
-                  :items="userRoles"
-                ></v-select>
+                  item-text="text"
+                  item-value="value"
+                >
+                  <template v-slot:selection="data">
+                    <v-list-item-content>
+                      <v-list-item-title v-html="data.item.text"></v-list-item-title>
+                    </v-list-item-content>
+                  </template>
+                  <template v-slot:item="data">
+                    <template>
+                      <v-list-item-content>
+                        <v-list-item-title v-html="data.item.text"></v-list-item-title>
+                      </v-list-item-content>
+                    </template>
+                  </template>
+                </v-autocomplete>
               </v-col>
             </v-row>
           </v-container>
