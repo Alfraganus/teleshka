@@ -26,7 +26,7 @@
         <v-icon text>mdi-plus-thick</v-icon>
       </v-btn>
     </v-card-title>
-    <v-divider :inset="inset"></v-divider>
+    <v-divider></v-divider>
     <v-data-table
       :headers="headers"
       :items="tellies"

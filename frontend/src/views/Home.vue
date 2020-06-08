@@ -2,7 +2,7 @@
   <div>
     <v-card class="mx-4">
       <v-card-title class="py-3 px-5">Bosh sahifa</v-card-title>
-      <v-divider :inset="inset"></v-divider>
+      <v-divider></v-divider>
       <v-row class="pa-8">
         <v-col class="pa-0" md="4" sm="6" xs="12">
           <v-card class="mr-2">
