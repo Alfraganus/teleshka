@@ -30,6 +30,7 @@
     <v-data-table
       :headers="headers"
       :items="ppr"
+      dense
       fixed-header
       :search="search"
       :loading="Loading"
@@ -37,17 +38,30 @@
       class="elevation-3"
       :height="height - 200"
     >
-      <template v-slot:item.id="{ item }">{{ ppr.map(v => v.id).indexOf(item.id) + 1 }}</template>
-      <template v-slot:item.shift="{ item }">{{ item.shift.name }}</template>
-      <template v-slot:item.telly_id="{ item }">
-        {{ item.telly_id.telly_number }}
-        <br />
-        {{ item.telly_id.telly_desc }}
-      </template>
-      <template v-slot:item.department_id="{ item }">{{ item.department_id.name }}</template>
-      <template v-slot:item.icons="{ item }">
-        <v-icon v-if="$user.role >= 1" @click="editPpr(item)" color="primary">mdi-pencil</v-icon>
-        <v-icon @click="deletePpr(item.id)" v-if="$user.role >= 2" color="red">mdi-delete</v-icon>
+      <template v-slot:item="{ item, index }">
+        <tr :class="item.trClass">
+          <td>{{ index+1 }}</td>
+          <td>{{ item.ppr_date }}</td>
+          <td>{{ item.shift.name }}</td>
+          <td>{{ item.ppr_responsible_employee_fullname }}</td>
+          <td>{{ item.brigadir_fullname }}</td>
+          <td>
+            {{ item.telly_id.telly_number }}
+            <br />
+            {{ item.telly_id.telly_desc }}
+          </td>
+          <td>{{ item.department_id.name }}</td>
+          <td>{{ item.updated_at }}</td>
+          <td>
+            {{ item.ppr_date | moment("add", "6 months", "YYYY-MM-DD") }}
+            <!-- {{ item.next_rip.getFullYear() }}-<span v-if="item.next_rip.getMonth()<9">0</span>{{ item.next_rip.getMonth()+1 }}-<span v-if="item.next_rip.getDate()<10">0</span>{{ item.next_rip.getDate() }} -->
+          </td>
+          <td>{{ item.technical_review_conclusion }}</td>
+          <td>
+            <v-icon v-if="$user.role >= 1" @click="editPpr(item)" color="primary">mdi-pencil</v-icon>
+            <v-icon @click="deletePpr(item.id)" v-if="$user.role >= 2" color="red">mdi-delete</v-icon>
+          </td>
+        </tr>
       </template>
     </v-data-table>
 
@@ -168,7 +182,7 @@ export default {
     return {
       ppr: [],
       headers: [
-        { text: "#", value: "id", width: 65 },
+        { text: "#", value: "id", width: 35 },
         {
           text: "Tamirlash sanasi",
           align: "start",
@@ -180,6 +194,11 @@ export default {
         { text: "Teleshka nomeri", value: "telly_id" },
         { text: "Department", value: "department_id" },
         { text: "Tamirlangan vaqt", value: "updated_at" },
+        {
+          text: "Navbatdagi tamirlash vaqti",
+          sortable: false,
+          value: "next_rip"
+        },
         { text: "Izox", value: "technical_review_conclusion" },
         {
           text: "",
@@ -201,7 +220,8 @@ export default {
       newPprInfo: "",
       tellies: "",
       friends: [],
-      height: 600
+      height: 600,
+      trClass: ''
     };
   },
   methods: {
@@ -382,7 +402,22 @@ export default {
           this.$axios
             .get(this.$store.state.backend_url + "/api/ppr")
             .then(response => {
-              this.ppr = response.data;
+              this.ppr = response.data.map(v => {
+                v.next_rip = new Date(
+                  new Date(v.ppr_date).getTime() + 6 * 30 * 24 * 60 * 60 * 1000
+                );
+                if(new Date().getTime() - new Date(v.ppr_date).getTime() > 15552000000){
+                  v.trClass = "red lighten-3";
+                }
+                else if(new Date().getTime() - new Date(v.ppr_date).getTime() > 10368000000){
+                  v.trClass = "yellow lighten-3";
+                }
+                else {
+                  v.trClass = ''
+                }
+                return v;
+              });
+              // console.log(this.ppr);
               this.Loading = false;
             })
             .catch(function(error) {

@@ -1,54 +1,77 @@
 <template>
-  <div>
-    <div class="diag">
-      <div class="block1 red"></div>
-      <div class="block2 blue"></div>
-      <div class="block3 teal"></div>
-      <div class="block4 pink"></div>
-    </div>
+  <div class="text-center">
+    <v-btn
+      class="ma-2"
+      :loading="loading"
+      :disabled="loading"
+      color="info"
+    >
+      Icon Loader
+      <template v-if="loading">
+        <span class="custom-loader">
+          <v-icon light>cached</v-icon>
+        </span>
+      </template>
+    </v-btn>
   </div>
 </template>
 
-<style scoped>
-  .diag{
-    width: 200px;
-    height: 200px;
-    position: relative;
-    margin: 150px auto;
+<script>
+  export default {
+    data () {
+      return {
+        loader: null,
+        loading: false,
+      }
+    },
+    watch: {
+      loader () {
+        const l = this.loader
+        this[l] = !this[l]
+
+        setTimeout(() => (this[l] = false), 3000)
+
+        this.loader = null
+      },
+    },
   }
-  .block1{
-    width: 200px;
-    height: 100px;
-    position: absolute;
-    border-top-left-radius: 100px;
-    border-top-right-radius: 100px;
-    transform: rotate(30deg);
-    transform-origin: bottom;
+</script>
+
+<style>
+  .custom-loader {
+    animation: loader 1s infinite;
+    display: flex;
   }
-  .block2{
-    width: 100px;
-    height: 100px;
-    position: absolute;
-    right: 0;
-    border-top-right-radius: 100px;
-    transform: rotate(240deg);
-    transform-origin: left bottom;
+  @-moz-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
-  .block3{
-    width: 100px;
-    height: 100px;
-    position: absolute;
-    bottom: 0;
-    border-bottom-left-radius: 100px;
-    transform: rotate(0deg);
-    transform-origin: right top;
+  @-webkit-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
-  .block4{
-    width: 100px;
-    height: 100px;
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-    border-bottom-right-radius: 100px;
+  @-o-keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
+  }
+  @keyframes loader {
+    from {
+      transform: rotate(0);
+    }
+    to {
+      transform: rotate(360deg);
+    }
   }
 </style>
