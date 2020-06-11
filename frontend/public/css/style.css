@@ -5,6 +5,12 @@
     background-size: 100%;
     position: relative;
 }
+
+.v-data-table td,
+.v-data-table th {
+    padding: 0 5px !important;
+}
+
 .custom-loader {
     animation: loader 1s infinite;
     display: flex;

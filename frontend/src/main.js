@@ -6,11 +6,13 @@ import store from './store'
 import vuetify from './plugins/vuetify';
 import axios from 'axios'
 import Cookies from 'vue-cookies';
+import VueMoment from 'vue-moment'
 
 
 Vue.prototype.$axios = axios
 Vue.config.productionTip = false
 Vue.use(Cookies)
+Vue.use(VueMoment)
 
 Vue.prototype.$user = Cookies.get('user')
 
