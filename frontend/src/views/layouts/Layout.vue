@@ -1,9 +1,9 @@
 <template>
   <v-card elevation="0">
     <v-app-bar color="white" dense app>
-      <v-app-bar-nav-icon @click="mini = !mini"></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-      <v-toolbar-title>Bosh sahifa</v-toolbar-title>
+      <!-- <v-toolbar-title>Bosh sahifa</v-toolbar-title> -->
 
       <v-spacer></v-spacer>
 
@@ -72,7 +72,7 @@ export default {
     return {
       drawer: true,
       items: [
-        { title: "My Account", icon: "mdi-account", link: "/" },
+        { title: "Bosh sahifa", icon: "mdi-home-outline", link: "/" },
         { title: "Users", icon: "mdi-account-group-outline", link: "users" },
         { title: "Joriy tamirlash", icon: "mdi-cog", link: "ppr" },
         {
@@ -85,8 +85,8 @@ export default {
           icon: "mdi-truck-trailer",
           link: "telly-type"
         },
-        { title: "Department", icon: "mdi-truck-trailer", link: "department" },
-        { title: "Shift", icon: "mdi-truck-trailer", link: "shift" },
+        { title: "Department", icon: "mdi-select-group", link: "department" },
+        { title: "Shift", icon: "mdi-account-convert", link: "shift" },
       ],
       mini: true
     };

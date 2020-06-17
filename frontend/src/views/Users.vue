@@ -61,7 +61,7 @@
                   label="Tabel №*"
                   color="#203d5b"
                   outlined
-                  type="number"
+                  type="text"
                   dense
                   required
                   :readonly="readonly"
@@ -164,11 +164,11 @@ export default {
       if (!this.form.id) {
         this.$axios
           .get(
-            "http://wb.uzautomotors.com/api/get-all-employees/" +
+            "http://wb.uz/api/get-all-employees/" +
               this.form.tabel_number
           )
           .then(res => {
-            this.newUserInfo = res.data[0];
+            this.newUserInfo = res.data;
             this.$axios
               .post(this.$store.state.backend_url + "/api/users/create", {
                 fullname:
