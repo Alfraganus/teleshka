@@ -15,7 +15,6 @@
       ></v-text-field>
       <v-btn
         @click="newTelly()"
-        v-if="$user.role >= 2"
         color="success"
         class="ml-8"
         dark
@@ -40,7 +39,7 @@
       <template v-slot:item.telly_type_id="{ item }">{{ item.telly_type.name}}</template>
       <template v-slot:item.icons="{ item }">
         <v-icon v-if="$user.role >= 1" @click="editTelly(item)" color="primary">mdi-pencil</v-icon>
-        <v-icon v-if="$user.role >= 2" @click="deleteTelly(item.id)" color="red">mdi-delete</v-icon>
+        <v-icon v-if="$user.role >= 1" @click="deleteTelly(item.id)" color="red">mdi-delete</v-icon>
       </template>
     </v-data-table>
 
@@ -57,7 +56,7 @@
                   v-model="form.telly_number"
                   autofocus
                   hide-details="auto"
-                  label="Telly №*"
+                  label="Teleshka nomeri*"
                   color="#203d5b"
                   outlined
                   dense
@@ -98,7 +97,7 @@
                   color="#203d5b"
                   outlined
                   dense
-                  label="Description*"
+                  label="Tavsifnoma*"
                   persistent-hint
                   required
                 ></v-textarea>
@@ -107,8 +106,8 @@
           </v-container>
         </v-card-text>
         <v-card-actions class="justify-center">
-          <v-btn color="green" dark @click="saveTelly">Save</v-btn>
-          <v-btn color="red darken-1" dark @click="saveTellyModal = false">Close</v-btn>
+          <v-btn color="green" dark @click="saveTelly">Saqlash</v-btn>
+          <v-btn color="red darken-1" dark @click="saveTellyModal = false">Yopish</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>

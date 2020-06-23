@@ -15,7 +15,6 @@
       ></v-text-field>
       <v-btn
         @click="addPpr()"
-        v-if="$user.role >= 2"
         color="success"
         class="ml-8"
         dark
@@ -59,7 +58,7 @@
           <td>{{ item.technical_review_conclusion }}</td>
           <td>
             <v-icon v-if="$user.role >= 1" @click="editPpr(item)" color="primary">mdi-pencil</v-icon>
-            <v-icon @click="deletePpr(item.id)" v-if="$user.role >= 2" color="red">mdi-delete</v-icon>
+            <v-icon @click="deletePpr(item.id)" v-if="$user.role >= 1" color="red">mdi-delete</v-icon>
           </td>
         </tr>
       </template>
@@ -89,7 +88,7 @@
               <v-col cols="12">
                 <v-select
                   v-model="form.shift_id"
-                  label="Shifts*"
+                  label="Smena*"
                   hide-details="auto"
                   color="#203d5b"
                   outlined
@@ -120,6 +119,7 @@
                   outlined
                   item-text="tellyInfo"
                   item-value="id"
+                  dense
                 >
                   <template v-slot:selection="data">
                     <v-list-item-content>
@@ -140,7 +140,7 @@
               <v-col cols="12">
                 <v-select
                   v-model="form.department_id"
-                  label="Department*"
+                  label="Bo'lim*"
                   hide-details="auto"
                   color="#203d5b"
                   outlined
@@ -157,7 +157,7 @@
                   color="#203d5b"
                   outlined
                   dense
-                  label="Description*"
+                  label="Izox*"
                   persistent-hint
                   required
                 ></v-textarea>
@@ -166,8 +166,8 @@
           </v-container>
         </v-card-text>
         <v-card-actions class="justify-center">
-          <v-btn color="green" dark @click="savePpr">Save</v-btn>
-          <v-btn color="red darken-1" dark @click="savePprModal = false">Close</v-btn>
+          <v-btn color="green" dark @click="savePpr">Saqlash</v-btn>
+          <v-btn color="red darken-1" dark @click="savePprModal = false">Yopish</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -191,8 +191,8 @@ export default {
         { text: "Smena", value: "shift" },
         { text: "Tamirlovchi", value: "ppr_responsible_employee_fullname" },
         { text: "Brigadir", value: "brigadir_fullname" },
-        { text: "Teleshka nomeri", value: "telly_id" },
-        { text: "Department", value: "department_id" },
+        { text: "Teleshka", value: "telly_id" },
+        { text: "Bo'lim", value: "department_id" },
         { text: "Tamirlangan vaqt", value: "updated_at" },
         {
           text: "Navbatdagi tamirlash vaqti",
@@ -221,7 +221,7 @@ export default {
       tellies: "",
       friends: [],
       height: 600,
-      trClass: ''
+      trClass: ""
     };
   },
   methods: {
@@ -406,14 +406,18 @@ export default {
                 v.next_rip = new Date(
                   new Date(v.ppr_date).getTime() + 6 * 30 * 24 * 60 * 60 * 1000
                 );
-                if(new Date().getTime() - new Date(v.ppr_date).getTime() > 15552000000){
+                if (
+                  new Date().getTime() - new Date(v.ppr_date).getTime() >
+                  15552000000
+                ) {
                   v.trClass = "red lighten-3";
-                }
-                else if(new Date().getTime() - new Date(v.ppr_date).getTime() > 10368000000){
+                } else if (
+                  new Date().getTime() - new Date(v.ppr_date).getTime() >
+                  10368000000
+                ) {
                   v.trClass = "yellow lighten-3";
-                }
-                else {
-                  v.trClass = ''
+                } else {
+                  v.trClass = "";
                 }
                 return v;
               });

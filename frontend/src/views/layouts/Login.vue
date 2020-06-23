@@ -11,7 +11,7 @@
               <v-text-field
                 v-model="username"
                 color="#203d5b"
-                placeholder="username"
+                placeholder="Login"
                 type="text"
                 outlined
                 dense
@@ -20,7 +20,7 @@
               <v-text-field
                 v-model="password"
                 color="#203d5b"
-                placeholder="Enter your password"
+                placeholder="Parol"
                 type="password"
                 outlined
                 dense
@@ -52,7 +52,7 @@ export default {
     return {
       username: "",
       password: "",
-      loader: null,
+      loader: null
     };
   },
   methods: {
@@ -75,17 +75,17 @@ export default {
             "1h"
           );
           //this.$router.push("/"),
-            (axios.defaults.headers.common = {
-              Accept: "application/json",
-              "Content-Type": "application/json",
-              Authorization: res.data.token_type + " " + res.data.access_token
-            });
+          axios.defaults.headers.common = {
+            Accept: "application/json",
+            "Content-Type": "application/json",
+            Authorization: res.data.token_type + " " + res.data.access_token
+          };
           axios
             .get(this.$store.state.backend_url + "/api/users/show")
             .then(ress => {
               this.$cookies.set("user", ress.data, "1h");
               //console.log(ress.data);
-              location.replace('/');
+              location.replace("/");
             });
         })
         .catch(function(error) {

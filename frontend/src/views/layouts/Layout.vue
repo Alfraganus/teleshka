@@ -73,7 +73,11 @@ export default {
       drawer: true,
       items: [
         { title: "Bosh sahifa", icon: "mdi-home-outline", link: "/" },
-        { title: "Users", icon: "mdi-account-group-outline", link: "users" },
+        {
+          title: "Foydalanuvchilar",
+          icon: "mdi-account-group-outline",
+          link: "users"
+        },
         { title: "Joriy tamirlash", icon: "mdi-cog", link: "ppr" },
         {
           title: "Teleshkalar",
@@ -85,8 +89,8 @@ export default {
           icon: "mdi-truck-trailer",
           link: "telly-type"
         },
-        { title: "Department", icon: "mdi-select-group", link: "department" },
-        { title: "Shift", icon: "mdi-account-convert", link: "shift" },
+        { title: "Bo'limlar", icon: "mdi-select-group", link: "department" },
+        { title: "Smena", icon: "mdi-account-convert", link: "shift" }
       ],
       mini: true
     };

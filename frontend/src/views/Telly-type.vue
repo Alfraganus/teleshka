@@ -15,7 +15,7 @@
       ></v-text-field>
       <v-btn
         @click="newTelly()"
-        v-if="$user.role >= 2"
+        v-if="$user.role >= 1"
         color="success"
         class="ml-8"
         dark
@@ -38,8 +38,8 @@
     >
       <template v-slot:item.id="{ item }">{{ telly_types.map(v => v.id).indexOf(item.id) + 1 }}</template>
       <template v-slot:item.icons="{ item }">
-        <v-icon v-if="$user.role >= 2" @click="editTelly(item)" color="primary">mdi-pencil</v-icon>
-        <v-icon @click="deleteTelly(item.id)" v-if="$user.role >= 2" color="red">mdi-delete</v-icon>
+        <v-icon v-if="$user.role >= 1" @click="editTelly(item)" color="primary">mdi-pencil</v-icon>
+        <v-icon @click="deleteTelly(item.id)" v-if="$user.role >= 1" color="red">mdi-delete</v-icon>
       </template>
     </v-data-table>
 
@@ -56,7 +56,7 @@
                   v-model="form.name"
                   autofocus
                   hide-details="auto"
-                  label="Telly type name*"
+                  label="Teleshka turi nomi*"
                   color="#203d5b"
                   outlined
                   dense
@@ -67,8 +67,8 @@
           </v-container>
         </v-card-text>
         <v-card-actions class="justify-center">
-          <v-btn color="green" dark @click="saveTelly">Save</v-btn>
-          <v-btn color="red darken-1" dark @click="saveTellyModal = false">Close</v-btn>
+          <v-btn color="green" dark @click="saveTelly">Saqlash</v-btn>
+          <v-btn color="red darken-1" dark @click="saveTellyModal = false">Yopish</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -173,7 +173,7 @@ export default {
     deleteTelly(id) {
       Swal.fire({
         title: "O'chirish",
-        text: "Siz ushbu teleshkan turini o'chirishga aminmisiz!",
+        text: "Siz ushbu teleshkani turini o'chirishga aminmisiz!",
         icon: "warning",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",

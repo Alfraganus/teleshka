@@ -15,7 +15,7 @@
       ></v-text-field>
       <v-btn
         @click="newUser()"
-        v-if="$user.role >= 2"
+        v-if="$user.role >= 1"
         color="success"
         class="ml-8"
         dark
@@ -41,14 +41,22 @@
         v-slot:item.role="{ item }"
       >{{ userRoles.find( v => v.value == item.role) ? userRoles.find( v => v.value == item.role).text : '' }}</template>
       <template v-slot:item.icons="{ item }">
-        <v-icon v-if="item.id != 1 && $user.role >= 1" @click="editUser(item)" color="primary">mdi-pencil</v-icon>
-        <v-icon @click="deleteUser(item.id)" v-if="item.id != 1 && $user.role >= 2" color="red">mdi-delete</v-icon>
+        <v-icon
+          v-if="item.id != 1 && $user.role >= 1"
+          @click="editUser(item)"
+          color="primary"
+        >mdi-pencil</v-icon>
+        <v-icon
+          @click="deleteUser(item.id)"
+          v-if="item.id != 1 && $user.role >= 2"
+          color="red"
+        >mdi-delete</v-icon>
       </template>
     </v-data-table>
     <v-dialog v-model="saveUserModal" persistent max-width="450px">
       <v-card>
         <v-card-title>
-          <span class="headline">Add user</span>
+          <span class="headline">{{ dialogSaveTitle }}</span>
         </v-card-title>
         <v-card-text>
           <v-container>
@@ -58,7 +66,7 @@
                   v-model="form.tabel_number"
                   autofocus
                   hide-details="auto"
-                  label="Tabel №*"
+                  label="Tabel raqami"
                   color="#203d5b"
                   outlined
                   type="text"
@@ -97,8 +105,8 @@
           </v-container>
         </v-card-text>
         <v-card-actions class="justify-center">
-          <v-btn color="green" dark @click="saveUser">Add</v-btn>
-          <v-btn color="red darken-1" dark @click="saveUserModal = false">Close</v-btn>
+          <v-btn color="green" dark @click="saveUser">Saqlash</v-btn>
+          <v-btn color="red darken-1" dark @click="saveUserModal = false">Yopish</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -118,6 +126,7 @@ export default {
       form: {},
       Loading: true,
       readonly: false,
+      dialogSaveTitlev: "",
       newUserInfo: {},
       headers: [
         { text: "#", value: "id", width: 65 },
@@ -140,8 +149,7 @@ export default {
       ],
       userRoles: [
         { text: "User", value: "0" },
-        { text: "Admin", value: "1" },
-        { text: "Administrator", value: "2" }
+        { text: "Admin", value: "1" }
       ],
       height: 600
     };
@@ -150,6 +158,7 @@ export default {
     newUser() {
       this.saveUserModal = true;
       this.readonly = false;
+      this.dialogSaveTitle = "Yangi foydalanuvchi qo'shish";
       this.form = {
         tabel_number: "",
         role: ""
@@ -158,15 +167,13 @@ export default {
     editUser(item) {
       this.saveUserModal = true;
       this.readonly = true;
+      this.dialogSaveTitle = "Foydalanuvchini o'zgartirish";
       this.form = JSON.parse(JSON.stringify(item));
     },
     saveUser() {
       if (!this.form.id) {
         this.$axios
-          .get(
-            "http://wb.uz/api/get-all-employees/" +
-              this.form.tabel_number
-          )
+          .get("http://wb.uz/api/get-all-employees/" + this.form.tabel_number)
           .then(res => {
             this.newUserInfo = res.data;
             this.$axios

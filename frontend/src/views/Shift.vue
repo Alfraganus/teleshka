@@ -56,7 +56,7 @@
                   v-model="form.name"
                   autofocus
                   hide-details="auto"
-                  label="Shift name*"
+                  label="Smena nomi*"
                   color="#203d5b"
                   outlined
                   dense
@@ -67,8 +67,8 @@
           </v-container>
         </v-card-text>
         <v-card-actions class="justify-center">
-          <v-btn color="green" dark @click="saveShift">Save</v-btn>
-          <v-btn color="red darken-1" dark @click="saveShiftModal = false">Close</v-btn>
+          <v-btn color="green" dark @click="saveShift">Saqlash</v-btn>
+          <v-btn color="red darken-1" dark @click="saveShiftModal = false">Yopish</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -104,7 +104,7 @@ export default {
   methods: {
     newShift() {
       this.saveShiftModal = true;
-      this.ShiftTitle = "Shift qo'shish";
+      this.ShiftTitle = "Smena qo'shish";
       this.form = {
         name: ""
       };

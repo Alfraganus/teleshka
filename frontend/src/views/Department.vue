@@ -1,7 +1,7 @@
 <template>
   <div class="mx-4">
     <v-card-title class="elevation-1">
-      Departmentlar
+      Bo'limlar
       <v-spacer></v-spacer>
       <v-text-field
         v-model="search"
@@ -56,7 +56,7 @@
                   v-model="form.name"
                   autofocus
                   hide-details="auto"
-                  label="Department name*"
+                  label="Bo'lim nomi*"
                   color="#203d5b"
                   outlined
                   dense
@@ -67,8 +67,8 @@
           </v-container>
         </v-card-text>
         <v-card-actions class="justify-center">
-          <v-btn color="green" dark @click="saveDepartment">Save</v-btn>
-          <v-btn color="red darken-1" dark @click="saveDepartmentModal = false">Close</v-btn>
+          <v-btn color="green" dark @click="saveDepartment">Saqlash</v-btn>
+          <v-btn color="red darken-1" dark @click="saveDepartmentModal = false">Yopish</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -85,7 +85,7 @@ export default {
       headers: [
         { text: "#", value: "id", width: 65 },
         {
-          text: "Department name",
+          text: "Bo'limlar nomi",
           align: "start",
           value: "name"
         },
@@ -104,7 +104,7 @@ export default {
   methods: {
     newDepartment() {
       this.saveDepartmentModal = true;
-      this.departmentTitle = "Department qo'shish";
+      this.departmentTitle = "Bo'lim qo'shish";
       this.form = {
         name: ""
       };
