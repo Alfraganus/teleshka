@@ -105,7 +105,10 @@
           </v-container>
         </v-card-text>
         <v-card-actions class="justify-center">
-          <v-btn color="green" dark @click="saveUser">Saqlash</v-btn>
+          <v-btn color="green" dark @click="saveUser">
+            Saqlash
+            <v-progress-circular v-if="loadingSave" indeterminate :width="3" :size="18"></v-progress-circular>
+          </v-btn>
           <v-btn color="red darken-1" dark @click="saveUserModal = false">Yopish</v-btn>
         </v-card-actions>
       </v-card>
@@ -118,6 +121,7 @@ import Swal from "sweetalert2";
 export default {
   data() {
     return {
+      loadingSave: false,
       users: [],
       search: "",
       addUserModal: false,
@@ -172,6 +176,7 @@ export default {
     },
     saveUser() {
       if (!this.form.id) {
+        this.loadingSave = true;
         this.$axios
           .get("http://wb.uz/api/get-all-employees/" + this.form.tabel_number)
           .then(res => {
@@ -216,6 +221,7 @@ export default {
                   timerProgressBar: true
                 });
                 this.users.push(response.data);
+                this.loadingSave = false;
               })
               .catch(function(error) {
                 console.error(error);
