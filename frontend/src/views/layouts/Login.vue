@@ -26,7 +26,7 @@
                 dense
                 autocomplete="off"
               ></v-text-field>
-              <v-checkbox class="mx-2" label="Remember me" style="margin: 0"></v-checkbox>
+              <v-checkbox class="mx-2 pull-right" label="Remember me" style="margin: 0"></v-checkbox>              
               <v-btn color="rgb(32, 61, 91)" @click="login" class="col-12" dark>
                 Login
                 <template v-slot:loader>
@@ -35,6 +35,11 @@
                   </span>
                 </template>
               </v-btn>
+              <a href="/file/telejka.pptx" class="text-decoratsion">
+                <v-btn outlined  depressed small class="mt-6">
+                  <v-icon left>mdi-arrow-down-circle-outline</v-icon>Qo'llanma
+                </v-btn>
+              </a>
             </v-form>
           </div>
         </v-col>
@@ -100,3 +105,9 @@ export default {
   }
 };
 </script>
+<style scoped>
+.text-decoratsion {
+  text-decoration: none;
+}
+
+</style>

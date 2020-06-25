@@ -7,6 +7,12 @@
 
       <v-spacer></v-spacer>
 
+      <a href="/file/telejka.pptx">
+        <v-btn depressed small color="primary">
+          <v-icon left>mdi-arrow-down-circle-outline</v-icon>Qo'llanma
+        </v-btn>
+      </a>
+
       <v-btn text @click="Logout">
         <v-icon class="ml-2">mdi-logout</v-icon>
       </v-btn>
