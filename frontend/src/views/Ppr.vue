@@ -49,7 +49,7 @@
             <br />
             {{ item.telly_id.telly_desc }}
           </td>
-          <td>{{ item.department_id.name }}</td>
+          <td>{{ item.department.name }}</td>
           <td>{{ item.updated_at }}</td>
           <td>
             {{ item.ppr_date | moment("add", "6 months", "YYYY-MM-DD") }}
@@ -108,10 +108,10 @@
                   type="number"
                   dense
                 ></v-text-field>
-              </v-col>
+               </v-col>
               <v-col cols="12">
                 <v-autocomplete
-                  v-model="friends"
+                  v-model="form.telly_id"
                   :items="tellies"
                   hide-details="auto"
                   color="#203d5b"
@@ -217,8 +217,9 @@ export default {
       pprTitle: "",
       shift: [],
       department: [],
-      newPprInfo: "",
-      tellies: "",
+      newPprInfo: [],
+      users: [],
+      tellies: [],
       friends: [],
       height: 600,
       trClass: ""
@@ -251,16 +252,16 @@ export default {
       if (!this.form.id)
         this.$axios
           .get(
-            "http://wb.uzautomotors.com/api/get-all-employees/" +
+            "http://b-edo.uzautomotors.com/api/get-all-employees/" +
               this.form.brigadir_tabel
           )
           .then(res => {
-            this.newPprInfo = res.data[0];
+            this.newPprInfo = res.data;
             this.$axios
               .post(this.$store.state.backend_url + "/api/ppr/create", {
                 ppr_date: this.form.ppr_date,
                 shift_id: this.form.shift_id,
-                ppr_responsible_employee_tabel: this.$user.tabel_number,
+                ppr_responsible_employee_tabel: this.$user.tabel_number,  
                 ppr_responsible_employee_fullname: this.$user.fullname,
                 brigadir_tabel: this.form.brigadir_tabel,
                 brigadir_fullname:
@@ -268,13 +269,11 @@ export default {
                   " " +
                   this.newPprInfo.lastname_uz_latin +
                   " " +
-                  this.newPprInfo.middlename_uz_latin,
+                  this.newPprInfo.middlename_uz_latin,  
                 telly_id: this.friends,
                 department_id: this.form.department_id,
                 technical_review_conclusion: this.form
                   .technical_review_conclusion,
-                created_at: new Date(),
-                updated_at: new Date()
               })
               .then(response => {
                 this.savePprModal = false;
@@ -306,11 +305,11 @@ export default {
       else
         this.$axios
           .get(
-            "http://wb.uzautomotors.com/api/get-all-employees/" +
+            "http://b-edo.uzautomotors.com/api/get-all-employees/" +
               this.form.brigadir_tabel
           )
           .then(res => {
-            this.newPprInfo = res.data[0];
+            this.newPprInfo = res.data;
             this.$axios
               .post(
                 this.$store.state.backend_url +
@@ -319,6 +318,8 @@ export default {
                 {
                   ppr_date: this.form.ppr_date,
                   shift_id: this.form.shift_id,
+                  ppr_responsible_employee_tabel: this.$user.tabel_number,  
+                  ppr_responsible_employee_fullname: this.$user.fullname,
                   brigadir_tabel: this.form.brigadir_tabel,
                   brigadir_fullname:
                     this.newPprInfo.firstname_uz_latin +
@@ -326,8 +327,8 @@ export default {
                     this.newPprInfo.lastname_uz_latin +
                     " " +
                     this.newPprInfo.middlename_uz_latin,
-                  telly_id: this.friends.id,
-                  department_id: this.form.department_id.id,
+                  telly_id: this.friends,
+                  department_id: this.form.department_id,
                   technical_review_conclusion: this.form
                     .technical_review_conclusion,
                   updated_at: new Date()
@@ -464,12 +465,13 @@ export default {
           console.log(error);
         });
     }
-  },
+    },
   mounted() {
     this.getList();
     this.getTellyList();
     this.getShiftList();
     this.getDepartmentList();
+  
     this.height = document.getElementById("navbar").clientHeight;
   }
 };

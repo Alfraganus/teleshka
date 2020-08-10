@@ -90,6 +90,6 @@ class UserController extends Controller
     }
     public function show()
     {
-     return Auth::user()->get();
+     return Auth::user();
     }
 }

@@ -14,10 +14,10 @@ class PprController extends Controller
     //
     public function index()
     {
-        $getPpr = PprEvent::with('shift')->with('tellyId')->with('departmentId')->orderBy('updated_at', 'desc')->get();
-        //$shifts = Shift::get();
-        //$tellyIds = Telly::get();
-        //$departments = Department::get();
+        $getPpr = PprEvent::with('shift')
+                            ->with('telly')
+                            // ->with('department')
+                            ->get();
         return $getPpr;
     }
 
@@ -26,7 +26,9 @@ class PprController extends Controller
         $pprDate =  $request->input('ppr_date');
         $shift_id = $request->input('shift_id');
         $employeeTabel = $request->input('ppr_responsible_employee_tabel');
-        $brigadirTabel =$request->input('brigadir_tabel');
+        $employeeFullName = $request->input('ppr_responsible_employee_fullname');
+        $brigadirTabel = $request->input('brigadir_tabel');
+        $brigadirFullName = $request->input('brigadir_fullname');
         $tellyId = $request->input('telly_id');
         $departmentId = $request->input('department_id');
         $technicalReview = $request->input('technical_review_conclusion');
@@ -34,7 +36,9 @@ class PprController extends Controller
         $addPpr->ppr_date = $pprDate;
         $addPpr->shift_id = $shift_id;
         $addPpr->ppr_responsible_employee_tabel = $employeeTabel;
+        $addPpr->ppr_responsible_employee_fullname = $employeeFullName;
         $addPpr->brigadir_tabel = $brigadirTabel;
+        $addPpr->brigadir_fullname = $brigadirFullName;
         $addPpr->telly_id = $tellyId;
         $addPpr->department_id = $departmentId;
         $addPpr->technical_review_conclusion = $technicalReview;
@@ -48,14 +52,18 @@ class PprController extends Controller
     $newDate =  $request->input('ppr_date');
     $newShiftId = $request->input('shift_id');
     $newEmployeeTabel = $request->input('ppr_responsible_employee_tabel');
+    $employeeFullName = $request->input('ppr_responsible_employee_fullname');
     $newBrigadirTabel = $request->input('brigadir_tabel');
+    $brigadirFullName =$request->input('brigadir_fullname');
     $newTellyId = $request->input('telly_id');
     $newDepartmentId = $request->input('department_id');
     $newTechReview = $request->input('technical_review_conclusion');
     $updatePpr->ppr_date = $newDate;
     $updatePpr->shift_id = $newShiftId;
     $updatePpr->ppr_responsible_employee_tabel = $newEmployeeTabel;
+    $updatePpr->ppr_responsible_employee_fullname = $employeeFullName;
     $updatePpr->brigadir_tabel = $newBrigadirTabel;
+    $updatePpr->brigadir_fullname = $brigadirFullName;
     $updatePpr->telly_id =$newTellyId;
     $updatePpr->department_id =$newDepartmentId;
     $updatePpr->technical_review_conclusion = $newTechReview;
