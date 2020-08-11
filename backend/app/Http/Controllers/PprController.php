@@ -9,6 +9,7 @@ use App\Http\Models\Shift;
 use App\Http\Models\Department;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 class PprController extends Controller
 {
     //
@@ -100,5 +101,19 @@ class PprController extends Controller
                         group by tt.name");
                 return ['res'=>$getTypes, 'year'=>date("Y")];
 
+    }
+
+    public function shiftList()
+    {    
+        // $today = Carbon::today()->toDateString();
+        
+        $shift = Shift::get();
+
+        foreach ($shift as $key => $value) {
+            $shift[$key]->count = PprEvent::where('ppr_date', '2020-06-06')->where('shift_id', $value->id)->count();
+        }
+        return $shift;
+        
+        
     }
 }
