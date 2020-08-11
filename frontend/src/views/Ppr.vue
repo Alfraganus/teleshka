@@ -13,15 +13,7 @@
         color="#203d5b"
         dense
       ></v-text-field>
-      <v-btn
-        @click="addPpr()"
-        color="success"
-        class="ml-8"
-        dark
-        outlined
-        small
-        icon
-      >
+      <v-btn @click="addPpr()" color="success" class="ml-8" dark outlined small icon>
         <v-icon text>mdi-plus-thick</v-icon>
       </v-btn>
     </v-card-title>
@@ -108,7 +100,7 @@
                   type="number"
                   dense
                 ></v-text-field>
-               </v-col>
+              </v-col>
               <v-col cols="12">
                 <v-autocomplete
                   v-model="form.telly_id"
@@ -186,7 +178,7 @@ export default {
         {
           text: "Tamirlash sanasi",
           align: "start",
-          value: "ppr_date"
+          value: "ppr_date",
         },
         { text: "Smena", value: "shift" },
         { text: "Tamirlovchi", value: "ppr_responsible_employee_fullname" },
@@ -197,7 +189,7 @@ export default {
         {
           text: "Navbatdagi tamirlash vaqti",
           sortable: false,
-          value: "next_rip"
+          value: "next_rip",
         },
         { text: "Izox", value: "technical_review_conclusion" },
         {
@@ -205,8 +197,8 @@ export default {
           align: "right",
           value: "icons",
           sortable: false,
-          width: 80
-        }
+          width: 80,
+        },
       ],
       search: "",
       Loading: true,
@@ -222,11 +214,11 @@ export default {
       tellies: [],
       friends: [],
       height: 600,
-      trClass: ""
+      trClass: "",
     };
   },
   methods: {
-    addPpr(id) {
+    addPpr() {
       this.savePprModal = true;
       this.pprTitle = "Teleshka tamirlashni hisobga olish";
       this.form = {
@@ -234,9 +226,9 @@ export default {
         shift_id: "",
         ppr_responsible_employee_tabel: this.$user.tabel_number,
         brigadir_tabel: "",
-        telly_id: id,
+        telly_id: "",
         department_id: "",
-        technical_review_conclusion: ""
+        technical_review_conclusion: "",
       };
       this.getShiftList();
       this.getDepartmentList();
@@ -255,13 +247,13 @@ export default {
             "http://b-edo.uzautomotors.com/api/get-all-employees/" +
               this.form.brigadir_tabel
           )
-          .then(res => {
+          .then((res) => {
             this.newPprInfo = res.data;
             this.$axios
               .post(this.$store.state.backend_url + "/api/ppr/create", {
                 ppr_date: this.form.ppr_date,
                 shift_id: this.form.shift_id,
-                ppr_responsible_employee_tabel: this.$user.tabel_number,  
+                ppr_responsible_employee_tabel: this.$user.tabel_number,
                 ppr_responsible_employee_fullname: this.$user.fullname,
                 brigadir_tabel: this.form.brigadir_tabel,
                 brigadir_fullname:
@@ -269,13 +261,13 @@ export default {
                   " " +
                   this.newPprInfo.lastname_uz_latin +
                   " " +
-                  this.newPprInfo.middlename_uz_latin,  
+                  this.newPprInfo.middlename_uz_latin,
                 telly_id: this.friends,
                 department_id: this.form.department_id,
                 technical_review_conclusion: this.form
                   .technical_review_conclusion,
               })
-              .then(response => {
+              .then((response) => {
                 this.savePprModal = false;
                 Swal.fire({
                   position: "top-end",
@@ -284,22 +276,22 @@ export default {
                   title: "Saqlandi!!!",
                   showConfirmButton: false,
                   timer: 1500,
-                  timerProgressBar: true
+                  timerProgressBar: true,
                 });
                 this.Loading = true;
                 (this.friends = []), this.getList();
                 console.log(response.date);
               })
-              .catch(function(error) {
+              .catch(function (error) {
                 console.log(error);
               });
           })
-          .catch(function(error) {
+          .catch(function (error) {
             console.error(error);
             Swal.fire({
               title: "Bunday tabel mavjud emas..!",
               icon: "error",
-              confirmButtonColor: "#d33"
+              confirmButtonColor: "#d33",
             });
           });
       else
@@ -308,7 +300,7 @@ export default {
             "http://b-edo.uzautomotors.com/api/get-all-employees/" +
               this.form.brigadir_tabel
           )
-          .then(res => {
+          .then((res) => {
             this.newPprInfo = res.data;
             this.$axios
               .post(
@@ -318,7 +310,7 @@ export default {
                 {
                   ppr_date: this.form.ppr_date,
                   shift_id: this.form.shift_id,
-                  ppr_responsible_employee_tabel: this.$user.tabel_number,  
+                  ppr_responsible_employee_tabel: this.$user.tabel_number,
                   ppr_responsible_employee_fullname: this.$user.fullname,
                   brigadir_tabel: this.form.brigadir_tabel,
                   brigadir_fullname:
@@ -331,10 +323,10 @@ export default {
                   department_id: this.form.department_id,
                   technical_review_conclusion: this.form
                     .technical_review_conclusion,
-                  updated_at: new Date()
+                  updated_at: new Date(),
                 }
               )
-              .then(response => {
+              .then((response) => {
                 this.savePprModal = false;
                 Swal.fire({
                   position: "top-end",
@@ -343,23 +335,23 @@ export default {
                   title: "O'zgartirildi!!!",
                   showConfirmButton: false,
                   timer: 1500,
-                  timerProgressBar: true
+                  timerProgressBar: true,
                 });
                 this.Loading = true;
                 (this.friends = []), this.getList();
                 console.log(response.date);
               })
-              .catch(function(error) {
+              .catch(function (error) {
                 console.log(error);
               });
             console.log(this.newPprInfo);
           })
-          .catch(function(error) {
+          .catch(function (error) {
             console.error(error);
             Swal.fire({
               title: "Bunday tabel mavjud emas..!",
               icon: "error",
-              confirmButtonColor: "#d33"
+              confirmButtonColor: "#d33",
             });
           });
     },
@@ -372,17 +364,17 @@ export default {
         confirmButtonColor: "#3085d6",
         cancelButtonColor: "#d33",
         confirmButtonText: "O'chirish!",
-        cancelButtonText: "Yopish"
-      }).then(result => {
+        cancelButtonText: "Yopish",
+      }).then((result) => {
         if (result.value) {
           this.$axios
             .delete(this.$store.state.backend_url + "/api/ppr/delete/" + id)
-            .then(res => {
+            .then((res) => {
               this.Loading = true;
               this.getList();
               console.log(res.data);
             })
-            .catch(function(error) {
+            .catch(function (error) {
               console.error(error);
             });
           Swal.fire({
@@ -392,7 +384,7 @@ export default {
             title: "O'chirildi",
             showConfirmButton: false,
             timer: 2000,
-            timerProgressBar: true
+            timerProgressBar: true,
           });
         }
       });
@@ -402,8 +394,8 @@ export default {
         () =>
           this.$axios
             .get(this.$store.state.backend_url + "/api/ppr")
-            .then(response => {
-              this.ppr = response.data.map(v => {
+            .then((response) => {
+              this.ppr = response.data.map((v) => {
                 v.next_rip = new Date(
                   new Date(v.ppr_date).getTime() + 6 * 30 * 24 * 60 * 60 * 1000
                 );
@@ -425,7 +417,7 @@ export default {
               // console.log(this.ppr);
               this.Loading = false;
             })
-            .catch(function(error) {
+            .catch(function (error) {
               console.log(error);
             }),
         2000
@@ -434,45 +426,45 @@ export default {
     getDepartmentList() {
       this.$axios
         .get(this.$store.state.backend_url + "/api/department")
-        .then(response => {
+        .then((response) => {
           this.department = response.data;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error);
         });
     },
     getShiftList() {
       this.$axios
         .get(this.$store.state.backend_url + "/api/shift")
-        .then(response => {
+        .then((response) => {
           this.shift = response.data;
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error);
         });
     },
     getTellyList() {
       this.$axios
         .get(this.$store.state.backend_url + "/api/tellies")
-        .then(response => {
-          this.tellies = response.data.map(v => {
+        .then((response) => {
+          this.tellies = response.data.map((v) => {
             v.tellyInfo = v.telly_number + " " + v.telly_desc;
             return v;
           });
           //console.log(response.data);
         })
-        .catch(function(error) {
+        .catch(function (error) {
           console.log(error);
         });
-    }
     },
+  },
   mounted() {
     this.getList();
     this.getTellyList();
     this.getShiftList();
     this.getDepartmentList();
-  
+
     this.height = document.getElementById("navbar").clientHeight;
-  }
+  },
 };
 </script>
