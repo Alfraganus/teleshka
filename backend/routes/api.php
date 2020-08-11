@@ -17,6 +17,7 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
+Route::post('ppr/create', 'PprController@create');
 
 
 Route::group(['middleware' => ['auth:api']], function () {
@@ -32,12 +33,9 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::delete('tellies/delete/{id}', 'TellyController@destroy');
     
     Route::get('ppr' , 'PprController@index');
-    Route::post('ppr/create', 'PprController@create');
     Route::post('ppr/update/{id}','PprController@update');
     Route::delete('ppr/delete/{id}', 'PprController@destroy');
-    Route::get('ppr/typelist', 'PprController@typelist');
     Route::get('ppr/list', 'PprController@list');
-    
     
     
     Route::get('telly-type', 'TellyTypeController@index');
@@ -49,9 +47,11 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('shift/create', 'ShiftController@create');
     Route::post('shift/update/{id}', 'ShiftController@update');
     Route::delete('shift/delete/{id}', 'ShiftController@destroy');
-
+    
     Route::get('department', 'DepartmentController@index');
     Route::post('department/create', 'DepartmentController@create');
     Route::post('department/update/{id}', 'DepartmentController@update');
     Route::delete('department/delete/{id}', 'DepartmentController@destroy');
 });
+Route::get('ppr/typelist', 'PprController@typelist');
+Route::get('ppr/shiftlist', 'PprController@shiftList');

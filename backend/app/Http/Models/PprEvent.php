@@ -11,7 +11,7 @@ class PprEvent extends Model{
     {
         return $this->hasOne('App\Http\Models\Shift', 'id', 'shift_id');
     }
-    
+
     public function telly()
     {
         return $this->hasOne('App\Http\Models\Telly', 'id', 'telly_id');
