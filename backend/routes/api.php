@@ -36,6 +36,8 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('ppr/update/{id}','PprController@update');
     Route::delete('ppr/delete/{id}', 'PprController@destroy');
     Route::get('ppr/list', 'PprController@list');
+    Route::get('ppr/typelist', 'PprController@typelist');
+    Route::get('ppr/shiftlist', 'PprController@shiftList');
     
     
     Route::get('telly-type', 'TellyTypeController@index');
@@ -53,5 +55,3 @@ Route::group(['middleware' => ['auth:api']], function () {
     Route::post('department/update/{id}', 'DepartmentController@update');
     Route::delete('department/delete/{id}', 'DepartmentController@destroy');
 });
-Route::get('ppr/typelist', 'PprController@typelist');
-Route::get('ppr/shiftlist', 'PprController@shiftList');

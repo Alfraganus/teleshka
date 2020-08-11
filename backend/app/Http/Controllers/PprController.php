@@ -17,7 +17,7 @@ class PprController extends Controller
     {
         $getPpr = PprEvent::with('shift')
                             ->with('telly')
-                            // ->with('department')
+                            ->with('department')
                             ->get();
         return $getPpr;
     }
@@ -110,7 +110,7 @@ class PprController extends Controller
         $shift = Shift::get();
 
         foreach ($shift as $key => $value) {
-            $shift[$key]->count = PprEvent::where('ppr_date', '2020-06-06')->where('shift_id', $value->id)->count();
+            $shift[$key]->count = PprEvent::where('ppr_date', $today)->where('shift_id', $value->id)->count();
         }
         return $shift;
         
