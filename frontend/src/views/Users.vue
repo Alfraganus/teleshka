@@ -130,7 +130,7 @@ export default {
       form: {},
       Loading: true,
       readonly: false,
-      dialogSaveTitlev: "",
+      dialogSaveTitle: "",
       newUserInfo: {},
       headers: [
         { text: "#", value: "id", width: 65 },
