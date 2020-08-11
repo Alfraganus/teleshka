@@ -105,7 +105,7 @@ class PprController extends Controller
 
     public function shiftList()
     {    
-         $today = Carbon::today()->toDateString();
+        // $today = Carbon::today()->toDateString();
         
         $shift = Shift::get();
 
