@@ -212,7 +212,6 @@ export default {
       newPprInfo: [],
       users: [],
       tellies: [],
-      friends: [],
       height: 600,
       trClass: "",
     };
@@ -237,7 +236,6 @@ export default {
     editPpr(item) {
       this.savePprModal = true;
       this.pprTitle = "O'zgartirish";
-      this.friends = item.telly_id;
       this.form = JSON.parse(JSON.stringify(item));
     },
     savePpr() {
@@ -261,8 +259,8 @@ export default {
                   " " +
                   this.newPprInfo.lastname_uz_latin +
                   " " +
-                  this.newPprInfo.middlename_uz_latin,
-                telly_id: this.friends,
+                  this.newPprInfo.middlename_uz_latin,  
+                telly_id: this.form.telly_id,
                 department_id: this.form.department_id,
                 technical_review_conclusion: this.form
                   .technical_review_conclusion,
@@ -279,8 +277,8 @@ export default {
                   timerProgressBar: true,
                 });
                 this.Loading = true;
-                (this.friends = []), this.getList();
-                console.log(response.date);
+                console.log(response.data);
+                this.getList();
               })
               .catch(function (error) {
                 console.log(error);
@@ -319,7 +317,6 @@ export default {
                     this.newPprInfo.lastname_uz_latin +
                     " " +
                     this.newPprInfo.middlename_uz_latin,
-                  telly_id: this.friends,
                   department_id: this.form.department_id,
                   technical_review_conclusion: this.form
                     .technical_review_conclusion,
@@ -338,7 +335,6 @@ export default {
                   timerProgressBar: true,
                 });
                 this.Loading = true;
-                (this.friends = []), this.getList();
                 console.log(response.date);
               })
               .catch(function (error) {
