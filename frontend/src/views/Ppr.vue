@@ -45,9 +45,9 @@
           <td>{{ item.ppr_responsible_employee_fullname }}</td>
           <td>{{ item.brigadir_fullname }}</td>
           <td>
-            {{ item.telly_id.telly_number }}
+            {{ item.telly.telly_number }}
             <br />
-            {{ item.telly_id.telly_desc }}
+            {{ item.telly.telly_desc }}
           </td>
           <td>{{ item.department.name }}</td>
           <td>{{ item.updated_at }}</td>
